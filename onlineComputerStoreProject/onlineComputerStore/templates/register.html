@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>REGISTER</title>
+    <h1>This is a register page</h1>
+</head>
+<body>
+
+{% if success%}
+    {% if success == 'true' %}
+        <script> confirm('success'); </script>
+        <script> window.location.href = "/";</script>
+    {% endif%}
+{% endif %}
+
+<form action="/register/" method="POST">
+    {% csrf_token %}
+    username: <input type="text" name="username">
+    password: <input type="password" name="password">
+    re-enter password <input type="password" name="re-password">
+    email: <input type="text" name="email">
+    <input type="submit" value="confirm">
+</form>
+</body>
+</html>
