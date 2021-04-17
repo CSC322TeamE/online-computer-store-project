@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% comment %} <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,4 +23,41 @@
     <input type="submit" value="confirm">
 </form>
 </body>
-</html>
+</html> {% endcomment %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+
+	</head>
+	<body>
+
+    {% if success%}
+        {% if success == 'true' %}
+            <script> confirm('success'); </script>
+            <script> window.location.href = "/";</script>
+        {% endif%}
+    {% endif %}
+		<div class="wrap">
+			<div class="register-wrap">
+				<div class="login-title">
+					Register
+				</div>
+                <form class="login-form" form action="/register/" method="POST">
+					<input type="text" name="user" placeholder="username" class="login-input">
+					<input type="password" name="password" placeholder="password" class="login-input">
+					<input type="password" name="re-password" placeholder="re-enter password" class="login-input">
+                    <input type="email" name="email" placeholder="email" class="login-input">
+                    <input type="submit" name="register" value="Register" class="register-submit"/>
+				</form>
+				<div class="tip">
+					Have a account already? <a href="/login">Sign in</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html> 
