@@ -1,14 +1,27 @@
 
 html {
     height: 100%;
+    background-image: linear-gradient(to right, #30cfd0, #330867);
 }
 body {
     height: 100%;
 }
 /* color from：https://www.sj520.cn/tools/jianbian/  */
-.wrap {
+/* .wrap {
     height: 100%;
-    background-image: linear-gradient(to right, #30cfd0, #330867);
+} */
+
+.maintext {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.navBar {
+    text-align: center;
+}
+
+.navBar a {
+    padding: 10px;
 }
 
 .login-wrap {

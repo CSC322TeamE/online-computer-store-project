@@ -19,4 +19,16 @@ def register(request):
         return render(request, 'register.html', context={'success': 'true'},)
     return render(request, 'register.html')
 
+def clerk(request):
+    return render(request, 'clerk.html')
+
+def manager(request):
+    return render(request, 'manager.html')
+
+def regUser(request):
+    return render(request, 'regUser.html')
+
+
+
+
 
