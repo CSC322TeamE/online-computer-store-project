@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect
 from onlineComputerStore.models import Users
 from django.contrib import messages
+from onlineComputerStore.models import Items
 
 
 # Create your views here.
 
 
 def index(request):
-    return render(request, 'index.html')
+    suggested_list = ['s1', 's2', 's3']
+    popular_list = Items.objects.order_by('quantity_sold')[0:3]
+    return render(request, 'index.html', {'popular_list': popular_list, 'suggested_list': suggested_list})
 
 
 def login(request):

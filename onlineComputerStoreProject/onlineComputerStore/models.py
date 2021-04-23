@@ -9,3 +9,15 @@ class Users(models.Model):
     password = models.CharField(max_length=20)
 
 
+class Items(models.Model):
+    name = models.CharField(max_length=20)
+    price = models.FloatField()
+    quantity = models.IntegerField(default=0)
+    discount = models.FloatField()
+    rating = models.FloatField()
+    keyword = models.CharField(max_length=10)
+    quantity_sold = models.IntegerField(default=0)
+
+
+
+
