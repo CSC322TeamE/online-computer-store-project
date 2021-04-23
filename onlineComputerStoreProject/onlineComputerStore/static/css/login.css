@@ -1,3 +1,10 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans Light";
+    letter-spacing: .07em; /* Letter spacing size */
+}
+
 
 html {
     height: 100%;
@@ -11,17 +18,9 @@ body {
     height: 100%;
 } */
 
-.maintext {
-    text-align: center;
-    margin-top: 100px;
-}
-
-.navBar {
-    text-align: center;
-}
-
-.navBar a {
-    padding: 10px;
+.wrap {
+    height: 100%;
+    background-image: linear-gradient(to right, #30cfd0, #330867);
 }
 
 .login-wrap {
