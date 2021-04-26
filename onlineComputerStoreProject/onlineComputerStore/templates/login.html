@@ -1,3 +1,20 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LOGIN</title>
+    <h1>LOGIN PAGE</h1>
+</head>
+<body>
+<form action="/login/" method="POST">
+    {% csrf_token %}
+    username: <input type="text" name = "username">
+    password: <input type="password" name="password">
+    <input type="submit" value="LOGIN">
+</form>
+<a href="/register">register</a>
+</body>
+</html>  {% endcomment %}
 
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/login.css' %}">
@@ -8,15 +25,7 @@
 		<title>LOGIN</title>
 
 	</head>
-
 	<body>
-        {% if messages %}
-            {% for message in messages %}
-                {% if message.tags %}
-                    <script> alert('{{ message }}'); </script>
-                {% endif %}>
-            {% endfor %}
-        {% endif %}
 		<div class="wrap">
 			<div class="login-wrap">
 				<div class="login-title">
@@ -24,8 +33,8 @@
 				</div>
 				<form class="login-form" action="/login/" method="POST">
 					{% csrf_token %}
-                    <input type="text" name="username" class="login-input" placeholder="username" required>
-					<input type="password" name="password" class="login-input" placeholder="password" required>
+                    <input type="text" name="username" placeholder="username" class="login-input">
+					<input type="password" name="password" placeholder="password" class="login-input">
 					<input type="submit" name="login" value="Login" class="login-submit"/>
 				</form>
 				<div class="tip">
