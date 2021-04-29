@@ -1,0 +1,60 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<!DOCTYPE html>
+<html lang="EN">
+	<head>
+		<meta charset="utf-8">
+		<title>REGISTER</title>
+        {% comment %} <h1 class="maintext">Online Computer Store</h1> {% endcomment %}
+	</head>
+
+    <script>
+
+        const check = function validatePassword() {
+            if (document.getElementById("password").value === document.getElementById("re_password").value) {
+                document.getElementById("re_password").setCustomValidity('');
+            } else {
+                document.getElementById("re_password").setCustomValidity("Passwords Don't Match");
+            }
+        };
+
+    </script>
+
+	<body>
+        {% comment %} <div class="navBar">
+            <a href="/">Home</a>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            <a href="/aboutus">About Us</a>
+        </div> {% endcomment %}
+
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags %}
+                    <script> alert('{{ message }}'); </script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+		<div class="wrap">
+			<div class="register-wrap">
+				<div class="login-title">
+					Register
+				</div>
+
+                <form class="login-form" action="/register/" method="POST">
+                    {% csrf_token %}
+					<input type="text" name="username" placeholder="username" class="login-input" required>
+					<input id="password" type="password" name="password" placeholder="password" class="login-input" required onkeyup='check();'>
+					<input id="re_password" type="password" name="re_password" placeholder="re-enter password" class="login-input" required onkeyup='check();'>
+                    <input type="email" name="email" placeholder="email" class="login-input" required>
+                    <input type="submit" name="register" value="Register" class="register-submit"/>
+				</form>
+				<div class="tip">
+					Have a account already? <a href="/login">Sign in</a>
+				</div>
+
+			</div>
+		</div>
+	</body>
+</html> 

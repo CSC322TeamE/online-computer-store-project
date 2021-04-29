@@ -1,0 +1,37 @@
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>LOGIN</title>
+
+	</head>
+
+	<body>
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags %}
+                    <script> alert('{{ message }}'); </script>
+                {% endif %}>
+            {% endfor %}
+        {% endif %}
+		<div class="wrap">
+			<div class="login-wrap">
+				<div class="login-title">
+					Login
+				</div>
+				<form class="login-form" action="/login/" method="POST">
+					{% csrf_token %}
+                    <input type="text" name="username" class="login-input" placeholder="username" required>
+					<input type="password" name="password" class="login-input" placeholder="password" required>
+					<input type="submit" name="login" value="Login" class="login-submit"/>
+				</form>
+				<div class="tip">
+					Don't have account? <a href="/register">Sign up</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html> 
