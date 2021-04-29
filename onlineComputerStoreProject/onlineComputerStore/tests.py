@@ -11,3 +11,4 @@ def add_user():
         user.save()
         group = Group.objects.get(name='managers')
         user.groups.add(group)
+

@@ -26,4 +26,5 @@ urlpatterns = [
     path('account/', views.account),
     path('addItem/', views.addItem),
     path('browse/', views.browse),
+    path('topUp/', views.topUp),
 ]

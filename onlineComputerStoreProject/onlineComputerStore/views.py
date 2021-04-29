@@ -1,8 +1,7 @@
 from django.contrib.auth.models import Group, Permission
 from django.shortcuts import render, redirect
-from onlineComputerStore.models import Customer, Clerk, Manager, CPU, GPU, Memory, Computer
 from django.contrib import messages, auth
-from onlineComputerStore.models import Item
+from onlineComputerStore.models import *
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import permission_required, login_required
 import onlineComputerStore.tests as ts
@@ -162,4 +161,17 @@ def browse(request):
     return render(request, 'browse.html')
 
 
-
+def topUp(request):
+    if request.method == "POST":
+        if Bank.objects.filter(card_number=request.POST['card_num']).exists():
+            obj = Bank.objects.get(card_number=request.POST['card_num'])
+            if request.POST['customer_name'] == obj.customer_name and request.POST['pwd'] == obj.pwd:
+                customer = Customer.objects.get(user_ptr_id=9)
+                customer.balance += float(request.POST['amount'])
+                customer.save()
+                messages.info(request, "Success!!!")
+            else:
+                messages.info(request, "Information doesnt match!!!")
+        else:
+            messages.info(request, "Customer doesn't exist!!!")
+    return render(request, 'topUp.html')

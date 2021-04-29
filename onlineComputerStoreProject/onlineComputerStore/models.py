@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.core.validators import MinLengthValidator,MaxLengthValidator
 
 
 class Customer(User):
@@ -38,8 +39,8 @@ class Item(models.Model):
 
 
 class CPU(Item):
-    category = models.CharField(max_length=10) #
-    core_name = models.CharField(max_length=10) # either intel or AMD
+    category = models.CharField(max_length=10)  #
+    core_name = models.CharField(max_length=10)  # either intel or AMD
     num_cores = models.IntegerField(default=0)
     frequency = models.FloatField(default=0.0)
 
@@ -57,7 +58,13 @@ class Memory(Item):
 
 class Computer(Item):
     category = models.CharField(max_length=20)  # business, computing, gaming ...
-    os = models.CharField(max_length=10) # operating system
+    os = models.CharField(max_length=10)  # operating system
     cpu_id = models.IntegerField()  # cpu
     gpu_id = models.IntegerField()  # gpu
     memory_id = models.IntegerField()  # memory
+
+
+class Bank(models.Model):
+    pwd = models.CharField(max_length=4)
+    customer_name = models.CharField(max_length=20)
+    card_number = models.IntegerField(validators=[MaxLengthValidator(6),MinLengthValidator(6)])  # fix length 6
