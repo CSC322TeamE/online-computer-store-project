@@ -27,4 +27,7 @@ urlpatterns = [
     path('addItem/', views.addItem),
     path('browse/', views.browse),
     path('topUp/', views.topUp),
+    path('forum/', views.forum),
+    path('forumHome/', views.forumHome),
+    path('addInDiscussion/', views.addInDiscussion),
 ]

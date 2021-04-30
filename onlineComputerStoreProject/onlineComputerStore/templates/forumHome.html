@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion forum</title>
+    <style>
+        .box {
+            border: 4px solid black;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+<h2 class="jumbotron">
+    Currently active forums: {{ count }}
+</h2>
+
+<div class="card-columns" style="padding: 10px; margin: 20px;"></div>
+
+{% for forum in forums %}
+    {% {{forum_name}} = forum.item_id %}
+
+    <div class="card box container">
+        <br>
+        <h5 class="card-title">
+            <a href='{{ 'forum.link' }}'><h3>{{ forum.topic }}</h3></a>
+            <div class="card-body container">
+                <p>{{ forum.description }}</p>
+        </h5>
+        <hr>
+        <p> By: {{ forum.customer_id }}</p>
+        <hr>
+        <h4>Views from other users</h4>
+        {% for discuss in discussions %}
+            {% for objs in discuss %}
+                {% if objs.forum == forum %}
+                    {{ objs.discuss }}
+                    <br>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+        <form method="POST" action="\forumHome\">
+            {% csrf_token %}
+            <button class="btn btn-success" style="width:fit-content; padding: 4px; margin:10px;">Add more</button>
+        </form>
+    </div>
+    </div>
+    </div>
+    <br>
+
+{% endfor %}
+
+</body>
+</html>

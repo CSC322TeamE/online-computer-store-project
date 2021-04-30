@@ -177,3 +177,38 @@ def topUp(request):
         else:
             messages.info(request, "Customer doesn't exist!!!")
     return render(request, 'topUp.html')
+
+
+def forumHome(request):
+    forums = Forum.objects.all()
+    count = forums.count()
+    discussions = []
+
+    for f in forums:
+        discussions.append(f.discussion_set.all())
+    context = {'forums': forums,
+               'count': count,
+               'discussions': discussions}
+    return render(request, 'forumHome.html', context)
+
+
+def forum(request):
+    form = CreateInForum()
+    if request.method == 'POST':
+        form = CreateInForum(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    context = {'form': form}
+    return render(request, 'forum.html', context)
+
+
+def addInDiscussion(request):
+    form = CreateInDiscussion()
+    if request.method == 'POST':
+        form = CreateInDiscussion(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    context = {'form': form}
+    return render(request, 'addInDiscussion.html', context)
