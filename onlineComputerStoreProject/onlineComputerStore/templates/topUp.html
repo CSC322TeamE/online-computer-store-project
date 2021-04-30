@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
-<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<link rel="stylesheet" href="{% static 'css/topUp.css' %}">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Top Up</title>
 </head>
 <body class="wrap">
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
 <div class="navBar">
     <a href="/">Home</a>
     <a href="/logout">Log out</a>

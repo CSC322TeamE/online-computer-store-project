@@ -166,9 +166,11 @@ def topUp(request):
         if Bank.objects.filter(card_number=request.POST['card_num']).exists():
             obj = Bank.objects.get(card_number=request.POST['card_num'])
             if request.POST['customer_name'] == obj.customer_name and request.POST['pwd'] == obj.pwd:
-                customer = Customer.objects.get(user_ptr_id=9)
+                customer = Customer.objects.get(id=request.user.id)
                 customer.balance += float(request.POST['amount'])
                 customer.save()
+                tran = Transaction.objects.create(customer_id=customer, amount=request.POST['amount'])
+                tran.save()
                 messages.info(request, "Success!!!")
             else:
                 messages.info(request, "Information doesnt match!!!")

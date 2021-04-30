@@ -68,3 +68,9 @@ class Bank(models.Model):
     pwd = models.CharField(max_length=4)
     customer_name = models.CharField(max_length=20)
     card_number = models.IntegerField(validators=[MaxLengthValidator(6),MinLengthValidator(6)])  # fix length 6
+
+
+class Transaction(models.Model):
+    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    amount = models.FloatField(blank=True)
+    time = models.DateTimeField(auto_now_add=True, blank=True)
