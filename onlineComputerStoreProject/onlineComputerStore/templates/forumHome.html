@@ -1,4 +1,5 @@
 {% load static %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous"0>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,17 +22,18 @@
 <div class="card-columns" style="padding: 10px; margin: 20px;"></div>
 
 {% for forum in forums %}
-    {% {{forum_name}} = forum.item_id %}
+
 
     <div class="card box container">
         <br>
         <h5 class="card-title">
-            <a href='{{ 'forum.link' }}'><h3>{{ forum.topic }}</h3></a>
+            <a href='{{ forum.link }}'><h3>Item Name: {{ forum.item.name }}</h3></a>
             <div class="card-body container">
                 <p>{{ forum.description }}</p>
         </h5>
         <hr>
-        <p> By: {{ forum.customer_id }}</p>
+        <p> Item ID: {{ forum.item_id }}</p>
+        <p> Item Rating: {{ forum.item.rating }}</p>
         <hr>
         <h4>Views from other users</h4>
         {% for discuss in discussions %}

@@ -78,13 +78,12 @@ class Transaction(models.Model):
 
 class Forum(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    topic = models.CharField(max_length=300)
     description = models.CharField(max_length=1000, blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     link = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
-        return str(self.topic)
+        return str(self.item.name)
 
 
 class Discussion(models.Model):

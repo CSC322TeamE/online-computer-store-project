@@ -182,12 +182,15 @@ def topUp(request):
 def forumHome(request):
     forums = Forum.objects.all()
     count = forums.count()
+    items = []
     discussions = []
 
     for f in forums:
         discussions.append(f.discussion_set.all())
+        items.append(Item.objects.filter(id=f.item_id))
     context = {'forums': forums,
                'count': count,
+               'items': items,
                'discussions': discussions}
     return render(request, 'forumHome.html', context)
 
