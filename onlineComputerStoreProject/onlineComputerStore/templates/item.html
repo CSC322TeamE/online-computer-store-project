@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Item page</title>
+</head>
+<body>
+    <img src="{{ item.img.url }}">
+    <ul>
+        <li>{{ item.name }}</li>
+    </ul>
+    <a href="/purchase/{{ item.url_slug }}">purchase</a>
+</body>
+</html>

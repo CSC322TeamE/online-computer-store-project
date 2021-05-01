@@ -3,9 +3,13 @@ from django.db import models
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.template.defaultfilters import slugify
 
+import uuid
+
+
 
 class Customer(User):
     balance = models.FloatField(default=0.0)
+    saved_address = models.CharField(max_length=50, null=True, blank=True, default=None)
 
     class Meta:
         permissions = [
@@ -35,8 +39,14 @@ class Item(models.Model):
     quantity = models.IntegerField(default=0)
     discount = models.FloatField()
     rating = models.FloatField()
-    keyword = models.CharField(max_length=10)
     quantity_sold = models.IntegerField(default=0)
+    img = models.ImageField(upload_to='img/item_img/', default='img/default_img/400x650.png', blank=True, null=True)
+    url_slug = models.SlugField(editable=False, default="")
+    description = models.CharField(max_length=50, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.url_slug = slugify(self.name)
+        super(Item, self).save(*args, **kwargs)
 
 
 class CPU(Item):
@@ -111,3 +121,11 @@ class Warning(models.Model):
 class ForumWarning(Warning):
     reporter = models.ForeignKey(User, on_delete=models.CASCADE)
     discuss = models.ForeignKey(Discussion, on_delete=models.CASCADE)
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    uid = models.UUIDField() # a unique uniformed id for each order
+    status = models.CharField(max_length=20)
+    address = models.CharField(max_length=50, blank=False, null=False)
+
