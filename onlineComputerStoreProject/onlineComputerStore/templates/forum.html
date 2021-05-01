@@ -1,17 +1,87 @@
+{% load static %}
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" 0>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion forum</title>
     <style>
-        form{
-            border:4px solid black;
+        .box {
+            border: 4px solid black;
             margin: 0 auto;
-            padding: 40px;
-            width: fit-content;
         }
     </style>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous"0>
-    
 </head>
-<form action="{% url 'addInForum' %}" method="POST">
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" class="btn btn-success" value="submit">
-</form>
+<body>
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+<h2 class="jumbotron">
+    Currently active forums: {{ count }}
+</h2>
+
+<div class="card-columns" style="padding: 10px; margin: 20px;"></div>
+
+{% for forum in forums %}
+
+    <div class="card box container">
+        <br>
+        <h5 class="card-title">
+            <a href="/item/forum.item.url_slug "><h3>Item Name: {{ forum.item.name }}</h3></a>
+            <div class="card-body container">
+                <p>{{ forum.description }}</p>
+        </h5>
+        <hr>
+        <p> Item ID: {{ forum.item_id }}</p>
+        <p> Item Rating: {{ forum.item.rating }}</p>
+        <hr>
+        <h4>Discussions from other users</h4>
+        <div style="height:500px;width:1100px;overflow:auto;background:#EEEEEE;">
+            {% for discuss in discussions %}
+                {% for objs in discuss %}
+                    {% if objs.forum == forum %}
+                        <hr>
+                        <div>
+                            <b style="color: #00ff00; font-size:120%">
+                                <small style="color: #ff66ff">&ltID:{{ objs.user.id }}&gt</small>{{ objs.user.username }}:
+                            </b>
+                            <p style="background-color:#66ccff; font-size:160%;">
+                                "{{ objs.discuss }}"
+                            </p>
+                        </div>
+
+                        <div style="text-align:right;">
+                            <small> &lt{{ objs.date_created }}&gt</small>
+                            <form method="POST" action="\forum\report\">
+                                {% csrf_token %}
+                                <input type="hidden" name="discussionID" value={{ objs.id }}>
+                                <input type="hidden" name="reportedID" value={{ objs.user_id }}>
+                                <button class="btn btn-success" style="background-color: firebrick; width:fit-content; padding: 4px; margin:10px;">
+                                    Report
+                                </button>
+                            </form>
+                        </div>
+                        <br>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <form method="POST" action="\addDiscussion\">
+            {% csrf_token %}
+            <input type="hidden" name="forum_id" value="{{ forum.id }}">
+            <button class="btn btn-success" style="width:fit-content; padding: 4px; margin:10px;">Say something</button>
+        </form>
+    </div>
+    <br>
+
+{% endfor %}
+
+</body>
+</html>

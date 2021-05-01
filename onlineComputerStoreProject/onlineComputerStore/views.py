@@ -1,10 +1,10 @@
 from django.contrib.auth.models import Group, Permission
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
-from onlineComputerStore.models import *
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import permission_required, login_required
 import onlineComputerStore.tests as ts
+from .forms import *
 
 
 def index(request):
@@ -173,45 +173,56 @@ def topUp(request):
                 tran.save()
                 messages.info(request, "Success!!!")
             else:
-                messages.info(request, "Information doesnt match!!!")
+                messages.error(request, "Information doesnt match!!!")
         else:
-            messages.info(request, "Customer doesn't exist!!!")
+            messages.info(request, "This bank customer does not exist!!!")
     return render(request, 'topUp.html')
 
 
-def forumHome(request):
+def forum(request):
     forums = Forum.objects.all()
     count = forums.count()
-    items = []
     discussions = []
 
     for f in forums:
         discussions.append(f.discussion_set.all())
-        items.append(Item.objects.filter(id=f.item_id))
+
     context = {'forums': forums,
                'count': count,
-               'items': items,
                'discussions': discussions}
-    return render(request, 'forumHome.html', context)
-
-
-def forum(request):
-    form = CreateInForum()
-    if request.method == 'POST':
-        form = CreateInForum(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-    context = {'form': form}
     return render(request, 'forum.html', context)
 
 
-def addInDiscussion(request):
-    form = CreateInDiscussion()
+def addDiscussion(request):
+    form = DiscusstionForm()  # not POST
     if request.method == 'POST':
-        form = CreateInDiscussion(request.POST)
+
+        form = DiscusstionForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('/')
-    context = {'form': form}
-    return render(request, 'addInDiscussion.html', context)
+            forum_instance = form.save(commit=False)
+            forum_instance.user_id = request.user.id
+            forum_instance.forum_id = request.POST['forum_id']
+            forum_instance.save()
+            messages.info(request, "Your comments are submitted!")
+            return redirect('/forum/')
+
+    context = {'form': form, 'forum_id': request.POST['forum_id']}
+    return render(request, 'addDiscussion.html', context)
+
+
+def forum_report(request):
+    form = FroumReportForm()  # not POST
+    print(request.POST)
+    if request.method == 'POST':
+        if 'description' in request.POST:
+            form = FroumReportForm(request.POST, initial={'reported_user': request.POST["reportedID"],
+                                                          'reporter': request.user.id,
+                                                          'discuss': request.POST["discussionID"]})
+            print(form)
+            if form.is_valid():
+                form.save()
+                messages.info(request, "Your report is submitted!")
+            return redirect('/forum/')
+
+    context = {'form': form, 'discussionID': request.POST["discussionID"], 'reportedID': request.POST['reportedID']}
+    return render(request, 'forumReport.html', context)

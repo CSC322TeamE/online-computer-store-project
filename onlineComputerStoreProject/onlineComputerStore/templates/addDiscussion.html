@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <style>
+        form{
+            border:4px solid black;
+            margin: 0 auto;
+            padding: 40px;
+            width: fit-content;
+        }
+
+    </style>
+    <title>Add discussion page</title>
+    
+</head>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<form action="\addDiscussion\" method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type="hidden" name="forum_id" value="{{ forum_id }}" >
+    <input type="submit" class="btn btn-success" value="submit">
+</form>

@@ -28,6 +28,6 @@ urlpatterns = [
     path('browse/', views.browse),
     path('topUp/', views.topUp),
     path('forum/', views.forum),
-    path('forumHome/', views.forumHome),
-    path('addInDiscussion/', views.addInDiscussion),
+    path('addDiscussion/', views.addDiscussion),
+    path('forum/report/', views.forum_report),
 ]
