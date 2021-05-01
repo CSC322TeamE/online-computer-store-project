@@ -128,23 +128,23 @@ def forum(request):
 def addDiscussion(request):
     form = DiscusstionForm()  # not POST
     if request.method == 'POST':
-
-        form = DiscusstionForm(request.POST)
-        if form.is_valid():
-            forum_instance = form.save(commit=False)
-            forum_instance.user_id = request.user.id
-            forum_instance.forum_id = request.POST['forum_id']
-            forum_instance.save()
-            messages.info(request, "Your comments are submitted!")
-            return redirect('/forum/')
-
-    context = {'form': form, 'forum_id': request.POST['forum_id']}
+        if "forum_id" in request.POST:
+            form = DiscusstionForm(request.POST)
+            if form.is_valid():
+                forum_instance = form.save(commit=False)
+                forum_instance.user_id = request.user.id
+                forum_instance.forum_id = request.POST['forum_id']
+                forum_instance.save()
+                messages.info(request, "Your comments are submitted!")
+                return redirect('/forum/')
+            context = {'form': form, 'forum_id': request.POST['forum_id']}
+    else:
+        context = {'form': form}
     return render(request, 'addDiscussion.html', context)
 
 
 def forum_report(request):
     form = FroumReportForm()  # not POST
-    print(request.POST)
     if request.method == 'POST':
         if 'description' in request.POST:
             form = FroumReportForm(request.POST)
@@ -156,8 +156,9 @@ def forum_report(request):
                 form.save()
                 messages.info(request, "Your report is submitted!")
             return redirect('/forum/')
-
-    context = {'form': form, 'discussionID': request.POST["discussionID"], 'reportedID': request.POST['reportedID']}
+        context = {'form': form, 'discussionID': request.POST["discussionID"], 'reportedID': request.POST['reportedID']}
+    else:
+        context = {'form': form}
     return render(request, 'forumReport.html', context)
 
 

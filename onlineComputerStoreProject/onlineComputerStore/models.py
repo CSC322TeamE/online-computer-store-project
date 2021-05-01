@@ -45,6 +45,7 @@ class Item(models.Model):
     description = models.CharField(max_length=50, null=True, blank=True)
 
     def save(self, *args, **kwargs):
+
         self.url_slug = slugify(self.name)
         super(Item, self).save(*args, **kwargs)
 
