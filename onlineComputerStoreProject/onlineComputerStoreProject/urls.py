@@ -29,6 +29,10 @@ urlpatterns = [
     path('addItem/', views.addItem),
     path('browse/', views.browse),
     path('topUp/', views.topUp),
+    path('forum/', views.forum),
+    path('addDiscussion/', views.addDiscussion),
+    path('forum/report/', views.forum_report),
     path('item/<slug:url_slug>', views.item),
     path('purchase/<slug:url_slug>', views.purchase)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

@@ -2,7 +2,9 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.template.defaultfilters import slugify
+
 import uuid
+
 
 
 class Customer(User):
@@ -83,8 +85,45 @@ class Transaction(models.Model):
     time = models.DateTimeField(auto_now_add=True, blank=True)
 
 
+class Forum(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    description = models.CharField(max_length=1000, blank=True)
+    link = models.CharField(max_length=100, blank=True)
+    url_slug = models.SlugField(editable=False, default="")
+
+    def __str__(self):
+        return str(self.item.name)
+
+    def save(self, *args, **kwargs):
+        self.url_slug = slugify(self.item.name)
+        super(Forum, self).save(*args, **kwargs)
+
+
+class Discussion(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    forum = models.ForeignKey(Forum, on_delete=models.CASCADE)
+    discuss = models.CharField(max_length=1000)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return str(self.user.username) + str(self.forum)
+
+
+class Warning(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True, null=True, editable=True)
+    description = models.CharField(max_length=300, blank=False)
+    reported_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    finalized = models.BooleanField(default=False)
+
+
+class ForumWarning(Warning):
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE)
+    discuss = models.ForeignKey(Discussion, on_delete=models.CASCADE)
+
+
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     uid = models.UUIDField() # a unique uniformed id for each order
     status = models.CharField(max_length=20, default="open")
     address = models.CharField(max_length=50, blank=False, null=False)
+

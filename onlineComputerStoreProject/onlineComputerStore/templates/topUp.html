@@ -19,6 +19,7 @@
     <a href="/">Home</a>
     <a href="/logout">Log out</a>
     <a href="/topUp">Add balance</a>
+    <a href="/forum">Forum</a>
     <a href="/aboutus">About Us</a>
 </div>
 
@@ -31,7 +32,7 @@
         <input type="text" name="customer_name" class="login-input" placeholder="Name" required>
         <input type="text" name="card_num" class="login-input" placeholder="Card Number" required>
         <input type="password" name="pwd" class="login-input" placeholder="Password" required>
-        <input type="text" name="amount" class="login-input" placeholder="Amount" required>
+        <input type="number" name="amount" class="login-input" placeholder="Amount" min="0.1" step="any" required>
         <input type="submit" name="confirm" value="Confirm" class="login-submit"/>
     </form>
 </div>
