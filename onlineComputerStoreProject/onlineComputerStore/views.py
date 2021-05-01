@@ -4,11 +4,11 @@ from django.contrib import messages, auth
 from onlineComputerStore.models import *
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import permission_required, login_required
-import onlineComputerStore.tests as ts
+# import onlineComputerStore.tests as ts
+from onlineComputerStore.forms import AddCpuForm
 
 
 def index(request):
-    ts.add_user()
     if request.user.is_authenticated:
         return render(request, 'userIndex.html')
 
@@ -72,93 +72,24 @@ def account(request):
 
 @permission_required('onlineComputerStore.add_item', login_url="/login/")
 def addItem(request):
+    form = AddCpuForm(request.POST, request.FILES)
     if request.method == "POST" and 'name' in request.POST:
-        '''item = Item.objects.create(
-            name=request.POST['name'],
-            price=request.POST['price'],
-            quantity=request.POST['quantity'],
-            discount=request.POST['discount'],
-            rating=request.POST['rating'],
-            keyword=request.POST['keyword'],
-            quantity_sold=request.POST['quantity_sold']
-        )
-        item.save()'''
+        if form.is_valid():
+            cd = form.cleaned_data
+            if not CPU.objects.filter(name=cd['name']).exists():
+                form.save()
+            return render(request, 'addItem.html', {'form': form})
 
-        if request.POST['type'] == 'cpu':
-            obj = CPU.objects.create(
-                name=request.POST['name'],
-                price=request.POST['price'],
-                quantity=request.POST['quantity'],
-                discount=request.POST['discount'],
-                rating=request.POST['rating'],
-                keyword=request.POST['keyword'],
-                quantity_sold=request.POST['quantity_sold'],
-                category=request.POST['category'],
-                core_name=request.POST['core_name'],
-                num_cores=request.POST['num_cores'],
-                frequency=request.POST['frequency']
-            )
-            obj.save()
-            str += 'cpu'
-
-        if request.POST['type'] == 'gpu':
-            obj = GPU.objects.create(
-                name=request.POST['name'],
-                price=request.POST['price'],
-                quantity=request.POST['quantity'],
-                discount=request.POST['discount'],
-                rating=request.POST['rating'],
-                keyword=request.POST['keyword'],
-                quantity_sold=request.POST['quantity_sold'],
-                category=request.POST['category'],
-                chipset=request.POST['chipset'],
-                num_cuda_cores=request.POST['num_cuda_cores'],
-                core_clock=request.POST['core_clock']
-            )
-            obj.save()
-            str += "gpu"
-
-        if request.POST['type'] == 'memory':
-            obj = Memory.objects.create(
-                name=request.POST['name'],
-                price=request.POST['price'],
-                quantity=request.POST['quantity'],
-                discount=request.POST['discount'],
-                rating=request.POST['rating'],
-                keyword=request.POST['keyword'],
-                quantity_sold=request.POST['quantity_sold'],
-                capacity=request.POST['capacity'],
-            )
-            obj.save()
-            str += "memory"
-
-        if request.POST['type'] == 'computer':
-            obj = Computer.objects.create(
-                name=request.POST['name'],
-                price=request.POST['price'],
-                quantity=request.POST['quantity'],
-                discount=request.POST['discount'],
-                rating=request.POST['rating'],
-                keyword=request.POST['keyword'],
-                quantity_sold=request.POST['quantity_sold'],
-                category=request.POST['category'],
-                os=request.POST['os'],
-                cpu_id=request.POST['cpuid'],
-                gpu_id=request.POST['gpuid'],
-                memory_id=request.POST['memid']
-            )
-            obj.save()
-            str += "computer"
-
-        messages.info(request, str)
-        return render(request, 'addItem.html')
+        else:
+            return render(request, 'addItem.html', {'form': form})
 
     else:
-        return render(request, 'addItem.html')
+        return render(request, 'addItem.html', {'form': form})
 
 
 def browse(request):
-    return render(request, 'browse.html')
+    item_list = Item.objects.order_by("quantity_sold")
+    return render(request, 'browse.html', {'item_list': item_list})
 
 
 def topUp(request):
@@ -177,3 +108,12 @@ def topUp(request):
         else:
             messages.info(request, "Customer doesn't exist!!!")
     return render(request, 'topUp.html')
+
+
+def item(request, url_slug):
+    item = Item.objects.get(url_slug=url_slug)
+    return render(request, 'item.html', {'item': item})
+
+
+def purchase(request):
+    return render(request, 'purchase.html')

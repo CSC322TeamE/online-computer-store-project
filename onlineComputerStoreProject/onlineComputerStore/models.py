@@ -1,10 +1,13 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.core.validators import MinLengthValidator,MaxLengthValidator
+from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.template.defaultfilters import slugify
+import uuid
 
 
 class Customer(User):
     balance = models.FloatField(default=0.0)
+    saved_address = models.CharField(max_length=50, null=True, blank=True, default=None)
 
     class Meta:
         permissions = [
@@ -34,8 +37,14 @@ class Item(models.Model):
     quantity = models.IntegerField(default=0)
     discount = models.FloatField()
     rating = models.FloatField()
-    keyword = models.CharField(max_length=10)
     quantity_sold = models.IntegerField(default=0)
+    img = models.ImageField(upload_to='img/item_img/', default='img/default_img/400x650.png', blank=True, null=True)
+    url_slug = models.SlugField(editable=False, default="")
+    description = models.CharField(max_length=50, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.url_slug = slugify(self.name)
+        super(Item, self).save(*args, **kwargs)
 
 
 class CPU(Item):
@@ -67,10 +76,17 @@ class Computer(Item):
 class Bank(models.Model):
     pwd = models.CharField(max_length=4)
     customer_name = models.CharField(max_length=20)
-    card_number = models.IntegerField(validators=[MaxLengthValidator(6),MinLengthValidator(6)])  # fix length 6
+    card_number = models.IntegerField(validators=[MaxLengthValidator(6), MinLengthValidator(6)])  # fix length 6
 
 
 class Transaction(models.Model):
     customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
     amount = models.FloatField(blank=True)
     time = models.DateTimeField(auto_now_add=True, blank=True)
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    uid = models.UUIDField() # a unique uniformed id for each order
+    status = models.CharField(max_length=20)
+    address = models.CharField(max_length=50, blank=False, null=False)
