@@ -5,14 +5,11 @@ from django.utils.translation import ugettext_lazy as _  # translatable
 from django import forms
 
 
-
-
 class AddCpuForm(ModelForm):
     class Meta:
         model = CPU
         fields = ['name', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
                   'category', 'core_name', 'num_cores', 'frequency']
-
 
 
 # Add GPU form
@@ -22,17 +19,13 @@ class AddGpuForm(ModelForm):
         fields = ['name', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
                   'category', 'chipset', 'num_cuda_cores', 'core_clock']
 
+
 # Add memory form
 class AddMemoryForm(ModelForm):
     class Meta:
         model = Memory
         fields = ['name', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
                   'capacity']
-
-
-
-
-
 
 
 # purchase form
@@ -57,12 +50,13 @@ class DiscusstionForm(ModelForm):
 class FroumReportForm(ModelForm):
     class Meta:
         model = ForumWarning
-        exclude = ['finalized']
+        fields = ['discuss']
         widgets = {
             'description': Textarea(attrs={'cols': 60, 'rows': 10}),  # change text to textarea in form.
         }
         error_messages = {
             'discuss': {
                 'max_length': _("You write too much."),
+                'required': _("You have to provide some advice.")
             },
         }

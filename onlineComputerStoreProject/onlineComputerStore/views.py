@@ -147,11 +147,12 @@ def forum_report(request):
     print(request.POST)
     if request.method == 'POST':
         if 'description' in request.POST:
-            form = FroumReportForm(request.POST, initial={'reported_user': request.POST["reportedID"],
-                                                          'reporter': request.user.id,
-                                                          'discuss': request.POST["discussionID"]})
-            print(form)
+            form = FroumReportForm(request.POST)
             if form.is_valid():
+                forum_warning = form.save(commit=False)
+                forum_warning.reporter = request.user.id
+                forum_warning.reported_user = request.POST['reportedID']
+                forum_warning.discuss = request.POST['discussionID']
                 form.save()
                 messages.info(request, "Your report is submitted!")
             return redirect('/forum/')
