@@ -7,23 +7,23 @@ from onlineComputerStore.models import CPU, GPU, Memory
 class AddCpuForm(ModelForm):
     class Meta:
         model = CPU
-        fields = ['name', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
-                  'category', 'core_name', 'num_cores', 'frequency']
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
+                  'architecture', 'num_cores', 'frequency']
 
 
 # Add GPU form
 class AddGpuForm(ModelForm):
     class Meta:
         model = GPU
-        fields = ['name', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
-                  'category', 'chipset', 'num_cuda_cores', 'core_clock']
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
+                  'chipset', 'num_cuda_cores', 'core_clock']
 
 
 # Add memory form
 class AddMemoryForm(ModelForm):
     class Meta:
         model = Memory
-        fields = ['name', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
                   'capacity']
 
 

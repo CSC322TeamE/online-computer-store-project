@@ -33,11 +33,12 @@ class DeliveryCompany(User):
 
 class Item(models.Model):
     name = models.CharField(max_length=20)
-    price = models.FloatField()
-    quantity = models.IntegerField(default=0)
-    discount = models.FloatField()
-    rating = models.FloatField()
-    quantity_sold = models.IntegerField(default=0)
+    brand = models.CharField(max_length=20, null=True, blank=True, default=None)
+    price = models.FloatField(null=True, blank=True, default=None)
+    quantity = models.IntegerField(null=True, blank=True, default=None)
+    discount = models.FloatField(null=True, blank=True, default=None)
+    rating = models.FloatField(null=True, blank=True, default=None)
+    quantity_sold = models.IntegerField(null=True, blank=True, default=0)
     img = models.ImageField(upload_to='img/item_img/', default='img/default_img/400x650.png', blank=True, null=True)
     url_slug = models.SlugField(editable=False, default="")
     description = models.CharField(max_length=50, null=True, blank=True)
@@ -48,29 +49,26 @@ class Item(models.Model):
 
 
 class CPU(Item):
-    category = models.CharField(max_length=10)  #
-    core_name = models.CharField(max_length=10)  # either intel or AMD
-    num_cores = models.IntegerField(default=0)
-    frequency = models.FloatField(default=0.0)
+    architecture = models.CharField(max_length=10, null=True, blank=True, default=None)  # either intel or AMD
+    num_cores = models.IntegerField(null=True, blank=True, default=None)
+    frequency = models.FloatField(null=True, blank=True, default=None)
 
 
 class GPU(Item):
-    category = models.CharField(max_length=10)  # desktop or workstation
-    chipset = models.CharField(max_length=10)  # either nvidia or AMD
-    num_cuda_cores = models.IntegerField(default=0)
-    core_clock = models.FloatField(default=0.0)
+    chipset = models.CharField(max_length=10, null=True, blank=True, default=None)  # either nvidia or AMD
+    num_cuda_cores = models.IntegerField(null=True, blank=True, default=0)
+    core_clock = models.FloatField(null=True, blank=True, default=0.0)
 
 
 class Memory(Item):
-    capacity = models.FloatField(default=0.0)
+    capacity = models.FloatField(null=True, blank=True, default=0.0)
 
 
 class Computer(Item):
-    category = models.CharField(max_length=20)  # business, computing, gaming ...
-    os = models.CharField(max_length=10)  # operating system
-    cpu_id = models.IntegerField()  # cpu
-    gpu_id = models.IntegerField()  # gpu
-    memory_id = models.IntegerField()  # memory
+    os = models.CharField(max_length=10, null=True, blank=True, default=None)  # operating system
+    cpu_name = models.CharField(max_length=20, null=True, blank=True, default=None)
+    gpu_name = models.CharField(max_length=20, null=True, blank=True, default=None)
+    memory_name = models.CharField(max_length=20, null=True, blank=True, default=None)
 
 
 class Bank(models.Model):
@@ -88,5 +86,5 @@ class Transaction(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     uid = models.UUIDField() # a unique uniformed id for each order
-    status = models.CharField(max_length=20)
+    status = models.CharField(max_length=20, default="open")
     address = models.CharField(max_length=50, blank=False, null=False)
