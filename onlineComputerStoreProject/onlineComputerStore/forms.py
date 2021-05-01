@@ -50,12 +50,12 @@ class DiscusstionForm(ModelForm):
 class FroumReportForm(ModelForm):
     class Meta:
         model = ForumWarning
-        fields = ['discuss']
+        fields = ['description']
         widgets = {
             'description': Textarea(attrs={'cols': 60, 'rows': 10}),  # change text to textarea in form.
         }
         error_messages = {
-            'discuss': {
+            'description': {
                 'max_length': _("You write too much."),
                 'required': _("You have to provide some advice.")
             },

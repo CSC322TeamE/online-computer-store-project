@@ -150,9 +150,9 @@ def forum_report(request):
             form = FroumReportForm(request.POST)
             if form.is_valid():
                 forum_warning = form.save(commit=False)
-                forum_warning.reporter = request.user.id
-                forum_warning.reported_user = request.POST['reportedID']
-                forum_warning.discuss = request.POST['discussionID']
+                forum_warning.reporter_id = request.user.id
+                forum_warning.reported_user_id = request.POST['reportedID']
+                forum_warning.discuss_id = request.POST['discussionID']
                 form.save()
                 messages.info(request, "Your report is submitted!")
             return redirect('/forum/')
