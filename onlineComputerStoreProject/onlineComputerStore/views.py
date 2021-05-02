@@ -71,6 +71,9 @@ def account(request):
     if request.user.groups.filter(name='managers').exists():
         return render(request, 'manager.html')
 
+    if request.user.groups.filter(name='delivery').exists():
+        return render(request, 'delivery.html')
+
 
 @permission_required('onlineComputerStore.add_item', login_url="/login/")
 def addItem(request):
@@ -174,7 +177,10 @@ def deliveryOptions(request):
     return render(request, "deliveryOptions.html")
 
 def addDelivery(request):
-    name = request.POST['name']
-    price = int(request.POST['price'])
-    DeliveryCompany.objects.create(name=company, price=price, rating=5.0)
+    # name = request.POST['name']
+    # price = int(request.POST['price'])
+    # DeliveryCompany.objects.create(name=company, price=price, rating=5.0)
     return HttpResponse('ADDED')
+
+def delivery(request):
+    return render(request, "delivery.html")

@@ -30,9 +30,7 @@ class Company(User):
 
 
 class DeliveryCompany(User):
-    name = models.CharField(max_length=20)
-    price = models.IntegerField(null=True, blank=True, default=None)
-    rating = models.FloatField(null=True, blank=True, default=None)
+    pass
 
 
 class Item(models.Model):
@@ -130,3 +128,7 @@ class Order(models.Model):
     address = models.CharField(max_length=50, blank=False, null=False)
     delivery_company = models.CharField(max_length=20, default="")
 
+class Bidfor(models.Model):
+    price = models.FloatField(default=0)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE)
