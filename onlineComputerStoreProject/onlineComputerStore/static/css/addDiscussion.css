@@ -32,20 +32,7 @@ body {
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
-    padding: 0 50px; 
-}
-
-.maintext {
-    text-align: center;
-    margin: 100px 0 20px;
-}
-
-.navBar {
-    text-align: center;
-}
-
-.navBar a {
-    padding: 10px;
+    padding: 0 50px;
 }
 
 .register-wrap{
@@ -57,7 +44,7 @@ body {
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
-    padding: 0 50px; 
+    padding: 0 50px;
 }
 
 .login-title {
@@ -69,17 +56,17 @@ body {
 }
 
 .login-form .login-input{
-    display: block; 
+    display: block;
     width: 100%;
     border: 0;
     border-bottom: 1px solid #ccc;
     padding: 10px 0 10px 10px;
     margin-bottom: 20px;
-    outline: none; 
-    background-color: transparent; 
+    outline: none;
+    background-color: transparent;
 }
 .login-form .login-input::placeholder {
-    text-transform: uppercase; 
+    text-transform: uppercase;
     color: #bdbdbd;
 }
 

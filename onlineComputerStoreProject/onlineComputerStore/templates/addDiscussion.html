@@ -1,5 +1,6 @@
-
 <!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/addDiscussion.css' %}">
 <html lang="en" >
 <head>
     <meta charset="UTF-8">
@@ -16,6 +17,7 @@
     
 </head>
 
+<body>
 {% if messages %}
     {% for message in messages %}
         {% if message.tags %}
@@ -24,9 +26,21 @@
     {% endfor %}
 {% endif %}
 
-<form action="\addDiscussion\" method="POST">
+<div class="wrap">
+    <div class="login-title">
+        <h1>Add discussion page</h1>
+    </div>
+
+<form class="login-form" action="\addDiscussion\" method="POST" id="discuss">
     {% csrf_token %}
-    {{form.as_p}}
+    <b>What do you want to say:</b>
+    <textarea cols = 60, rows = 10 class="login-input" name="discuss" form="discuss"></textarea>
     <input type="hidden" name="forum_id" value="{{ forum_id }}" >
-    <input type="submit" class="btn btn-success" value="submit">
+    <input type="submit" class="login-submit" value="submit" >
 </form>
+
+
+</div>
+
+</body>
+</html>

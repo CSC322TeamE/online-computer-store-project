@@ -1,5 +1,5 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/userinfo.css' %}">
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -8,6 +8,7 @@
     <h1 class="maintext">Customer account home</h1>
 </head>
 
+<<<<<<< HEAD
 {% if messages %}
     {% for message in messages %}
         {% if message.tags %}
@@ -15,6 +16,8 @@
         {% endif %}
     {% endfor %}
 {% endif %}
+=======
+>>>>>>> a3744aaba683e5daf8b75b1cc79e542f97154233
 
 <body class="wrap">
 {% comment %} style="background:url({% static '/image/background1.jpg' %}); background-size: 100%;" {% endcomment %}
@@ -25,5 +28,35 @@
     <a href="/forum">Forum</a>
     <a href="/aboutus">About Us</a>
 </div>
+
+<div class="wrap">
+			<div class="UserInform-wrap">
+				<div class="login-title">
+					{{ user }}
+				</div>
+
+                <div class="login-form">
+                    <p style="margin: 5px 0">Account : Customer</p>
+                    <p style="margin: 5px 0">Email : {{ user.email }}</p>
+                    <p style="margin: 5px 0">Balance : {{ customer.balance }} </p>
+
+                </div>
+                 <form class="login-form" action="/topUp/" >
+                     <input type="submit" name="Add Balance" value="Add Balance" class="register-submit"/>
+				</form>
+
+                  <form class="login-form" action="/changePassword/" method="post" >
+                       {% csrf_token %}
+                     <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
+				</form>
+
+
+
+
+
+			</div>
+		</div>
+
+
 </body>
 </html> 

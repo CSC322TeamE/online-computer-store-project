@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import permission_required, login_required
 import onlineComputerStore.tests as ts
 from .forms import *
+import re
 # import onlineComputerStore.tests as ts
 from onlineComputerStore.forms import AddCpuForm
 
@@ -24,9 +25,10 @@ def login(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
+
         if user:
             auth.login(request, user)
-            return redirect('/', {'user': user})
+            return redirect('/', {'user': user } )
 
         messages.info(request, 'username and password does not match')
 
@@ -62,7 +64,8 @@ def logout(request):
 def account(request):
     # if the user is a customer:
     if request.user.groups.filter(name='customers').exists():
-        return render(request, 'customer.html')
+        customer = Customer.objects.get(id=request.user.id)
+        return render(request, 'customer.html',{'customer': customer})
 
     if request.user.groups.filter(name='clerks').exists():
         return render(request, 'clerk.html')
@@ -101,9 +104,10 @@ def topUp(request):
                 customer = Customer.objects.get(id=request.user.id)
                 customer.balance += float(request.POST['amount'])
                 customer.save()
-                tran = Transaction.objects.create(customer=customer, amount=request.POST['amount'])
-                tran.save()
+                Transaction.objects.create(customer_id=customer, amount=request.POST['amount'])
                 messages.info(request, "Success!!!")
+                return redirect('/account/')
+
             else:
                 messages.error(request, "Information doesnt match!!!")
         else:
@@ -115,10 +119,8 @@ def forum(request):
     forums = Forum.objects.all()
     count = forums.count()
     discussions = []
-
     for f in forums:
         discussions.append(f.discussion_set.all())
-
     context = {'forums': forums,
                'count': count,
                'discussions': discussions}
@@ -126,28 +128,33 @@ def forum(request):
 
 
 def addDiscussion(request):
-    form = DiscusstionForm()  # not POST
     if request.method == 'POST':
+        if "discuss" in request.POST:
+            message = request.POST['discuss']
+            for bad_word in TabooList.objects.values('word'):
+                message = message.replace(bad_word['word'], len(bad_word['word']) * '*')
 
-        form = DiscusstionForm(request.POST)
-        if form.is_valid():
-            forum_instance = form.save(commit=False)
-            forum_instance.user_id = request.user.id
-            forum_instance.forum_id = request.POST['forum_id']
-            forum_instance.save()
-            messages.info(request, "Your comments are submitted!")
+            obj = Discussion.objects.create(user_id=request.user.id, forum_id=request.POST['forum_id'],
+                                            discuss=message)
+
+            if message == request.POST['discuss']:
+                messages.info(request, "Your comments are submitted!")
+            else:
+                messages.info(request, "Your comments are submitted!")
+                Warning.objects.create(reported_user=request.user, description='__Taboo_List_Auto__')
+                messages.info(request, "A warning created since your message contains sensitive word(s)!")
             return redirect('/forum/')
-
-    context = {'form': form, 'forum_id': request.POST['forum_id']}
-    return render(request, 'addDiscussion.html', context)
+        context = {'forum_id': request.POST['forum_id']}
+        return render(request, 'addDiscussion.html', context)
+    else:
+        return render(request, 'addDiscussion.html')
 
 
 def forum_report(request):
-    form = FroumReportForm()  # not POST
-    print(request.POST)
+    form = ForumReportForm()  # not POST
     if request.method == 'POST':
         if 'description' in request.POST:
-            form = FroumReportForm(request.POST)
+            form = ForumReportForm(request.POST)
             if form.is_valid():
                 forum_warning = form.save(commit=False)
                 forum_warning.reporter_id = request.user.id
@@ -155,9 +162,14 @@ def forum_report(request):
                 forum_warning.discuss_id = request.POST['discussionID']
                 form.save()
                 messages.info(request, "Your report is submitted!")
-            return redirect('/forum/')
-
-    context = {'form': form, 'discussionID': request.POST["discussionID"], 'reportedID': request.POST['reportedID']}
+                return redirect('/forum/')
+            else:
+                messages.info(request, "Your input is not valid")
+        discussion = Discussion.objects.get(id=request.POST["discussionID"])
+        context = {'form': form, 'discussion': discussion, 'discussionID': request.POST["discussionID"],
+                   'reportedID': request.POST['reportedID']}
+    else:
+        context = {'form': form}
     return render(request, 'forumReport.html', context)
 
 
@@ -231,4 +243,29 @@ def purchaseConfirm(request, url_slug):
 
     else:
         return render(request, "purchaseConfirm.html")
+
+
+def tabooList(request):
+    wordlist = list(TabooList.objects.values_list('word', flat=True))
+    wordlist = [x.upper() for x in wordlist]
+    wordset = set(wordlist)
+    if request.method == "POST":
+        if "word" in request.POST:
+            if ' ' in request.POST['word']:
+                messages.info(request, "Warning: Space is not allowed!!!")
+            else:
+                if TabooList.objects.filter(word=request.POST['word']).exists():
+                    messages.info(request, "This word is already in the list.")
+                else:
+                    for w in TabooList.permute(request.POST['word']):
+                        TabooList.objects.create(word=w, addBy_id=request.user.id)
+
+                    txt = "The word {word} has been added successfully."
+                    messages.info(request, txt.format(word=request.POST['word']))
+    context = {'taboolist': wordset}
+    return render(request, 'tabooList.html', context)
+
+def changePassword(request):  ## do not have any functionality
+    return render(request, 'changePassword.html')
+
 

@@ -29,12 +29,13 @@ class AddMemoryForm(ModelForm):
                   'capacity']
 
 
-class DiscusstionForm(ModelForm):
+class DiscussionForm(ModelForm):
     class Meta:
         model = Discussion
         fields = ['discuss']
         widgets = {
-            'discuss': Textarea(attrs={'cols': 60, 'rows': 10}),  # change text to textarea in form.
+            'discuss': Textarea(attrs={'class': 'login-input', 'cols': 60, 'rows': 10}),
+            # change text to textarea in form.
         }
         error_messages = {
             'discuss': {
@@ -43,12 +44,13 @@ class DiscusstionForm(ModelForm):
         }
 
 
-class FroumReportForm(ModelForm):
+class ForumReportForm(ModelForm):
     class Meta:
         model = ForumWarning
         fields = ['description']
         widgets = {
-            'description': Textarea(attrs={'cols': 60, 'rows': 10}),  # change text to textarea in form.
+            'description': Textarea(attrs={'class': 'login-input', 'cols': 60, 'rows': 10}),
+            # change text to textarea in form.
         }
         error_messages = {
             'description': {
