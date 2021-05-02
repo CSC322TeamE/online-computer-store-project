@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Confirmation</h1>
+    <ul>
+        <li>
+            <label>Item name: {{ item.name }}</label>
+        </li>
+        <li>
+            <lable>payment method {{ payment_method }}</lable>
+        </li>
+        <li>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="amount" value="-{{ item.price }}">
+                <input type="hidden" name="payment_method" value={{ payment_method }}>
+                <input type="hidden" name="address" value={{ address }}>
+                <input type="submit" name="confirm" value="confirm">
+            </form>
+        </li>
+    </ul>
+</body>
+</html>

@@ -46,7 +46,7 @@ def register(request):
                 messages.info(request, 'another email')
                 return render(request, 'register.html')
 
-            user = Customer.objects.create_user(username=request.POST['username'], password=request.POST['password'])
+            user = Customer.objects.create_user(username=request.POST['username'], email=request.POST['email'], password=request.POST['password'])
             user.save()
             group = Group.objects.get(name='customers')
             user.groups.add(group)
@@ -101,7 +101,7 @@ def topUp(request):
                 customer = Customer.objects.get(id=request.user.id)
                 customer.balance += float(request.POST['amount'])
                 customer.save()
-                tran = Transaction.objects.create(customer_id=customer, amount=request.POST['amount'])
+                tran = Transaction.objects.create(customer=customer, amount=request.POST['amount'])
                 tran.save()
                 messages.info(request, "Success!!!")
             else:
@@ -166,5 +166,69 @@ def item(request, url_slug):
     return render(request, 'item.html', {'item': item})
 
 
-def purchase(request):
-    return render(request, 'purchase.html')
+def purchase(request, url_slug):
+    item = Item.objects.get(url_slug=url_slug)
+    customer = Customer.objects.get(id=request.user.id)
+    if customer.saved_address == "NULL":
+        return render(request, "purchase.html", {'item': item, 'balance': customer.balance})
+    else:
+        return render(request, "purchase.html", {'item': item, 'balance': customer.balance, 'saved_address': customer.saved_address})
+
+
+def purchaseConfirm(request, url_slug):
+    item = Item.objects.get(url_slug=url_slug)
+    if request.method == "POST":
+
+        # confirmation of purchase
+        if 'confirm' in request.POST:
+            customer = Customer.objects.get(id=request.user.id)
+            if request.POST['payment_method'] == "credit card":
+                # charge credit card
+                pass
+            else:
+                # charge from user balance
+                customer.balance -= item.price
+                customer.save()
+
+            # record transaction
+            form = TransactionForm(request.POST)
+            transaction = form.save(commit=False)
+            transaction.customer = customer
+            form.save()
+
+            # record order
+            form = OrderForm(request.POST)
+            order = form.save(commit=False)
+            order.customer = customer
+            order.transaction = Transaction.objects.filter(customer=customer).latest('id')
+            form.save()
+
+            messages.info(request, "purchased successfully")
+            return redirect("/")
+
+        # check input credit card is valid
+        if request.POST['payment_method'] == 'credit card':
+            form = CreditCardForm(request.POST)
+            if form.is_valid():
+                return render(request, "purchaseConfirm.html", {'item': item,
+                                                                'payment_method': request.POST['payment_method'],
+                                                                'address': request.POST['address']})
+            else:
+                error_string = ''.join([''.join(x for x in l) for l in list(form.errors.values())])
+                messages.info(request, error_string)
+                return redirect("/purchase/"+url_slug)
+
+        # check input balance is enough
+        if request.POST['payment_method'] == 'balance':
+            if item.price > Customer.objects.get(id=request.user.id).balance:
+                messages.info(request, "not enough balance, please topup first")
+                return redirect("/purchase/"+url_slug)
+
+            else:
+                return render(request, "purchaseConfirm.html", {'item': item,
+                                                                'payment_method': request.POST['payment_method'],
+                                                                'address': request.POST['address']})
+
+    else:
+        return render(request, "purchaseConfirm.html")
+

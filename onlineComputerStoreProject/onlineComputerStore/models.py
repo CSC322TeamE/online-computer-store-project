@@ -2,9 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.template.defaultfilters import slugify
-
 import uuid
-
 
 
 class Customer(User):
@@ -79,10 +77,11 @@ class Bank(models.Model):
     card_number = models.IntegerField(validators=[MaxLengthValidator(6), MinLengthValidator(6)])  # fix length 6
 
 
-class Transaction(models.Model):
-    customer_id = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    amount = models.FloatField(blank=True)
-    time = models.DateTimeField(auto_now_add=True, blank=True)
+class CreditCard(models.Model):
+    name = models.CharField(max_length=20)
+    card_number = models.CharField(max_length=20)
+    csc = models.CharField(max_length=3)
+    expired_date = models.CharField(max_length=5)
 
 
 class Forum(models.Model):
@@ -121,9 +120,19 @@ class ForumWarning(Warning):
     discuss = models.ForeignKey(Discussion, on_delete=models.CASCADE)
 
 
+class Transaction(models.Model):
+    transaction_number = models.UUIDField(default=uuid.uuid1, editable=False)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, default="")
+    amount = models.FloatField(default=0)
+    time = models.DateTimeField(auto_now_add=True)
+
+
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    uid = models.UUIDField() # a unique uniformed id for each order
-    status = models.CharField(max_length=20, default="open")
-    address = models.CharField(max_length=50, blank=False, null=False)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, default=None)
+    transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE, null=True, default=None)
+    order_number = models.UUIDField(editable=False, default=uuid.uuid1()) # a unique uniformed id for each order
+    status = models.CharField(max_length=20, default="in progress") # need a clerk to check the order
+    address = models.CharField(max_length=50, null=True, default=None)
+    delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, null=True, default=None)
+
 
