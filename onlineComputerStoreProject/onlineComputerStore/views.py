@@ -25,9 +25,10 @@ def login(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
+
         if user:
             auth.login(request, user)
-            return redirect('/', {'user': user})
+            return redirect('/', {'user': user } )
 
         messages.info(request, 'username and password does not match')
 
@@ -47,7 +48,8 @@ def register(request):
                 messages.info(request, 'another email')
                 return render(request, 'register.html')
 
-            user = Customer.objects.create_user(username=request.POST['username'], password=request.POST['password'])
+            user = Customer.objects.create_user(username=request.POST['username'], password=request.POST['password'],email=request.POST['email'])
+            user.save()
             group = Group.objects.get(name='customers')
             user.groups.add(group)
             return redirect('/login/')
@@ -62,7 +64,8 @@ def logout(request):
 def account(request):
     # if the user is a customer:
     if request.user.groups.filter(name='customers').exists():
-        return render(request, 'customer.html')
+        customer = Customer.objects.get(id=request.user.id)
+        return render(request, 'customer.html',{'customer': customer})
 
     if request.user.groups.filter(name='clerks').exists():
         return render(request, 'clerk.html')
@@ -103,6 +106,8 @@ def topUp(request):
                 customer.save()
                 Transaction.objects.create(customer_id=customer, amount=request.POST['amount'])
                 messages.info(request, "Success!!!")
+                return redirect('/account/')
+
             else:
                 messages.error(request, "Information doesnt match!!!")
         else:
@@ -176,7 +181,6 @@ def item(request, url_slug):
 def purchase(request):
     return render(request, 'purchase.html')
 
-
 def tabooList(request):
     wordlist = list(TabooList.objects.values_list('word', flat=True))
     wordlist = [x.upper() for x in wordlist]
@@ -196,3 +200,8 @@ def tabooList(request):
                     messages.info(request, txt.format(word=request.POST['word']))
     context = {'taboolist': wordset}
     return render(request, 'tabooList.html', context)
+
+def changePassword(request):  ## do not have any functionality
+    return render(request, 'changePassword.html')
+
+

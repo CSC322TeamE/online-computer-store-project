@@ -34,5 +34,8 @@ urlpatterns = [
                   path('forum/report/', views.forum_report),
                   path('item/<slug:url_slug>', views.item),
                   path('purchase/<slug:url_slug>', views.purchase),
-                  path('taboolist/', views.tabooList)
+                  path('taboolist/', views.tabooList),
+                    path('changePassword/', views.changePassword)
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
