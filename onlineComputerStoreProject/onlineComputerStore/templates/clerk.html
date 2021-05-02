@@ -1,5 +1,5 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link rel="stylesheet" href="{% static 'css/userinfo.css' %}">
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -15,6 +15,34 @@
     <a href="/addItem">Add Item</a>
     <a href="/forum">Forum</a>
     <a href="/aboutus">About Us</a>
+
+
+<div class="wrap">
+			<div class="UserInform-wrap">
+				<div class="login-title">
+					{{ user }}
+				</div>
+
+                <div class="login-form">
+                    <p style="margin: 5px 0">Account : clerk</p>
+
+
+                </div>
+                 <form class="login-form" action="/addItem/" >
+                     <input type="submit" name="addItem" value="Add Item" class="register-submit"/>
+				</form>
+
+                  <form class="login-form" action="/changePassword/" method="post" >
+                       {% csrf_token %}
+                     <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
+				</form>
+
+
+
+
+
+			</div>
+		</div>
 </div>
 </body>
 </html> 
