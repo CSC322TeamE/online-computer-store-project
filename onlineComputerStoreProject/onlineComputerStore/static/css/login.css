@@ -35,6 +35,19 @@ body {
     padding: 0 50px; 
 }
 
+.maintext {
+    text-align: center;
+    margin: 100px 0 20px;
+}
+
+.navBar {
+    text-align: center;
+}
+
+.navBar a {
+    padding: 10px;
+}
+
 .register-wrap{
     width: 200px;
     height: 500px;
