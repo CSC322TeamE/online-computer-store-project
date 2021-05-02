@@ -33,6 +33,8 @@ urlpatterns = [
     path('addDiscussion/', views.addDiscussion),
     path('forum/report/', views.forum_report),
     path('item/<slug:url_slug>', views.item),
-    path('purchase/<slug:url_slug>', views.purchase)
+    path('purchase/<slug:url_slug>', views.purchase),
+    path("deliveryOptions/", views.deliveryOptions),
+    path("addDelivery/", views.addDelivery),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

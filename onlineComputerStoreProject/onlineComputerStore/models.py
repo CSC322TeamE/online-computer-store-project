@@ -30,7 +30,9 @@ class Company(User):
 
 
 class DeliveryCompany(User):
-    pass
+    name = models.CharField(max_length=20)
+    price = models.IntegerField(null=True, blank=True, default=None)
+    rating = models.FloatField(null=True, blank=True, default=None)
 
 
 class Item(models.Model):
@@ -126,4 +128,5 @@ class Order(models.Model):
     uid = models.UUIDField() # a unique uniformed id for each order
     status = models.CharField(max_length=20, default="open")
     address = models.CharField(max_length=50, blank=False, null=False)
+    delivery_company = models.CharField(max_length=20, default="")
 

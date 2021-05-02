@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import permission_required, login_required
+from django.http import HttpResponse
 import onlineComputerStore.tests as ts
 from .forms import *
 # import onlineComputerStore.tests as ts
@@ -168,3 +169,12 @@ def item(request, url_slug):
 
 def purchase(request):
     return render(request, 'purchase.html')
+
+def deliveryOptions(request):
+    return render(request, "deliveryOptions.html")
+
+def addDelivery(request):
+    name = request.POST['name']
+    price = int(request.POST['price'])
+    DeliveryCompany.objects.create(name=company, price=price, rating=5.0)
+    return HttpResponse('ADDED')
