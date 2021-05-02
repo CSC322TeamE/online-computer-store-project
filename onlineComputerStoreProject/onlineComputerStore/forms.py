@@ -8,23 +8,23 @@ from django import forms
 class AddCpuForm(ModelForm):
     class Meta:
         model = CPU
-        fields = ['name', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
-                  'category', 'core_name', 'num_cores', 'frequency']
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
+                  'architecture', 'num_cores', 'frequency']
 
 
 # Add GPU form
 class AddGpuForm(ModelForm):
     class Meta:
         model = GPU
-        fields = ['name', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
-                  'category', 'chipset', 'num_cuda_cores', 'core_clock']
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
+                  'chipset', 'num_cuda_cores', 'core_clock']
 
 
 # Add memory form
 class AddMemoryForm(ModelForm):
     class Meta:
         model = Memory
-        fields = ['name', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
                   'capacity']
 
 
@@ -33,12 +33,13 @@ class AddMemoryForm(ModelForm):
 # ...
 
 
-class DiscusstionForm(ModelForm):
+class DiscussionForm(ModelForm):
     class Meta:
         model = Discussion
         fields = ['discuss']
         widgets = {
-            'discuss': Textarea(attrs={'cols': 60, 'rows': 10}),  # change text to textarea in form.
+            'discuss': Textarea(attrs={'class': 'login-input', 'cols': 60, 'rows': 10}),
+            # change text to textarea in form.
         }
         error_messages = {
             'discuss': {
@@ -47,12 +48,13 @@ class DiscusstionForm(ModelForm):
         }
 
 
-class FroumReportForm(ModelForm):
+class ForumReportForm(ModelForm):
     class Meta:
         model = ForumWarning
         fields = ['description']
         widgets = {
-            'description': Textarea(attrs={'cols': 60, 'rows': 10}),  # change text to textarea in form.
+            'description': Textarea(attrs={'class': 'login-input', 'cols': 60, 'rows': 10}),
+            # change text to textarea in form.
         }
         error_messages = {
             'description': {
