@@ -2,14 +2,14 @@ from onlineComputerStore.models import *
 from django.forms import ModelForm, Textarea
 from django.utils.translation import ugettext_lazy as _  # translatable
 from django.db.models import Q
-# Add CPU form
 from django import forms
 
 
+# Add CPU Form
 class AddCpuForm(ModelForm):
     class Meta:
         model = CPU
-        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'img', 'description',
                   'architecture', 'num_cores', 'frequency']
 
 
@@ -17,16 +17,23 @@ class AddCpuForm(ModelForm):
 class AddGpuForm(ModelForm):
     class Meta:
         model = GPU
-        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
-                  'chipset', 'num_cuda_cores', 'core_clock']
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'img', 'description',
+                  'chipset', 'num_cuda_cores', 'core_clock', 'memory_size']
 
 
 # Add memory form
 class AddMemoryForm(ModelForm):
     class Meta:
         model = Memory
-        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'rating', 'quantity_sold', 'img', 'description',
-                  'capacity']
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'img', 'description',
+                  'capacity', 'type', 'frequency']
+
+
+class AddComputerForm(ModelForm):
+    class Meta:
+        model = Computer
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'img', 'description',
+                  'os', 'computer_cpu', 'computer_gpu', 'computer_memory']
 
 
 class DiscussionForm(ModelForm):

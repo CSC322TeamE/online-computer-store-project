@@ -76,19 +76,42 @@ def account(request):
 
 @permission_required('onlineComputerStore.add_item', login_url="/login/")
 def addItem(request):
-    form = AddCpuForm(request.POST, request.FILES)
-    if request.method == "POST" and 'name' in request.POST:
+    if request.method == 'POST':
+        # if the posted form are cpu form
+        if 'is_cpu' in request.POST:
+            form = AddCpuForm(request.POST, request.FILES)
+            f_model = CPU
+
+        if 'is_gpu' in request.POST:
+            form = AddGpuForm(request.POST, request.FILES)
+            f_model = GPU
+
+        if 'is_memory' in request.POST:
+            form = AddMemoryForm(request.POST, request.FILES)
+            f_model = Memory
+
+        if 'is_computer' in request.POST:
+            form = AddComputerForm(request.POST, request.FILES)
+            f_model = Computer
+
         if form.is_valid():
             cd = form.cleaned_data
-            if not CPU.objects.filter(name=cd['name']).exists():
+            if not f_model.objects.filter(name=cd['name']).exists():
                 form.save()
-            return render(request, 'addItem.html', {'form': form})
-
+            messages.info(request, "add item successful")
         else:
-            return render(request, 'addItem.html', {'form': form})
+            messages.info(request, "something wrong")
+        return redirect('/addItem/')
 
     else:
-        return render(request, 'addItem.html', {'form': form})
+        cpu_form = AddCpuForm()
+        gpu_form = AddGpuForm()
+        memory_form = AddMemoryForm()
+        computer_form = AddComputerForm()
+        return render(request, 'addItem.html', {'cpu_form': cpu_form,
+                                                'gpu_form': gpu_form,
+                                                'memory_form': memory_form,
+                                                'computer_form': computer_form})
 
 
 def browse(request):

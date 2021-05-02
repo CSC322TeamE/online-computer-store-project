@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.core.validators import MinLengthValidator, MaxLengthValidator
+from django.core.validators import MinLengthValidator, MaxLengthValidator, MinValueValidator, MaxValueValidator
 from django.template.defaultfilters import slugify
 import uuid
 
@@ -40,14 +40,14 @@ class DeliveryCompany(User):
 class Item(models.Model):
     name = models.CharField(max_length=20)
     brand = models.CharField(max_length=20, null=True, blank=True, default=None)
-    price = models.FloatField(null=True, blank=True, default=None)
-    quantity = models.IntegerField(null=True, blank=True, default=None)
-    discount = models.FloatField(null=True, blank=True, default=None)
+    price = models.FloatField(null=True, blank=False, default=None)
+    quantity = models.IntegerField(null=True, blank=False, default=None)
+    discount = models.FloatField(null=True, blank=True, default=1)
     rating = models.FloatField(null=True, blank=True, default=None)
     quantity_sold = models.IntegerField(null=True, blank=True, default=0)
     img = models.ImageField(upload_to='img/item_img/', default='img/default_img/400x650.png', blank=True, null=True)
     url_slug = models.SlugField(editable=False, default="")
-    description = models.CharField(max_length=50, null=True, blank=True)
+    description = models.CharField(max_length=50, null=True, blank=True, default=None)
 
     def save(self, *args, **kwargs):
         self.url_slug = slugify(self.name)
@@ -57,26 +57,29 @@ class Item(models.Model):
 
 
 class CPU(Item):
-    architecture = models.CharField(max_length=10, null=True, blank=True, default=None)  # either intel or AMD
+    architecture = models.CharField(max_length=10, null=True, blank=True, default=None)  # arm or x86
     num_cores = models.IntegerField(null=True, blank=True, default=None)
     frequency = models.FloatField(null=True, blank=True, default=None)
 
 
 class GPU(Item):
     chipset = models.CharField(max_length=10, null=True, blank=True, default=None)  # either nvidia or AMD
-    num_cuda_cores = models.IntegerField(null=True, blank=True, default=0)
-    core_clock = models.FloatField(null=True, blank=True, default=0.0)
+    num_cuda_cores = models.IntegerField(null=True, blank=True, default=None)
+    core_clock = models.FloatField(null=True, blank=True, default=None)
+    memory_size = models.FloatField(null=True, blank=True, default=None)
 
 
 class Memory(Item):
     capacity = models.FloatField(null=True, blank=True, default=0.0)
+    type = models.CharField(max_length=5, null=True, blank=True, default=None)  # DDR4 DDR3 ...
+    frequency = models.IntegerField(null=True, blank=True, default=None)  #
 
 
 class Computer(Item):
     os = models.CharField(max_length=10, null=True, blank=True, default=None)  # operating system
-    cpu_name = models.CharField(max_length=20, null=True, blank=True, default=None)
-    gpu_name = models.CharField(max_length=20, null=True, blank=True, default=None)
-    memory_name = models.CharField(max_length=20, null=True, blank=True, default=None)
+    computer_cpu = models.ForeignKey(CPU, on_delete=models.DO_NOTHING, null=True, blank=False, default=None)
+    computer_gpu = models.ForeignKey(GPU, on_delete=models.DO_NOTHING, null=True, blank=False, default=None)
+    computer_memory = models.ForeignKey(Memory, on_delete=models.DO_NOTHING, null=True, blank=False, default=None)
 
 
 class Bank(models.Model):
