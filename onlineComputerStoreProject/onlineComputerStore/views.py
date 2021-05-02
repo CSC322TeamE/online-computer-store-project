@@ -28,7 +28,7 @@ def login(request):
 
         if user:
             auth.login(request, user)
-            return redirect('/', {'user': user } )
+            return redirect('/', {'user': user})
 
         messages.info(request, 'username and password does not match')
 
@@ -48,7 +48,8 @@ def register(request):
                 messages.info(request, 'another email')
                 return render(request, 'register.html')
 
-            user = Customer.objects.create_user(username=request.POST['username'], email=request.POST['email'], password=request.POST['password'])
+            user = Customer.objects.create_user(username=request.POST['username'], email=request.POST['email'],
+                                                password=request.POST['password'])
             user.save()
             group = Group.objects.get(name='customers')
             user.groups.add(group)
@@ -65,7 +66,7 @@ def account(request):
     # if the user is a customer:
     if request.user.groups.filter(name='customers').exists():
         customer = Customer.objects.get(id=request.user.id)
-        return render(request, 'customer.html',{'customer': customer})
+        return render(request, 'customer.html', {'customer': customer})
 
     if request.user.groups.filter(name='clerks').exists():
         return render(request, 'clerk.html')
@@ -127,7 +128,7 @@ def topUp(request):
                 customer = Customer.objects.get(id=request.user.id)
                 customer.balance += float(request.POST['amount'])
                 customer.save()
-                Transaction.objects.create(customer_id=customer, amount=request.POST['amount'])
+                Transaction.objects.create(customer_id=customer.id, amount=request.POST['amount'])
                 messages.info(request, "Success!!!")
                 return redirect('/account/')
 
@@ -198,7 +199,10 @@ def forum_report(request):
 
 def item(request, url_slug):
     item = Item.objects.get(url_slug=url_slug)
-    return render(request, 'item.html', {'item': item})
+    forum = Forum.objects.get(item=item)
+    discussion = forum.discussion_set.all()
+    print(discussion)
+    return render(request, 'item.html', {'item': item, 'discussion': discussion})
 
 
 def purchase(request, url_slug):
@@ -207,7 +211,8 @@ def purchase(request, url_slug):
     if customer.saved_address == "NULL":
         return render(request, "purchase.html", {'item': item, 'balance': customer.balance})
     else:
-        return render(request, "purchase.html", {'item': item, 'balance': customer.balance, 'saved_address': customer.saved_address})
+        return render(request, "purchase.html",
+                      {'item': item, 'balance': customer.balance, 'saved_address': customer.saved_address})
 
 
 def purchaseConfirm(request, url_slug):
@@ -217,7 +222,7 @@ def purchaseConfirm(request, url_slug):
         # confirmation of purchase
         if 'confirm' in request.POST:
             customer = Customer.objects.get(id=request.user.id)
-            if request.POST['payment_method'] == "credit card":
+            if request.POST['payment_method'] == "credit":
                 # charge credit card
                 pass
             else:
@@ -251,13 +256,13 @@ def purchaseConfirm(request, url_slug):
             else:
                 error_string = ''.join([''.join(x for x in l) for l in list(form.errors.values())])
                 messages.info(request, error_string)
-                return redirect("/purchase/"+url_slug)
+                return redirect("/purchase/" + url_slug)
 
         # check input balance is enough
         if request.POST['payment_method'] == 'balance':
             if item.price > Customer.objects.get(id=request.user.id).balance:
                 messages.info(request, "not enough balance, please topup first")
-                return redirect("/purchase/"+url_slug)
+                return redirect("/purchase/" + url_slug)
 
             else:
                 return render(request, "purchaseConfirm.html", {'item': item,
@@ -288,7 +293,6 @@ def tabooList(request):
     context = {'taboolist': wordset}
     return render(request, 'tabooList.html', context)
 
+
 def changePassword(request):  ## do not have any functionality
     return render(request, 'changePassword.html')
-
-

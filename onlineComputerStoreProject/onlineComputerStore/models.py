@@ -53,7 +53,7 @@ class Item(models.Model):
         self.url_slug = slugify(self.name)
         super(Item, self).save(*args, **kwargs)
         forum = Forum(item=self)
-        forum.save()
+        forum.save() # create forum as item created
 
 
 class CPU(Item):
@@ -118,7 +118,7 @@ class Discussion(models.Model):
         return str(self.user.username) + str(self.forum)
 
 
-class Warning(models.Model): # forum auto created ID are saved here since no reporter.
+class Warning(models.Model):  # forum auto created ID are saved here since no reporter.
     date_created = models.DateTimeField(auto_now_add=True, null=True, editable=True)
     description = models.CharField(max_length=300, blank=False)
     reported_user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -140,8 +140,8 @@ class Transaction(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, default=None)
     transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE, null=True, default=None)
-    order_number = models.UUIDField(editable=False, default=uuid.uuid1()) # a unique uniformed id for each order
-    status = models.CharField(max_length=20, default="in progress") # need a clerk to check the order
+    order_number = models.UUIDField(editable=False, default=uuid.uuid1())  # a unique uniformed id for each order
+    status = models.CharField(max_length=20, default="in progress")  # need a clerk to check the order
     address = models.CharField(max_length=50, null=True, default=None)
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, null=True, default=None)
 
@@ -169,3 +169,9 @@ class TabooList(models.Model):
                 temp += i
             word_list.append(temp)
         return word_list
+
+
+class Bidfor(models.Model):
+    price = models.FloatField(default=0)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    deli_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE)
