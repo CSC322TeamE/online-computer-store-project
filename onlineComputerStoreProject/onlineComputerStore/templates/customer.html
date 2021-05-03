@@ -1,7 +1,7 @@
 {% load static %}
-    <link rel="stylesheet" href="{% static 'css/userinfo.css' %}">
+<link rel="stylesheet" href="{% static 'css/userinfo.css' %}">
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>HOME</title>
@@ -29,32 +29,29 @@
 </div>
 
 <div class="wrap">
-			<div class="UserInform-wrap">
-				<div class="login-title">
-					{{ user }}
-				</div>
+    <div class="UserInform-wrap">
+        <div class="login-title">
+            {{ user }}
+        </div>
 
-                <div class="login-form">
-                    <p style="margin: 5px 0">Account : Customer</p>
-                    <p style="margin: 5px 0">Email : {{ user.email }}</p>
-                    <p style="margin: 5px 0">Balance : {{ customer.balance }} </p>
+        <div class="login-form">
+            <p style="margin: 5px 0">Account : Customer</p>
+            <p style="margin: 5px 0">Email : {{ user.email }}</p>
+            <p style="margin: 5px 0">Balance : {{ customer.balance }} </p>
 
-                </div>
-                 <form class="login-form" action="/topUp/" >
-                     <input type="submit" name="Add Balance" value="Add Balance" class="register-submit"/>
-				</form>
+        </div>
+        <form class="login-form" action="/topUp/">
+            <input type="submit" name="Add Balance" value="Add Balance" class="register-submit"/>
+        </form>
 
-                  <form class="login-form" action="/changePassword/" method="post" >
-                       {% csrf_token %}
-                     <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
-				</form>
-
-
+        <form class="login-form" action="/changePassword/" method="post">
+            {% csrf_token %}
+            <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
+        </form>
 
 
-
-			</div>
-		</div>
+    </div>
+</div>
 
 
 </body>

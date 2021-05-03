@@ -1,7 +1,7 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/userinfo.css' %}">
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>HOME</title>
@@ -28,31 +28,29 @@
 
 
     <div class="wrap">
-			<div class="UserInform-wrap">
-				<div class="login-title">
-					{{ user }}
-				</div>
+        <div class="UserInform-wrap">
+            <div class="login-title">
+                {{ user }}
+            </div>
 
-                <div class="login-form">
-                    <p style="margin: 5px 0">Account : manager</p>
-
-
-                </div>
-                 <form class="login-form" action="/" >
-                     <input type="submit" name="change suggested item" value="change suggested item" class="register-submit"/>
-				</form>
-
-                  <form class="login-form" action="/changePassword/" method="post" >
-                       {% csrf_token %}
-                     <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
-				</form>
+            <div class="login-form">
+                <p style="margin: 5px 0">Account : manager</p>
 
 
+            </div>
+            <form class="login-form" action="/">
+                <input type="submit" name="change suggested item" value="change suggested item"
+                       class="register-submit"/>
+            </form>
+
+            <form class="login-form" action="/changePassword/" method="post">
+                {% csrf_token %}
+                <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
+            </form>
 
 
-
-			</div>
-		</div>
+        </div>
+    </div>
 </div>
 </div>
 </body>

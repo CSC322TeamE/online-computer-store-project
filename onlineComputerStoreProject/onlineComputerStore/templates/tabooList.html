@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <title>Taboo List</title>
 </head>
+
 {% if messages %}
     {% for message in messages %}
         {% if message.tags %}
@@ -14,6 +15,14 @@
     {% endfor %}
 {% endif %}
 <body>
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/Browse">Browse</a>
+    <a href="/logout">Logout</a>
+    <a href="/">change suggested item</a>
+    <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
+</div>
 <div style="text-align:center" class="wrap" >
     <h2 class="login-title">Taboo List</h2>
 

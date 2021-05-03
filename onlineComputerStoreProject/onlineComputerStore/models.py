@@ -16,9 +16,6 @@ class Customer(User):
 
 
 class Clerk(User):
-    balance = models.FloatField(default=0.0)
-    saved_address = models.CharField(max_length=50, null=True, blank=True, default=None)
-
     class Meta:
         permissions = [
             ("add_balance", "can add balance"),

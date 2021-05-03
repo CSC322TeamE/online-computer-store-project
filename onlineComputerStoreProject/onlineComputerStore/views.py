@@ -1,11 +1,11 @@
 from django.contrib.auth.models import Group, Permission
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import permission_required, login_required
-import onlineComputerStore.tests as ts
 from .forms import *
-import re
+from django.core.mail import send_mail
 # import onlineComputerStore.tests as ts
 from onlineComputerStore.forms import AddCpuForm
 
@@ -41,11 +41,18 @@ def register(request):
     else:
         if 'email' in request.POST and 'username' in request.POST and 'password' in request.POST:
             if Customer.objects.filter(username=request.POST['username']).exists():
-                messages.info(request, 'another username')
+                messages.info(request, 'Another username')
                 return render(request, 'register.html')
 
             if Customer.objects.filter(email=request.POST['email']).exists():
-                messages.info(request, 'another email')
+                send_mail(
+                    'Online Computer Store Alert',
+                    'You already have a account, if you do not know what I am talking about, you should check what happended.',
+                    'onlineComputerStoreGroup@gmail.com',
+                    [request.POST['email']],
+                    fail_silently=False,
+                )
+                messages.info(request, 'Another email')
                 return render(request, 'register.html')
 
             user = Customer.objects.create_user(username=request.POST['username'], email=request.POST['email'],
@@ -53,6 +60,7 @@ def register(request):
             user.save()
             group = Group.objects.get(name='customers')
             user.groups.add(group)
+            messages.info(request, "You have been registered successfully!")
             return redirect('/login/')
 
 
@@ -266,7 +274,7 @@ def purchaseConfirm(request, url_slug):
             else:
                 return render(request, "purchaseConfirm.html", {'item': item,
                                                                 'payment_method': request.POST['payment_method'],
-                                                                'address': request.POST['address']})
+                                                                'address': request.POST['address2']})
 
     else:
         return render(request, "purchaseConfirm.html")
