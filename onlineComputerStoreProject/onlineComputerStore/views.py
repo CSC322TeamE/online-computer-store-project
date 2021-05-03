@@ -209,9 +209,6 @@ def item(request, url_slug):
     forum = Forum.objects.get(item=item)
     discussion = forum.discussion_set.all()
     return render(request, 'item.html', {'item': item, 'discussion': discussion, 'forum_id': forum.id})
-
-
-
 def deliveryOptions(request):
     return render(request, "deliveryOptions.html")
 
