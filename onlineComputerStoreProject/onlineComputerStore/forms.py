@@ -100,11 +100,11 @@ class OrderForm(ModelForm):
         fields = ['address']
 
 
-# component chosen form
+# component chosen form for filter computer
 class FilterComputerForm(forms.Form):
-    os = forms.CharField(max_length=10, required=False)
-    purpose = forms.CharField(max_length=10, required=False)
-    architecture = forms.CharField(max_length=10, required=False)
+    os = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    purpose = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    architecture = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
     cpu = forms.ModelChoiceField(queryset=None, required=False)
     gpu = forms.ModelChoiceField(queryset=None, required=False)
     memory = forms.ModelChoiceField(queryset=None, required=False)
@@ -120,17 +120,17 @@ class FilterComputerForm(forms.Form):
         if self.has_data("purpose"):
             if self.data["purpose"] == "gaming":
                 self.items = self.items.filter(Q(computer_cpu__frequency__gte=3.0) &
-                                     Q(computer_gpu__core_clock__gte=1500) &
-                                     Q(computer_memory__capacity__gte=8))
+                                               Q(computer_gpu__core_clock__gte=1500) &
+                                               Q(computer_memory__capacity__gte=8))
 
             if self.data["purpose"] == 'business':
                 self.items = self.items.filter(Q(computer_cpu__frequency__gte=2.0) &
-                                     Q(price__lte=1000))
+                                               Q(price__lte=1000))
 
             if self.data["purpose"] == "computing":
                 self.items = self.items.filter(Q(computer_cpu__frequency__gte=3.0) &
-                                     Q(computer_cpu__num_cores__gte=8) &
-                                     Q(computer_memory__capacity__gte=8))
+                                               Q(computer_cpu__num_cores__gte=8) &
+                                               Q(computer_memory__capacity__gte=8))
 
         if self.has_data("architecture"):
             if self.data["architecture"] == 'x86':
@@ -173,6 +173,9 @@ class FilterComputerForm(forms.Form):
             self.items = self.items.filter(computer_memory=self.data["memory"])
 
         return self.items
+
+
+
 
 
 

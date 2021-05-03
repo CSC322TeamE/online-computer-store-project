@@ -11,7 +11,7 @@ html {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 80% 20%;
+  grid-template-columns: 70% 30%;
   grid-template-rows: 100px 100% 20px;
   gap: 0px 0px;
   grid-template-areas:
@@ -27,6 +27,11 @@ html {
 .page-list { grid-area: page-list; }
 
 .filter-area { grid-area: filter-area; }
+
+
+.filter-area th { width: 150px}
+
+.filter-area tr {width: 300px;}
 
 input, textarea, button {
     height: 25px;
@@ -46,6 +51,7 @@ button, select {
     cursor: pointer;
 }
 select {
+    width: 300px;
     background: none;
 }
 button {
@@ -74,22 +80,19 @@ button:hover {
   text-align: right;
 }
 
-
-#view {
-  display: none;
-  width: auto;
-  height: 47px;
-}
-#submit {
+.submit {
     background: none;
     border: 1px solid black;
     margin: 25px 0;
     height: 47px;
-  width: auto;
-  height: 47px;
+    width: auto;
+    height: 47px;
+    cursor: pointer;
+    position: relative;
+    left: 50%;
 }
 
-#submit:hover {
+.submit:hover {
     background-color: #282B33;
     color: white;
 }
@@ -99,8 +102,8 @@ button:hover {
     border: 1px solid black;
     margin: 25px 0;
     height: 47px;
-  width: auto;
-  height: 47px;
+    width: auto;
+    left: 50%;
 }
 
 .reset:hover {
