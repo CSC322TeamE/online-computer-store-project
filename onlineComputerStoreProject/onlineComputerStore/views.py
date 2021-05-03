@@ -312,6 +312,19 @@ def tabooList(request):
     context = {'taboolist': wordset}
     return render(request, 'tabooList.html', context)
 
+def transaction(request):
+
+    data = Transaction.objects.filter(customer_id=request.user.id)
+
+    return render(request, 'transaction.html', context={'data': data})
+
+def viewOrder (request):
+
+
+    data = Order.objects.filter(customer_id=request.user.id)
+    ## Do not know how to acess data from another table
+    return render(request, 'viewOrder.html', context={'data': data})
+
 
 def changePassword(request):  ## do not have any functionality
     return render(request, 'changePassword.html')
