@@ -102,9 +102,9 @@ class OrderForm(ModelForm):
 
 # component chosen form for filter computer
 class FilterComputerForm(forms.Form):
-    os = forms.CharField(max_length=10, required=False)
-    purpose = forms.CharField(max_length=10, required=False)
-    architecture = forms.CharField(max_length=10, required=False)
+    os = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    purpose = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    architecture = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
     cpu = forms.ModelChoiceField(queryset=None, required=False)
     gpu = forms.ModelChoiceField(queryset=None, required=False)
     memory = forms.ModelChoiceField(queryset=None, required=False)

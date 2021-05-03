@@ -28,6 +28,11 @@ html {
 
 .filter-area { grid-area: filter-area; }
 
+
+.filter-area th { width: 150px}
+
+.filter-area tr {width: 300px;}
+
 input, textarea, button {
     height: 25px;
     margin: 0;
@@ -46,6 +51,7 @@ button, select {
     cursor: pointer;
 }
 select {
+    width: 300px;
     background: none;
 }
 button {
@@ -74,12 +80,6 @@ button:hover {
   text-align: right;
 }
 
-
-#view {
-  display: none;
-  width: auto;
-  height: 47px;
-}
 .submit {
     background: none;
     border: 1px solid black;
@@ -88,6 +88,8 @@ button:hover {
     width: auto;
     height: 47px;
     cursor: pointer;
+    position: relative;
+    left: 50%;
 }
 
 .submit:hover {
@@ -100,8 +102,8 @@ button:hover {
     border: 1px solid black;
     margin: 25px 0;
     height: 47px;
-  width: auto;
-  height: 47px;
+    width: auto;
+    left: 50%;
 }
 
 .reset:hover {

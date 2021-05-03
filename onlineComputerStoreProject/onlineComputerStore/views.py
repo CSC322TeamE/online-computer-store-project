@@ -340,8 +340,6 @@ def transaction(request):
     return render(request, 'transaction.html', context={'data': data})
 
 def viewOrder (request):
-
-
     data = Order.objects.filter(customer_id=request.user.id)
     ## Do not know how to acess data from another table
     return render(request, 'viewOrder.html', context={'data': data})

@@ -39,7 +39,9 @@
     <div id="filter-computer">
         <form id="filter-form" action="/browse/computer" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
+            <table>
+                {{ form.as_table }}
+            </table>
         </form>
         <input class="submit" type="submit" name="filter computer" value="Submit" form="filter-form">
         <button id='reset' onclick="document.location.href='/browse/';">RESET</button>
