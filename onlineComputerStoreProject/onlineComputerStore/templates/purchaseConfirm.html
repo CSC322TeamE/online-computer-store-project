@@ -17,7 +17,7 @@
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="amount" value="-{{ item.price }}">
-                <input type="hidden" name="payment_method" value={{ payment_method }}>
+                <input type="hidden" name="payment_method" value="{{ payment_method }}">
                 <input type="hidden" name="address" value={{ address }}>
                 <input type="submit" name="confirm" value="confirm">
             </form>

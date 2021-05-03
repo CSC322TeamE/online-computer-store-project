@@ -28,7 +28,7 @@ def login(request):
 
         if user:
             auth.login(request, user)
-            return redirect('/', {'user': user})
+            return redirect('/', {'user': user } )
 
         messages.info(request, 'username and password does not match')
 
@@ -48,8 +48,7 @@ def register(request):
                 messages.info(request, 'another email')
                 return render(request, 'register.html')
 
-            user = Customer.objects.create_user(username=request.POST['username'], email=request.POST['email'],
-                                                password=request.POST['password'])
+            user = Customer.objects.create_user(username=request.POST['username'], email=request.POST['email'], password=request.POST['password'])
             user.save()
             group = Group.objects.get(name='customers')
             user.groups.add(group)
@@ -66,7 +65,7 @@ def account(request):
     # if the user is a customer:
     if request.user.groups.filter(name='customers').exists():
         customer = Customer.objects.get(id=request.user.id)
-        return render(request, 'customer.html', {'customer': customer})
+        return render(request, 'customer.html',{'customer': customer})
 
     if request.user.groups.filter(name='clerks').exists():
         return render(request, 'clerk.html')
@@ -115,9 +114,32 @@ def addItem(request):
                                                 'computer_form': computer_form})
 
 
-def browse(request):
-    item_list = Item.objects.order_by("quantity_sold")
-    return render(request, 'browse.html', {'item_list': item_list})
+def browse(request, url_slug=None):
+    item_list = Item.objects.all()
+    if request.method == "POST":
+        if url_slug == "computer":
+            print(request.POST)
+            form = FilterComputerForm(request.POST)
+            item_list = form.get_items()
+            print(item_list)
+            return render(request, 'browseComputer.html', {'item_list': item_list,
+                                                           'form': form})
+
+        if url_slug == "component":
+            if request.POST['component'] == 'cpu':
+                item_list = CPU.objects.all()
+
+            if request.POST['component'] == 'gpu':
+                item_list = GPU.objects.all()
+
+            if request.POST['component'] == 'memory':
+                item_list = Memory.objects.all()
+
+            return render(request, 'browseComponent.html', {'item_list': item_list,
+                                                            'component': request.POST['component']})
+
+    else:
+        return render(request, 'browse.html', {'item_list': item_list})
 
 
 def topUp(request):
@@ -128,7 +150,7 @@ def topUp(request):
                 customer = Customer.objects.get(id=request.user.id)
                 customer.balance += float(request.POST['amount'])
                 customer.save()
-                Transaction.objects.create(customer_id=customer.id, amount=request.POST['amount'])
+                Transaction.objects.create(customer_id=customer, amount=request.POST['amount'])
                 messages.info(request, "Success!!!")
                 return redirect('/account/')
 
@@ -157,7 +179,7 @@ def addDiscussion(request):
             message = request.POST['discuss']
             for bad_word in TabooList.objects.values('word'):
                 message = message.replace(bad_word['word'], len(bad_word['word']) * '*')
-                print(request.POST['forum_id'])
+
             obj = Discussion.objects.create(user_id=request.user.id, forum_id=request.POST['forum_id'],
                                             discuss=message)
 
@@ -199,9 +221,7 @@ def forum_report(request):
 
 def item(request, url_slug):
     item = Item.objects.get(url_slug=url_slug)
-    forum = Forum.objects.get(item=item)
-    discussion = forum.discussion_set.all()
-    return render(request, 'item.html', {'item': item, 'discussion': discussion, 'forum_id': forum.id})
+    return render(request, 'item.html', {'item': item})
 
 
 def purchase(request, url_slug):
@@ -210,8 +230,7 @@ def purchase(request, url_slug):
     if customer.saved_address == "NULL":
         return render(request, "purchase.html", {'item': item, 'balance': customer.balance})
     else:
-        return render(request, "purchase.html",
-                      {'item': item, 'balance': customer.balance, 'saved_address': customer.saved_address})
+        return render(request, "purchase.html", {'item': item, 'balance': customer.balance, 'saved_address': customer.saved_address})
 
 
 def purchaseConfirm(request, url_slug):
@@ -221,7 +240,7 @@ def purchaseConfirm(request, url_slug):
         # confirmation of purchase
         if 'confirm' in request.POST:
             customer = Customer.objects.get(id=request.user.id)
-            if request.POST['payment_method'] == "credit":
+            if request.POST['payment_method'] == "credit card":
                 # charge credit card
                 pass
             else:
@@ -255,13 +274,13 @@ def purchaseConfirm(request, url_slug):
             else:
                 error_string = ''.join([''.join(x for x in l) for l in list(form.errors.values())])
                 messages.info(request, error_string)
-                return redirect("/purchase/" + url_slug)
+                return redirect("/purchase/"+url_slug)
 
         # check input balance is enough
         if request.POST['payment_method'] == 'balance':
             if item.price > Customer.objects.get(id=request.user.id).balance:
                 messages.info(request, "not enough balance, please topup first")
-                return redirect("/purchase/" + url_slug)
+                return redirect("/purchase/"+url_slug)
 
             else:
                 return render(request, "purchaseConfirm.html", {'item': item,
@@ -295,3 +314,32 @@ def tabooList(request):
 
 def changePassword(request):  ## do not have any functionality
     return render(request, 'changePassword.html')
+
+
+def choose(request):
+    if request.method == "POST":
+        if 'computer' in request.POST:
+            form = FilterComputerForm(request.POST)
+            if form.is_valid():
+                return render(request, 'chooseComputerComponent.html', {'form': form})
+
+            else:
+                messages.info(request, 'something wrong')
+                return redirect('/choose/')
+    else:
+        return render(request, 'choose.html')
+
+
+# computer item list and choose component
+def chooseComputerComponent(request):
+    if request.method == "POST":
+        form = FilterComputerForm(request.POST)
+        if form.is_valid():
+            return render(request, 'chooseComputerComponent.html', {'form': form})
+
+        else:
+            messages.info(request, 'something wrong')
+            return redirect('/choose/')
+
+    else:
+        return render(request, 'chooseComputerComponent.html')

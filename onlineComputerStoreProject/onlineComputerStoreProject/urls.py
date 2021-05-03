@@ -28,6 +28,7 @@ urlpatterns = [
     path('account/', views.account),
     path('addItem/', views.addItem),
     path('browse/', views.browse),
+    path('browse/<slug:url_slug>', views.browse),
     path('topUp/', views.topUp),
     path('forum/', views.forum),
     path('addDiscussion/', views.addDiscussion),

@@ -35,6 +35,12 @@ class AddComputerForm(ModelForm):
         fields = ['name', 'brand', 'price', 'quantity', 'discount', 'img', 'description',
                   'os', 'computer_cpu', 'computer_gpu', 'computer_memory']
 
+    def __init__(self, *args, **kwargs):
+        super(AddComputerForm, self).__init__(*args, **kwargs)
+        self.fields['computer_cpu'].label_from_instance = lambda obj: "%s" % obj.name
+        self.fields['computer_gpu'].label_from_instance = lambda obj: "%s" % obj.name
+        self.fields['computer_memory'].label_from_instance = lambda obj: "%s" % obj.name
+
 
 class DiscussionForm(ModelForm):
     class Meta:
@@ -92,3 +98,82 @@ class OrderForm(ModelForm):
     class Meta:
         model = Order
         fields = ['address']
+
+
+# component chosen form
+class FilterComputerForm(forms.Form):
+    os = forms.CharField(max_length=10, required=False)
+    purpose = forms.CharField(max_length=10, required=False)
+    architecture = forms.CharField(max_length=10, required=False)
+    cpu = forms.ModelChoiceField(queryset=None, required=False)
+    gpu = forms.ModelChoiceField(queryset=None, required=False)
+    memory = forms.ModelChoiceField(queryset=None, required=False)
+    items = Computer.objects.all()
+
+    def __init__(self, *args, **kwargs):
+        super(FilterComputerForm, self).__init__(*args, **kwargs)
+
+        # filter by input
+        if self.has_data("os"):
+            self.items = self.items.filter(os=self.data["os"])
+
+        if self.has_data("purpose"):
+            if self.data["purpose"] == "gaming":
+                self.items = self.items.filter(Q(computer_cpu__frequency__gte=3.0) &
+                                     Q(computer_gpu__core_clock__gte=1500) &
+                                     Q(computer_memory__capacity__gte=8))
+
+            if self.data["purpose"] == 'business':
+                self.items = self.items.filter(Q(computer_cpu__frequency__gte=2.0) &
+                                     Q(price__lte=1000))
+
+            if self.data["purpose"] == "computing":
+                self.items = self.items.filter(Q(computer_cpu__frequency__gte=3.0) &
+                                     Q(computer_cpu__num_cores__gte=8) &
+                                     Q(computer_memory__capacity__gte=8))
+
+        if self.has_data("architecture"):
+            if self.data["architecture"] == 'x86':
+                self.items = self.items.filter(computer_cpu__architecture="x86")
+
+            if self.data["architecture"] == 'arm':
+                self.items = self.items.filter(computer_cpu__architecture="arm")
+
+        id_list = self.items.distinct().order_by('computer_cpu').values_list('computer_cpu')
+        self.fields["cpu"].queryset = CPU.objects.filter(id__in=id_list)
+        self.fields["cpu"].label_from_instance = lambda obj: "%s" % obj.name
+
+        id_list = self.items.distinct().order_by('computer_gpu').values_list('computer_gpu')
+        self.fields["gpu"].queryset = GPU.objects.filter(id__in=id_list)
+        self.fields["gpu"].label_from_instance = lambda obj: "%s" % obj.name
+
+        id_list = self.items.distinct().order_by('computer_memory').values_list('computer_memory')
+        self.fields["memory"].queryset = Memory.objects.filter(id__in=id_list)
+        self.fields["memory"].label_from_instance = lambda obj: "%s" % obj.name
+
+    def has_data(self, s):
+        if s not in self.data:
+            return False
+
+        if not self.data[s]:
+            return False
+
+        return True
+
+    # get items queryset
+    def get_items(self):
+        print(self.has_data('cpu'))
+        if self.has_data('cpu'):
+            self.items = self.items.filter(computer_cpu=self.data["cpu"])
+
+        if self.has_data('gpu'):
+            self.items = self.items.filter(computer_gpu=self.data["gpu"])
+
+        if self.has_data('memory'):
+            self.items = self.items.filter(computer_memory=self.data["memory"])
+
+        return self.items
+
+
+
+
