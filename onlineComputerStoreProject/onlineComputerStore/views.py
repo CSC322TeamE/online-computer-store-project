@@ -17,7 +17,7 @@ def index(request):
         return render(request, 'userIndex.html')
 
     else:
-        # ts.add_user()
+        ts.add_user()
         suggested_list = ['s1', 's2', 's3']
         popular_list = Item.objects.order_by('quantity_sold')[0:3]
         return render(request, 'index.html', {'popular_list': popular_list, 'suggested_list': suggested_list})
