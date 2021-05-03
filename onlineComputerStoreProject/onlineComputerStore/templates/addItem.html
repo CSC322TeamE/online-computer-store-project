@@ -4,15 +4,137 @@
     <meta charset="UTF-8">
     <title>Add item page</title>
 </head>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<script>
+    function show(id) {
+		document.getElementById(id).style.display='';
+    }
+
+	function hide(id) {
+		document.getElementById(id).style.display='none';
+    }
+
+    window.onload=function(){
+		hide("add-component");
+		hide("add-computer");
+		hide("select-component");
+	}
+
+	function select_type() {
+        let target = document.getElementById("type");
+        if (target.value === "component") {
+            hide("add-computer");
+            hide("add-component");
+            show("select-component");
+        } else if (target.value === "computer") {
+            show("add-computer");
+            hide("add-component");
+            hide("select-component");
+            document.getElementById('component').value = ""
+        } else {
+            hide("add-computer");
+            hide("add-component");
+            hide("select-component");
+        }
+    }
+
+    function select_component() {
+        let target = document.getElementById("component");
+        if (target.value === 'cpu') {
+            show("add-component");
+            show("add-cpu");
+            hide("add-gpu");
+            hide("add-memory");
+        } else if (target.value === 'gpu') {
+            show("add-component");
+            hide("add-cpu");
+            show("add-gpu");
+            hide("add-memory");
+        } else if(target.value === 'memory') {
+            show("add-component");
+            hide("add-cpu");
+            hide("add-gpu");
+            show("add-memory");
+        } else {
+            hide("add-component");
+            hide("add-cpu");
+            hide("add-gpu");
+            hide("add-memory");
+        }
+    }
+</script>
+
+
 <body>
 
-<div id="1">
-    <form action="" method="post" enctype="multipart/form-data">
+<div id="selector">
+    <div id="select-type">
+        <label>
+            Item type:
+            <select id="type" onchange="select_type()">
+                <option value="">--please select item type--</option>
+                <option value="component">component</option>
+                <option value="computer">computer</option>
+            </select>
+        </label>
+    </div>
+
+
+    <div id="select-component">
+        <label>
+            Component:
+            <select id="component" onchange="select_component()">
+                <option value="">--please select component</option>
+                <option value="cpu">cpu</option>
+                <option value="gpu">gpu</option>
+                <option value="memory">memory</option>
+            </select>
+        </label>
+    </div>
+</div>
+
+<div id="add-component">
+    <div id="add-cpu">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ cpu_form.as_p }}
+            <input type="submit" name="is_cpu" value="Submit">
+        </form>
+    </div>
+
+    <div id="add-gpu">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ gpu_form.as_p }}
+            <input type="submit" name="is_gpu" value="Submit">
+        </form>
+    </div>
+
+    <div id="add-memory">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ memory_form.as_p }}
+            <input type="submit" name="is_memory" value="Submit">
+        </form>
+    </div>
+</div>
+
+<div id="add-computer">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit">
+        {{ computer_form.as_p }}
+        <input type="submit" name="is_computer" value="Submit">
     </form>
 </div>
+
 
 </body>
 </html>

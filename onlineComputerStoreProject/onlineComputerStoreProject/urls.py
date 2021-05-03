@@ -36,6 +36,9 @@ urlpatterns = [
     path('purchase/<slug:url_slug>', views.purchase),
     path("deliveryOptions/", views.deliveryOptions),
     path("addDelivery/", views.addDelivery),
-    path("delivery/", views.delivery),
+    path('purchaseConfirm/<slug:url_slug>', views.purchaseConfirm),
+    path('taboolist/', views.tabooList),
+    path('changePassword/', views.changePassword)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 

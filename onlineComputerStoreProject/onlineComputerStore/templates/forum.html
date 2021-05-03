@@ -49,14 +49,14 @@
                     {% if objs.forum == forum %}
                         <hr>
                         <div>
-                            <b style="color: #00ff00; font-size:120%">
-                                <small style="color: #ff66ff">&ltID:{{ objs.user.id }}&gt</small>{{ objs.user.username }}:
+                            <small style="font-size:80%; color: #ff66ff">&ltID:{{ objs.user.id }}&gt</small>
+                            <b style="color: #00ff00; font-size:140%">
+                                {{ objs.user.username }}:
                             </b>
                             <p style="background-color:#66ccff; font-size:160%;">
                                 "{{ objs.discuss }}"
                             </p>
                         </div>
-
                         <div style="text-align:right;">
                             <small> &lt{{ objs.date_created }}&gt</small>
                             <form method="POST" action="\forum\report\">
