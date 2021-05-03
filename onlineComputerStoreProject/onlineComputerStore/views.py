@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import permission_required, login_required
+from django.http import HttpResponse
 import onlineComputerStore.tests as ts
 from .forms import *
 import re
@@ -72,6 +73,12 @@ def account(request):
 
     if request.user.groups.filter(name='managers').exists():
         return render(request, 'manager.html')
+
+    if request.user.groups.filter(name='deliverycompany').exists():
+        open_order = Order.objects.filter(status='in progress')
+        print(open_order)
+        return render(request, 'delivery.html',context={'open_order': open_order})
+
 
 
 @permission_required('onlineComputerStore.add_item', login_url="/login/")
@@ -224,6 +231,19 @@ def item(request, url_slug):
     return render(request, 'item.html', {'item': item})
 
 
+def delivery(request):
+    if request.method == 'POST':
+        company = request.user.id
+        print('PRICE'+request.POST['price'])
+        price = float(request.POST['price'])
+        order_id = request.POST['order_id']
+        print(company)
+        Bidfor.objects.create(price=price, delivery_company_id=company, order_id=order_id)
+        messages.info(request, "Success!!!")
+        return render(request, "delivery.html")
+    else:
+        return render(request, "delivery.html")
+
 def purchase(request, url_slug):
     item = Item.objects.get(url_slug=url_slug)
     customer = Customer.objects.get(id=request.user.id)
@@ -285,7 +305,7 @@ def purchaseConfirm(request, url_slug):
             else:
                 return render(request, "purchaseConfirm.html", {'item': item,
                                                                 'payment_method': request.POST['payment_method'],
-                                                                'address': request.POST['address']})
+                                                                'address': request.POST['address2']})
 
     else:
         return render(request, "purchaseConfirm.html")
@@ -310,6 +330,19 @@ def tabooList(request):
                     messages.info(request, txt.format(word=request.POST['word']))
     context = {'taboolist': wordset}
     return render(request, 'tabooList.html', context)
+
+def transaction(request):
+
+    data = Transaction.objects.filter(customer_id=request.user.id)
+
+    return render(request, 'transaction.html', context={'data': data})
+
+def viewOrder (request):
+
+
+    data = Order.objects.filter(customer_id=request.user.id)
+    ## Do not know how to acess data from another table
+    return render(request, 'viewOrder.html', context={'data': data})
 
 
 def changePassword(request):  ## do not have any functionality
