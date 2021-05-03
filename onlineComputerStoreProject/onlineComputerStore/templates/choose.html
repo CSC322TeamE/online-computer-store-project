@@ -1,39 +1,9 @@
-{% load static %}
-<link rel="stylesheet" href="/static/css/browse.css?{% now "U" %}"/>
-
-<div class="grid-container">
-<div class="tools">
-    <div class="search-area">
-        <input type="text" id="search" placeholder="Search" /> <button id="searchbutton">Go</button>
-    </div>
-</div>
-
-<div class="products-products-table">
-    <div class="products products-table">
-        {% for item in item_list %}
-        <div class="product">
-            <div class="product-img">
-                <img src="{{ item.img.url }}">
-            </div>
-            <div class="product-content">
-                <h3>
-                    <a href="/item/{{ item.url_slug }}">{{ item.name }}</a>
-                    <small>{{ item.description }}</small>
-                </h3>
-                <p class="product-text price">{{ item.price }}</p>
-                <p class="product-text genre">{{ item.rating }}</p>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-
-<div class="page-list">
-
-</div>
-
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Browse Instructions</title>
+</head>
 
 <script>
     function show(id) {
@@ -71,11 +41,13 @@
         if (document.getElementById("type").value === "computer") {
             show("computer-form");
             hide("component-form");
+            disabled("component-form");
             set_default("component");
         }
         else if (document.getElementById("type").value === "component") {
             show("component-form");
             hide("computer-form");
+            disabled("computer");
             set_default("os");
             set_default("purpose");
             set_default("architecture");
@@ -89,88 +61,106 @@
         }
     }
 
+    function select_os() {
+        if (document.getElementById("os").value !== "") {
+            enable("purpose");
+        }
+        else {
+            disabled("purpose");
+            disabled("architecture");
+            set_default("purpose");
+            set_default("architecture");
+        }
+    }
+
+    function select_purpose() {
+        if (document.getElementById("purpose").value !== "") {
+            enable("architecture");
+        }
+        else {
+            disabled("architecture");
+            set_default("architecture");
+        }
+    }
 </script>
 
-<div class="filter-area">
-    <div id="select-grid" class="select-grid">
-        <table>
-            <tr>
-                <th><label>Category: </label></th>
-                <td>
-                    <select name="type" id="type" onchange="select_type()">
-                        <option value="">--please select--</option>
-                        <option value="computer">computer</option>
-                        <option value="component">component</option>
-                    </select>
-                </td>
-            </tr>
-        </table>
+<body>
+
+<div class = "select-grid">
+    <div class="select-form">
+        <label>
+            I want to buy:
+            <select name="type" id="type" onchange="select_type()">
+                <option value="">--please select--</option>
+                <option value="computer">computer</option>
+                <option value="component">component</option>
+            </select>
+        </label>
         <div class="computer-form" id="computer-form">
-            <form action="/browse/computer" class="browse-form" method="post">
+            <form class="browse-form" method="post">
                 {% csrf_token %}
-                <table>
-                    <tr>
-                        <th><label>OS: </label></th>
-                        <td>
-                            <select name="os" id="os">
+                <ul>
+                    <li>
+                        <label>
+                            OS:
+                            <select name="os" id="os" onchange="select_os()">
                                 <option value="">--please select a operating system--</option>
                                 <option value="windows">windows</option>
                                 <option value="linux">linux</option>
                                 <option value="mac os">mac os</option>
                             </select>
-                        </td>
-                    </tr>
+                        </label>
+                    </li>
 
-                    <tr>
-                        <th><label>Main purpose: </label></th>
-                        <td>
-                            <select name="purpose" id="purpose">
+                    <li>
+                        <label>
+                            Main purpose:
+                            <select name="purpose" id="purpose" disabled onchange="select_purpose()">
                                 <option value="">--please select a main purpose--</option>
                                 <option value="business">business</option>
                                 <option value="computing">computing</option>
                                 <option value="gaming">gaming</option>
                             </select>
-                        </td>
-                    </tr>
+                        </label>
+                    </li>
 
-                    <tr>
-                        <th><label>Architecture</label></th>
-                        <td>
-                            <select name="architecture" id="architecture">
+                    <li>
+                        <label>
+                            Architecture:
+                            <select name="architecture" id="architecture" disabled>
                                 <option value="">--please select a architecture--</option>
                                 <option value="intel">intel</option>
                                 <option value="arm">arm</option>
                             </select>
-                        </td>
-                    </tr>
-                </table>
-                <input class="submit" type="submit" name="choose_computer" value="GO">
+                        </label>
+                    </li>
+
+                </ul>
+                <input type="submit" name="computer" value="GO">
             </form>
         </div>
 
         <div class="component-form" id="component-form">
             <form class="browse-form" action="/browse/component" method="post">
                 {% csrf_token %}
-                <table>
-                    <tr>
-                        <th><label>Category: </label></th>
-                        <td>
+                <ul>
+                    <li>
+                        <label>
+                            Category:
                             <select name="component" id="component">
                                 <option value="">--please select a category--</option>
                                 <option value="cpu">cpu</option>
                                 <option value="gpu">gpu</option>
                                 <option value="memory">memory</option>
                             </select>
-                        </td>
-                    </tr>
-                </table>
-                <input type="submit" class="submit" name="choose_component" value="GO">
+                        </label>
+                    </li>
+                </ul>
+                <input type="submit" name="choose_component" value="GO">
             </form>
         </div>
     </div>
 </div>
 
-</div>
-
-
-
+</body>
+</html>

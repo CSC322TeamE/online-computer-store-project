@@ -1873,698 +1873,689 @@ model</ColNames>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="620" parent="182" name="balance">
-      <Position>2</Position>
-      <DataType>real|0s</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="621" parent="182" name="saved_address">
-      <Position>3</Position>
-      <DataType>varchar(50)|0s</DataType>
-    </column>
-    <key id="622" parent="182">
+    <key id="620" parent="182">
       <ColNames>user_ptr_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="623" parent="182">
+    <foreign-key id="621" parent="182">
       <ColNames>user_ptr_id</ColNames>
       <RefTableName>auth_user</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="624" parent="183" name="user_ptr_id">
+    <column id="622" parent="183" name="user_ptr_id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="625" parent="183">
+    <key id="623" parent="183">
       <ColNames>user_ptr_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="626" parent="183">
+    <foreign-key id="624" parent="183">
       <ColNames>user_ptr_id</ColNames>
       <RefTableName>auth_user</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="627" parent="184" name="item_ptr_id">
+    <column id="625" parent="184" name="item_ptr_id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="628" parent="184" name="os">
+    <column id="626" parent="184" name="os">
       <Position>2</Position>
       <DataType>varchar(10)|0s</DataType>
     </column>
-    <column id="629" parent="184" name="computer_cpu_id">
+    <column id="627" parent="184" name="computer_cpu_id">
       <Position>3</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="630" parent="184" name="computer_gpu_id">
+    <column id="628" parent="184" name="computer_gpu_id">
       <Position>4</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="631" parent="184" name="computer_memory_id">
+    <column id="629" parent="184" name="computer_memory_id">
       <Position>5</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <index id="632" parent="184" name="onlineComputerStore_computer_computer_cpu_id_05158a10">
+    <index id="630" parent="184" name="onlineComputerStore_computer_computer_cpu_id_05158a10">
       <ColNames>computer_cpu_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <index id="633" parent="184" name="onlineComputerStore_computer_computer_gpu_id_92f869e1">
+    <index id="631" parent="184" name="onlineComputerStore_computer_computer_gpu_id_92f869e1">
       <ColNames>computer_gpu_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <index id="634" parent="184" name="onlineComputerStore_computer_computer_memory_id_0d563dff">
+    <index id="632" parent="184" name="onlineComputerStore_computer_computer_memory_id_0d563dff">
       <ColNames>computer_memory_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <key id="635" parent="184">
+    <key id="633" parent="184">
       <ColNames>item_ptr_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="636" parent="184">
+    <foreign-key id="634" parent="184">
       <ColNames>item_ptr_id</ColNames>
       <RefTableName>onlineComputerStore_item</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <foreign-key id="637" parent="184">
+    <foreign-key id="635" parent="184">
       <ColNames>computer_cpu_id</ColNames>
       <RefTableName>onlineComputerStore_cpu</RefTableName>
       <RefColNames>item_ptr_id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <foreign-key id="638" parent="184">
+    <foreign-key id="636" parent="184">
       <ColNames>computer_gpu_id</ColNames>
       <RefTableName>onlineComputerStore_gpu</RefTableName>
       <RefColNames>item_ptr_id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <foreign-key id="639" parent="184">
+    <foreign-key id="637" parent="184">
       <ColNames>computer_memory_id</ColNames>
       <RefTableName>onlineComputerStore_memory</RefTableName>
       <RefColNames>item_ptr_id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="640" parent="185" name="item_ptr_id">
+    <column id="638" parent="185" name="item_ptr_id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="641" parent="185" name="architecture">
+    <column id="639" parent="185" name="architecture">
       <Position>2</Position>
       <DataType>varchar(10)|0s</DataType>
     </column>
-    <column id="642" parent="185" name="num_cores">
+    <column id="640" parent="185" name="num_cores">
       <Position>3</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="643" parent="185" name="frequency">
+    <column id="641" parent="185" name="frequency">
       <Position>4</Position>
       <DataType>real|0s</DataType>
     </column>
-    <key id="644" parent="185">
+    <key id="642" parent="185">
       <ColNames>item_ptr_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="645" parent="185">
+    <foreign-key id="643" parent="185">
       <ColNames>item_ptr_id</ColNames>
       <RefTableName>onlineComputerStore_item</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="646" parent="186" name="id">
+    <column id="644" parent="186" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="647" parent="186" name="name">
+    <column id="645" parent="186" name="name">
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="648" parent="186" name="card_number">
+    <column id="646" parent="186" name="card_number">
       <Position>3</Position>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="649" parent="186" name="csc">
+    <column id="647" parent="186" name="csc">
       <Position>4</Position>
       <DataType>varchar(3)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="650" parent="186" name="expired_date">
+    <column id="648" parent="186" name="expired_date">
       <Position>5</Position>
       <DataType>varchar(5)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="651" parent="186">
+    <key id="649" parent="186">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="652" parent="187" name="user_ptr_id">
+    <column id="650" parent="187" name="user_ptr_id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="653" parent="187" name="balance">
+    <column id="651" parent="187" name="balance">
       <Position>2</Position>
       <DataType>real|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="654" parent="187" name="saved_address">
+    <column id="652" parent="187" name="saved_address">
       <Position>3</Position>
       <DataType>varchar(50)|0s</DataType>
     </column>
-    <key id="655" parent="187">
+    <key id="653" parent="187">
       <ColNames>user_ptr_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="656" parent="187">
+    <foreign-key id="654" parent="187">
       <ColNames>user_ptr_id</ColNames>
       <RefTableName>auth_user</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="657" parent="188" name="user_ptr_id">
+    <column id="655" parent="188" name="user_ptr_id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="658" parent="188">
+    <key id="656" parent="188">
       <ColNames>user_ptr_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="659" parent="188">
+    <foreign-key id="657" parent="188">
       <ColNames>user_ptr_id</ColNames>
       <RefTableName>auth_user</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="660" parent="189" name="id">
+    <column id="658" parent="189" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="661" parent="189" name="discuss">
+    <column id="659" parent="189" name="discuss">
       <Position>2</Position>
       <DataType>varchar(1000)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="662" parent="189" name="date_created">
+    <column id="660" parent="189" name="date_created">
       <Position>3</Position>
       <DataType>datetime|0s</DataType>
     </column>
-    <column id="663" parent="189" name="forum_id">
+    <column id="661" parent="189" name="forum_id">
       <Position>4</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="664" parent="189" name="user_id">
+    <column id="662" parent="189" name="user_id">
       <Position>5</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="665" parent="189" name="onlineComputerStore_discussion_forum_id_9c78d54a">
+    <index id="663" parent="189" name="onlineComputerStore_discussion_forum_id_9c78d54a">
       <ColNames>forum_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <index id="666" parent="189" name="onlineComputerStore_discussion_user_id_0a453dca">
+    <index id="664" parent="189" name="onlineComputerStore_discussion_user_id_0a453dca">
       <ColNames>user_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <key id="667" parent="189">
+    <key id="665" parent="189">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="668" parent="189">
+    <foreign-key id="666" parent="189">
       <ColNames>forum_id</ColNames>
       <RefTableName>onlineComputerStore_forum</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <foreign-key id="669" parent="189">
+    <foreign-key id="667" parent="189">
       <ColNames>user_id</ColNames>
       <RefTableName>auth_user</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="670" parent="190" name="id">
+    <column id="668" parent="190" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="671" parent="190" name="description">
+    <column id="669" parent="190" name="description">
       <Position>2</Position>
       <DataType>varchar(1000)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="672" parent="190" name="url_slug">
+    <column id="670" parent="190" name="url_slug">
       <Position>3</Position>
       <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="673" parent="190" name="item_id">
+    <column id="671" parent="190" name="item_id">
       <Position>4</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="674" parent="190" name="onlineComputerStore_forum_url_slug_837e1bef">
+    <index id="672" parent="190" name="onlineComputerStore_forum_url_slug_837e1bef">
       <ColNames>url_slug</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <index id="675" parent="190" name="onlineComputerStore_forum_item_id_9eecdeb6">
+    <index id="673" parent="190" name="onlineComputerStore_forum_item_id_9eecdeb6">
       <ColNames>item_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <key id="676" parent="190">
+    <key id="674" parent="190">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="677" parent="190">
+    <foreign-key id="675" parent="190">
       <ColNames>item_id</ColNames>
       <RefTableName>onlineComputerStore_item</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="678" parent="191" name="warning_ptr_id">
+    <column id="676" parent="191" name="warning_ptr_id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="679" parent="191" name="discuss_id">
+    <column id="677" parent="191" name="discuss_id">
       <Position>2</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="680" parent="191" name="reporter_id">
+    <column id="678" parent="191" name="reporter_id">
       <Position>3</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="681" parent="191" name="onlineComputerStore_forumwarning_discuss_id_625a70d9">
+    <index id="679" parent="191" name="onlineComputerStore_forumwarning_discuss_id_625a70d9">
       <ColNames>discuss_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <index id="682" parent="191" name="onlineComputerStore_forumwarning_reporter_id_0651ef15">
+    <index id="680" parent="191" name="onlineComputerStore_forumwarning_reporter_id_0651ef15">
       <ColNames>reporter_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <key id="683" parent="191">
+    <key id="681" parent="191">
       <ColNames>warning_ptr_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="684" parent="191">
+    <foreign-key id="682" parent="191">
       <ColNames>warning_ptr_id</ColNames>
       <RefTableName>onlineComputerStore_warning</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <foreign-key id="685" parent="191">
+    <foreign-key id="683" parent="191">
       <ColNames>discuss_id</ColNames>
       <RefTableName>onlineComputerStore_discussion</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <foreign-key id="686" parent="191">
+    <foreign-key id="684" parent="191">
       <ColNames>reporter_id</ColNames>
       <RefTableName>auth_user</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="687" parent="192" name="item_ptr_id">
+    <column id="685" parent="192" name="item_ptr_id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="688" parent="192" name="chipset">
+    <column id="686" parent="192" name="chipset">
       <Position>2</Position>
       <DataType>varchar(10)|0s</DataType>
     </column>
-    <column id="689" parent="192" name="num_cuda_cores">
+    <column id="687" parent="192" name="num_cuda_cores">
       <Position>3</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="690" parent="192" name="core_clock">
+    <column id="688" parent="192" name="core_clock">
       <Position>4</Position>
       <DataType>real|0s</DataType>
     </column>
-    <column id="691" parent="192" name="memory_size">
+    <column id="689" parent="192" name="memory_size">
       <Position>5</Position>
       <DataType>real|0s</DataType>
     </column>
-    <key id="692" parent="192">
+    <key id="690" parent="192">
       <ColNames>item_ptr_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="693" parent="192">
+    <foreign-key id="691" parent="192">
       <ColNames>item_ptr_id</ColNames>
       <RefTableName>onlineComputerStore_item</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="694" parent="193" name="id">
+    <column id="692" parent="193" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="695" parent="193" name="name">
+    <column id="693" parent="193" name="name">
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="696" parent="193" name="brand">
+    <column id="694" parent="193" name="brand">
       <Position>3</Position>
       <DataType>varchar(20)|0s</DataType>
     </column>
-    <column id="697" parent="193" name="price">
+    <column id="695" parent="193" name="price">
       <Position>4</Position>
       <DataType>real|0s</DataType>
     </column>
-    <column id="698" parent="193" name="quantity">
+    <column id="696" parent="193" name="quantity">
       <Position>5</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="699" parent="193" name="discount">
+    <column id="697" parent="193" name="discount">
       <Position>6</Position>
       <DataType>real|0s</DataType>
     </column>
-    <column id="700" parent="193" name="rating">
+    <column id="698" parent="193" name="rating">
       <Position>7</Position>
       <DataType>real|0s</DataType>
     </column>
-    <column id="701" parent="193" name="quantity_sold">
+    <column id="699" parent="193" name="quantity_sold">
       <Position>8</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="702" parent="193" name="img">
+    <column id="700" parent="193" name="img">
       <Position>9</Position>
       <DataType>varchar(100)|0s</DataType>
     </column>
-    <column id="703" parent="193" name="url_slug">
+    <column id="701" parent="193" name="url_slug">
       <Position>10</Position>
       <DataType>varchar(50)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="704" parent="193" name="description">
+    <column id="702" parent="193" name="description">
       <Position>11</Position>
       <DataType>varchar(50)|0s</DataType>
     </column>
-    <index id="705" parent="193" name="onlineComputerStore_item_url_slug_d0052b07">
+    <index id="703" parent="193" name="onlineComputerStore_item_url_slug_d0052b07">
       <ColNames>url_slug</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <key id="706" parent="193">
+    <key id="704" parent="193">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="707" parent="194" name="clerk_ptr_id">
+    <column id="705" parent="194" name="clerk_ptr_id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="708" parent="194">
+    <key id="706" parent="194">
       <ColNames>clerk_ptr_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="709" parent="194">
+    <foreign-key id="707" parent="194">
       <ColNames>clerk_ptr_id</ColNames>
       <RefTableName>onlineComputerStore_clerk</RefTableName>
       <RefColNames>user_ptr_id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="710" parent="195" name="item_ptr_id">
+    <column id="708" parent="195" name="item_ptr_id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="711" parent="195" name="capacity">
+    <column id="709" parent="195" name="capacity">
       <Position>2</Position>
       <DataType>real|0s</DataType>
     </column>
-    <column id="712" parent="195" name="type">
+    <column id="710" parent="195" name="type">
       <Position>3</Position>
       <DataType>varchar(5)|0s</DataType>
     </column>
-    <column id="713" parent="195" name="frequency">
+    <column id="711" parent="195" name="frequency">
       <Position>4</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <key id="714" parent="195">
+    <key id="712" parent="195">
       <ColNames>item_ptr_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="715" parent="195">
+    <foreign-key id="713" parent="195">
       <ColNames>item_ptr_id</ColNames>
       <RefTableName>onlineComputerStore_item</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="716" parent="196" name="id">
+    <column id="714" parent="196" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="717" parent="196" name="status">
+    <column id="715" parent="196" name="status">
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="718" parent="196" name="address">
+    <column id="716" parent="196" name="address">
       <Position>3</Position>
       <DataType>varchar(50)|0s</DataType>
     </column>
-    <column id="719" parent="196" name="customer_id">
+    <column id="717" parent="196" name="customer_id">
       <Position>4</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="720" parent="196" name="delivery_company_id">
+    <column id="718" parent="196" name="delivery_company_id">
       <Position>5</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="721" parent="196" name="transaction_id">
+    <column id="719" parent="196" name="transaction_id">
       <Position>6</Position>
       <DataType>integer|0s</DataType>
     </column>
-    <column id="722" parent="196" name="order_number">
+    <column id="720" parent="196" name="order_number">
       <Position>7</Position>
       <DataType>char(32)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="723" parent="196" name="sqlite_autoindex_onlineComputerStore_order_1">
+    <index id="721" parent="196" name="sqlite_autoindex_onlineComputerStore_order_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>transaction_id</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="724" parent="196" name="onlineComputerStore_order_customer_id_b5ee1e79">
+    <index id="722" parent="196" name="onlineComputerStore_order_customer_id_b5ee1e79">
       <ColNames>customer_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <index id="725" parent="196" name="onlineComputerStore_order_delivery_company_id_6baef5eb">
+    <index id="723" parent="196" name="onlineComputerStore_order_delivery_company_id_6baef5eb">
       <ColNames>delivery_company_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <key id="726" parent="196">
+    <key id="724" parent="196">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="727" parent="196">
+    <key id="725" parent="196">
       <ColNames>transaction_id</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_onlineComputerStore_order_1</UnderlyingIndexName>
     </key>
-    <foreign-key id="728" parent="196">
+    <foreign-key id="726" parent="196">
       <ColNames>customer_id</ColNames>
       <RefTableName>onlineComputerStore_customer</RefTableName>
       <RefColNames>user_ptr_id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <foreign-key id="729" parent="196">
+    <foreign-key id="727" parent="196">
       <ColNames>delivery_company_id</ColNames>
       <RefTableName>onlineComputerStore_deliverycompany</RefTableName>
       <RefColNames>user_ptr_id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <foreign-key id="730" parent="196">
+    <foreign-key id="728" parent="196">
       <ColNames>transaction_id</ColNames>
       <RefTableName>onlineComputerStore_transaction</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="731" parent="197" name="id">
+    <column id="729" parent="197" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="732" parent="197" name="word">
+    <column id="730" parent="197" name="word">
       <Position>2</Position>
       <DataType>varchar(100)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="733" parent="197" name="addBy_id">
+    <column id="731" parent="197" name="addBy_id">
       <Position>3</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="734" parent="197" name="sqlite_autoindex_onlineComputerStore_taboolist_1">
+    <index id="732" parent="197" name="sqlite_autoindex_onlineComputerStore_taboolist_1">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>word</ColNames>
       <ColumnCollations></ColumnCollations>
       <Unique>1</Unique>
     </index>
-    <index id="735" parent="197" name="onlineComputerStore_taboolist_addBy_id_3a0707d4">
+    <index id="733" parent="197" name="onlineComputerStore_taboolist_addBy_id_3a0707d4">
       <ColNames>addBy_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <key id="736" parent="197">
+    <key id="734" parent="197">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="737" parent="197">
+    <key id="735" parent="197">
       <ColNames>word</ColNames>
       <UnderlyingIndexName>sqlite_autoindex_onlineComputerStore_taboolist_1</UnderlyingIndexName>
     </key>
-    <foreign-key id="738" parent="197">
+    <foreign-key id="736" parent="197">
       <ColNames>addBy_id</ColNames>
       <RefTableName>onlineComputerStore_clerk</RefTableName>
       <RefColNames>user_ptr_id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="739" parent="198" name="id">
+    <column id="737" parent="198" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="740" parent="198" name="transaction_number">
+    <column id="738" parent="198" name="transaction_number">
       <Position>2</Position>
       <DataType>char(32)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="741" parent="198" name="amount">
+    <column id="739" parent="198" name="amount">
       <Position>3</Position>
       <DataType>real|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="742" parent="198" name="time">
+    <column id="740" parent="198" name="time">
       <Position>4</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="743" parent="198" name="customer_id">
+    <column id="741" parent="198" name="customer_id">
       <Position>5</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="744" parent="198" name="onlineComputerStore_transaction_customer_id_2cda1e0d">
+    <index id="742" parent="198" name="onlineComputerStore_transaction_customer_id_2cda1e0d">
       <ColNames>customer_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <key id="745" parent="198">
+    <key id="743" parent="198">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="746" parent="198">
+    <foreign-key id="744" parent="198">
       <ColNames>customer_id</ColNames>
       <RefTableName>onlineComputerStore_customer</RefTableName>
       <RefColNames>user_ptr_id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="747" parent="199" name="id">
+    <column id="745" parent="199" name="id">
       <Position>1</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>null</SequenceIdentity>
     </column>
-    <column id="748" parent="199" name="date_created">
+    <column id="746" parent="199" name="date_created">
       <Position>2</Position>
       <DataType>datetime|0s</DataType>
     </column>
-    <column id="749" parent="199" name="description">
+    <column id="747" parent="199" name="description">
       <Position>3</Position>
       <DataType>varchar(300)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="750" parent="199" name="finalized">
+    <column id="748" parent="199" name="finalized">
       <Position>4</Position>
       <DataType>bool|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="751" parent="199" name="reported_user_id">
+    <column id="749" parent="199" name="reported_user_id">
       <Position>5</Position>
       <DataType>integer|0s</DataType>
       <NotNull>1</NotNull>
     </column>
-    <index id="752" parent="199" name="onlineComputerStore_warning_reported_user_id_c4c37fe2">
+    <index id="750" parent="199" name="onlineComputerStore_warning_reported_user_id_c4c37fe2">
       <ColNames>reported_user_id</ColNames>
       <ColumnCollations></ColumnCollations>
     </index>
-    <key id="753" parent="199">
+    <key id="751" parent="199">
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="754" parent="199">
+    <foreign-key id="752" parent="199">
       <ColNames>reported_user_id</ColNames>
       <RefTableName>auth_user</RefTableName>
       <RefColNames>id</RefColNames>
       <Deferrable>1</Deferrable>
       <InitiallyDeferred>1</InitiallyDeferred>
     </foreign-key>
-    <column id="755" parent="200" name="type">
+    <column id="753" parent="200" name="type">
       <Position>1</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="756" parent="200" name="name">
+    <column id="754" parent="200" name="name">
       <Position>2</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="757" parent="200" name="tbl_name">
+    <column id="755" parent="200" name="tbl_name">
       <Position>3</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="758" parent="200" name="rootpage">
+    <column id="756" parent="200" name="rootpage">
       <Position>4</Position>
       <DataType>int|0s</DataType>
     </column>
-    <column id="759" parent="200" name="sql">
+    <column id="757" parent="200" name="sql">
       <Position>5</Position>
       <DataType>text|0s</DataType>
     </column>
-    <column id="760" parent="201" name="name">
+    <column id="758" parent="201" name="name">
       <Position>1</Position>
     </column>
-    <column id="761" parent="201" name="seq">
+    <column id="759" parent="201" name="seq">
       <Position>2</Position>
     </column>
   </database-model>

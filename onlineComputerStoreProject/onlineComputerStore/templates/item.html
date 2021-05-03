@@ -50,7 +50,7 @@
 
     <form method="POST" action="\addDiscussion\">
         {% csrf_token %}
-        <input type="hidden" name="forum_id" value="{{ forum_id }}">
+        <input type="hidden" name="forum_id" value="{{ forum.id }}">
         <button class="btn btn-success" style="width:fit-content; padding: 4px; margin:10px;">Say something</button>
     </form>
 </div>

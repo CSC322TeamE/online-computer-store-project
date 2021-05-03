@@ -16,10 +16,7 @@ class Customer(User):
 
 
 class Clerk(User):
-    class Meta:
-        permissions = [
-            ("add_balance", "can add balance"),
-        ]
+    pass
 
 
 class Manager(Clerk):
@@ -143,6 +140,12 @@ class Order(models.Model):
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, null=True, default=None)
 
 
+class Bidfor(models.Model):
+    price = models.FloatField(default=0)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE)
+
+
 class TabooList(models.Model):
     addBy = models.ForeignKey(Clerk, on_delete=models.CASCADE)
     word = models.CharField(max_length=100, unique=True)
@@ -166,9 +169,3 @@ class TabooList(models.Model):
                 temp += i
             word_list.append(temp)
         return word_list
-
-
-class Bidfor(models.Model):
-    price = models.FloatField(default=0)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    deli_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE)

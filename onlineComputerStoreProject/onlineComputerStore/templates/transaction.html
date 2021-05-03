@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction</title>
+
+
+</head>
+<body>
+
+ <h1 style="text-align: center"> Transaction</h1>
+
+    <table align="center" border="1" width="600" height="150">
+        <tr>
+            <th>Amount</th>
+            <th>Transaction number</th>
+            <th>time</th>
+        </tr>
+        {% for data in data  %}
+        <tr align="center">
+            <td>{{ data.amount }}</td>
+            <td>{{ data.transaction_number }}</td>
+            <td>{{ data.time }}</td>
+        </tr>
+        {% endfor %}
+
+        </table>
+
+      <a  style="display: block; text-align: center;" href="/account">account page</a>
+
+</body>
+</html>
