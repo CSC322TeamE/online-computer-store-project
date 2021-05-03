@@ -18,6 +18,7 @@ class Customer(User):
 class Clerk(User):
     pass
 
+
 class Manager(Clerk):
     pass
 

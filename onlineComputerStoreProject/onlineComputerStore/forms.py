@@ -120,17 +120,17 @@ class FilterComputerForm(forms.Form):
         if self.has_data("purpose"):
             if self.data["purpose"] == "gaming":
                 self.items = self.items.filter(Q(computer_cpu__frequency__gte=3.0) &
-                                     Q(computer_gpu__core_clock__gte=1500) &
-                                     Q(computer_memory__capacity__gte=8))
+                                               Q(computer_gpu__core_clock__gte=1500) &
+                                               Q(computer_memory__capacity__gte=8))
 
             if self.data["purpose"] == 'business':
                 self.items = self.items.filter(Q(computer_cpu__frequency__gte=2.0) &
-                                     Q(price__lte=1000))
+                                               Q(price__lte=1000))
 
             if self.data["purpose"] == "computing":
                 self.items = self.items.filter(Q(computer_cpu__frequency__gte=3.0) &
-                                     Q(computer_cpu__num_cores__gte=8) &
-                                     Q(computer_memory__capacity__gte=8))
+                                               Q(computer_cpu__num_cores__gte=8) &
+                                               Q(computer_memory__capacity__gte=8))
 
         if self.has_data("architecture"):
             if self.data["architecture"] == 'x86':

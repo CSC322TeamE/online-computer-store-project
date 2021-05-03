@@ -71,13 +71,11 @@
         if (document.getElementById("type").value === "computer") {
             show("computer-form");
             hide("component-form");
-            disabled("component-form");
             set_default("component");
         }
         else if (document.getElementById("type").value === "component") {
             show("component-form");
             hide("computer-form");
-            disabled("computer");
             set_default("os");
             set_default("purpose");
             set_default("architecture");
@@ -91,27 +89,6 @@
         }
     }
 
-    function select_os() {
-        if (document.getElementById("os").value !== "") {
-            enable("purpose");
-        }
-        else {
-            disabled("purpose");
-            disabled("architecture");
-            set_default("purpose");
-            set_default("architecture");
-        }
-    }
-
-    function select_purpose() {
-        if (document.getElementById("purpose").value !== "") {
-            enable("architecture");
-        }
-        else {
-            disabled("architecture");
-            set_default("architecture");
-        }
-    }
 </script>
 
 <div class="filter-area">
@@ -135,7 +112,7 @@
                     <tr>
                         <th><label>OS: </label></th>
                         <td>
-                            <select name="os" id="os" onchange="select_os()">
+                            <select name="os" id="os">
                                 <option value="">--please select a operating system--</option>
                                 <option value="windows">windows</option>
                                 <option value="linux">linux</option>
@@ -147,7 +124,7 @@
                     <tr>
                         <th><label>Main purpose: </label></th>
                         <td>
-                            <select name="purpose" id="purpose" disabled onchange="select_purpose()">
+                            <select name="purpose" id="purpose">
                                 <option value="">--please select a main purpose--</option>
                                 <option value="business">business</option>
                                 <option value="computing">computing</option>
@@ -159,7 +136,7 @@
                     <tr>
                         <th><label>Architecture</label></th>
                         <td>
-                            <select name="architecture" id="architecture" disabled>
+                            <select name="architecture" id="architecture">
                                 <option value="">--please select a architecture--</option>
                                 <option value="intel">intel</option>
                                 <option value="arm">arm</option>
