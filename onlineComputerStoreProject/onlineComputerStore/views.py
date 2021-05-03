@@ -157,7 +157,7 @@ def addDiscussion(request):
             message = request.POST['discuss']
             for bad_word in TabooList.objects.values('word'):
                 message = message.replace(bad_word['word'], len(bad_word['word']) * '*')
-
+                print(request.POST['forum_id'])
             obj = Discussion.objects.create(user_id=request.user.id, forum_id=request.POST['forum_id'],
                                             discuss=message)
 
@@ -201,8 +201,7 @@ def item(request, url_slug):
     item = Item.objects.get(url_slug=url_slug)
     forum = Forum.objects.get(item=item)
     discussion = forum.discussion_set.all()
-    print(discussion)
-    return render(request, 'item.html', {'item': item, 'discussion': discussion})
+    return render(request, 'item.html', {'item': item, 'discussion': discussion, 'forum_id': forum.id})
 
 
 def purchase(request, url_slug):
