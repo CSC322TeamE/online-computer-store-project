@@ -1,0 +1,46 @@
+{% load static %}
+<link rel="stylesheet" href="/static/css/browse.css?{% now "U" %}"/>
+
+<div class="grid-container">
+<div class="tools">
+    <div class="search-area">
+        <input type="text" id="search" placeholder="Search" /> <button id="searchbutton">Go</button>
+    </div>
+</div>
+
+<div class="products-products-table">
+    <div class="products products-table">
+        {% for item in item_list %}
+        <div class="product">
+            <div class="product-img">
+                <img src="{{ item.img.url }}">
+            </div>
+            <div class="product-content">
+                <h3>
+                    <a href="/item/{{ item.url_slug }}">{{ item.name }}</a>
+                    <small>{{ item.description }}</small>
+                </h3>
+                <p class="product-text price">{{ item.price }}</p>
+                <p class="product-text genre">{{ item.rating }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="page-list">
+
+</div>
+
+
+
+<div class="filter-area">
+    filter: {{ component }} <br>
+    <button id='reset' onclick="document.location.href='/browse/';">RESET</button>
+</div>
+
+</div>
+
+
+

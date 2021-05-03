@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import permission_required, login_required
+from django.http import HttpResponse
+import onlineComputerStore.tests as ts
 from .forms import *
 from django.core.mail import send_mail
 # import onlineComputerStore.tests as ts
@@ -82,6 +84,11 @@ def account(request):
     if request.user.groups.filter(name='managers').exists():
         return render(request, 'manager.html')
 
+    if request.user.groups.filter(name='deliverycompany').exists():
+        open_order = Order.objects.filter(status='in progress')
+        print(open_order)
+        return render(request, 'delivery.html', context={'open_order': open_order})
+
 
 @permission_required('onlineComputerStore.add_item', login_url="/login/")
 def addItem(request):
@@ -123,9 +130,32 @@ def addItem(request):
                                                 'computer_form': computer_form})
 
 
-def browse(request):
-    item_list = Item.objects.order_by("quantity_sold")
-    return render(request, 'browse.html', {'item_list': item_list})
+def browse(request, url_slug=None):
+    item_list = Item.objects.all()
+    if request.method == "POST":
+        if url_slug == "computer":
+            print(request.POST)
+            form = FilterComputerForm(request.POST)
+            item_list = form.get_items()
+            print(item_list)
+            return render(request, 'browseComputer.html', {'item_list': item_list,
+                                                           'form': form})
+
+        if url_slug == "component":
+            if request.POST['component'] == 'cpu':
+                item_list = CPU.objects.all()
+
+            if request.POST['component'] == 'gpu':
+                item_list = GPU.objects.all()
+
+            if request.POST['component'] == 'memory':
+                item_list = Memory.objects.all()
+
+            return render(request, 'browseComponent.html', {'item_list': item_list,
+                                                            'component': request.POST['component']})
+
+    else:
+        return render(request, 'browse.html', {'item_list': item_list})
 
 
 def topUp(request):
@@ -138,7 +168,7 @@ def topUp(request):
                 customer.save()
                 Transaction.objects.create(customer_id=customer.id, amount=request.POST['amount'])
                 messages.info(request, "Success!!!")
-                return redirect('/account/')
+                return redirect('/topUp/')
 
             else:
                 messages.error(request, "Information doesnt match!!!")
@@ -165,8 +195,8 @@ def addDiscussion(request):
             message = request.POST['discuss']
             for bad_word in TabooList.objects.values('word'):
                 message = message.replace(bad_word['word'], len(bad_word['word']) * '*')
-                print(request.POST['forum_id'])
-            obj = Discussion.objects.create(user_id=request.user.id, forum_id=request.POST['forum_id'],
+
+                Discussion.objects.create(user_id=request.user.id, forum_id=request.POST['forum_id'],
                                             discuss=message)
 
             if message == request.POST['discuss']:
@@ -209,7 +239,21 @@ def item(request, url_slug):
     item = Item.objects.get(url_slug=url_slug)
     forum = Forum.objects.get(item=item)
     discussion = forum.discussion_set.all()
-    return render(request, 'item.html', {'item': item, 'discussion': discussion, 'forum_id': forum.id})
+    return render(request, 'item.html', {'item': item, 'forum': forum, 'discussion': discussion})
+
+
+def delivery(request):
+    if request.method == 'POST':
+        company = request.user.id
+        print('PRICE' + request.POST['price'])
+        price = float(request.POST['price'])
+        order_id = request.POST['order_id']
+        print(company)
+        Bidfor.objects.create(price=price, delivery_company_id=company, order_id=order_id)
+        messages.info(request, "Success!!!")
+        return render(request, "delivery.html")
+    else:
+        return render(request, "delivery.html")
 
 
 def purchase(request, url_slug):
@@ -229,7 +273,7 @@ def purchaseConfirm(request, url_slug):
         # confirmation of purchase
         if 'confirm' in request.POST:
             customer = Customer.objects.get(id=request.user.id)
-            if request.POST['payment_method'] == "credit":
+            if request.POST['payment_method'] == "credit card":
                 # charge credit card
                 pass
             else:
@@ -301,5 +345,46 @@ def tabooList(request):
     return render(request, 'tabooList.html', context)
 
 
+def transaction(request):
+    data = Transaction.objects.filter(customer_id=request.user.id)
+
+    return render(request, 'transaction.html', context={'data': data})
+
+
+def viewOrder(request):
+    data = Order.objects.filter(customer_id=request.user.id)
+    ## Do not know how to acess data from another table
+    return render(request, 'viewOrder.html', context={'data': data})
+
+
 def changePassword(request):  ## do not have any functionality
     return render(request, 'changePassword.html')
+
+
+def choose(request):
+    if request.method == "POST":
+        if 'computer' in request.POST:
+            form = FilterComputerForm(request.POST)
+            if form.is_valid():
+                return render(request, 'chooseComputerComponent.html', {'form': form})
+
+            else:
+                messages.info(request, 'something wrong')
+                return redirect('/choose/')
+    else:
+        return render(request, 'choose.html')
+
+
+# computer item list and choose component
+def chooseComputerComponent(request):
+    if request.method == "POST":
+        form = FilterComputerForm(request.POST)
+        if form.is_valid():
+            return render(request, 'chooseComputerComponent.html', {'form': form})
+
+        else:
+            messages.info(request, 'something wrong')
+            return redirect('/choose/')
+
+    else:
+        return render(request, 'chooseComputerComponent.html')

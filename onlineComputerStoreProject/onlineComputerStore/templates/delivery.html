@@ -4,8 +4,8 @@
 <html lang="en" >
 <head>
     <meta charset="UTF-8">
-    <title>HOME</title>
-    <h1 class="maintext">Clerk account home</h1>
+    <title>Delivery</title>
+    <h1 class="maintext">Delivery company account home</h1>
 </head>
 
 {% if messages %}
@@ -17,11 +17,17 @@
 {% endif %}
 
 <body class="wrap">
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}>
+    {% endfor %}
+{% endif %}
 {% comment %} style="background:url({% static '/image/background1.jpg' %}); background-size: 100%;" {% endcomment %}
 <div class="navBar">
     <a href="/">Home</a>
     <a href="/browse">Browse</a>
-    <a href="/addItem">Add Item</a>
     <a href="/forum">Forum</a>
     <a href="/taboolist">Taboo List</a>
     <a href="/aboutus">About Us</a>
@@ -34,23 +40,18 @@
 				</div>
 
                 <div class="login-form">
-                    <p style="margin: 5px 0">Account : clerk</p>
-
-
+                    <p style="margin: 5px 0">Account : Delivery Company</p><br>
                 </div>
-                 <form class="login-form" action="/addItem/" >
-                     <input type="submit" name="addItem" value="Add Item" class="register-submit"/>
+                    {% for order in open_order %}
+                 <form class="login-form" action="/delivery/" method="POST">
+                 {% csrf_token %}
+                        <li> order # {{order.id}}, 
+                        <br> bid price: 
+                        <input type="number" name="price" >
+                        <input type="hidden" value={{order.id}} name="order_id">
+                        <input type="submit" value="submit">
 				</form>
-
-                  <form class="login-form" action="/changePassword/" method="post" >
-                       {% csrf_token %}
-                     <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
-				</form>
-
-                <form class="login-form" action="/assignDeliCom/" method="post" >
-                       {% csrf_token %}
-                     <input type="submit" name="deliCom" value="Assign Delivery" class="register-submit"/>
-				</form>
+                    {% endfor %}
 
 
 

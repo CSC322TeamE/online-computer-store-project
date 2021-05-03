@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Order</title>
+</head>
+<body>
+ <h1 style="text-align: center"> Order History</h1>
+
+    <table align="center" border="1" width="1200" height="150">
+        <tr>
+            <th>Order Number</th>
+            <th>Money</th>
+            <th>Order time</th>
+            <th>Address</th>
+            <th>delivery company</th>
+            <th>status</th>
+        </tr>
+
+        {% for data in data  %}
+
+        <tr align="center">
+            <td>{{ data.order_number }}</td>
+            <td> money </td>
+            <td>time</td>
+            <td>{{ data.address }}</td>
+            <td>{{ data.delivery_company }}</td>
+            <td>{{ data.status }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+ <a  style="display: block; text-align: center;" href="/account">account page</a>
+</body>
+</html>

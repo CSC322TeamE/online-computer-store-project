@@ -18,9 +18,9 @@
 <body>
 <div class="navBar">
     <a href="/">Home</a>
-    <a href="/Browse">Browse</a>
-    <a href="/logout">Logout</a>
-    <a href="/">change suggested item</a>
+    <a href="/browse">Browse</a>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
     <a href="/forum">Forum</a>
     <a href="/aboutus">About Us</a>
 </div>
@@ -42,7 +42,7 @@
     <div class="card box container">
         <br>
         <h5 class="card-title">
-            <a href="/item/{{ forum.item.url_slug  }}"><h3>Item Name: {{ forum.item.name }}</h3></a>
+            <a href="/item/{{ forum.item.url_slug }}"><h3>Item Name: {{ forum.item.name }}</h3></a>
             <div class="card-body container">
                 <p>{{ forum.description }}</p>
         </h5>
@@ -71,7 +71,8 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="discussionID" value={{ objs.id }}>
                                 <input type="hidden" name="reportedID" value={{ objs.user_id }}>
-                                <button class="btn btn-success" style="background-color: firebrick; width:fit-content; padding: 4px; margin:10px;">
+                                <button class="btn btn-success"
+                                        style="background-color: firebrick; width:fit-content; padding: 4px; margin:10px;">
                                     Report
                                 </button>
                             </form>

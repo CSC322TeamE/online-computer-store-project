@@ -1,39 +1,9 @@
-{% load static %}
-<link rel="stylesheet" href="/static/css/browse.css?{% now "U" %}"/>
-
-<div class="grid-container">
-<div class="tools">
-    <div class="search-area">
-        <input type="text" id="search" placeholder="Search" /> <button id="searchbutton">Go</button>
-    </div>
-</div>
-
-<div class="products-products-table">
-    <div class="products products-table">
-        {% for item in item_list %}
-        <div class="product">
-            <div class="product-img">
-                <img src="{{ item.img.url }}">
-            </div>
-            <div class="product-content">
-                <h3>
-                    <a href="/item/{{ item.url_slug }}">{{ item.name }}</a>
-                    <small>{{ item.description }}</small>
-                </h3>
-                <p class="product-text price">{{ item.price }}</p>
-                <p class="product-text genre">{{ item.rating }}</p>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-
-
-<div class="page-list">
-
-</div>
-
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Browse Instructions</title>
+</head>
 
 <script>
     function show(id) {
@@ -114,8 +84,10 @@
     }
 </script>
 
-<div class="filter-area">
-    <div id="select-grid" class="select-grid">
+<body>
+
+<div class = "select-grid">
+    <div class="select-form">
         <label>
             I want to buy:
             <select name="type" id="type" onchange="select_type()">
@@ -125,7 +97,7 @@
             </select>
         </label>
         <div class="computer-form" id="computer-form">
-            <form action="/browse/computer" class="browse-form" method="post">
+            <form class="browse-form" method="post">
                 {% csrf_token %}
                 <ul>
                     <li>
@@ -164,7 +136,7 @@
                     </li>
 
                 </ul>
-                <input type="submit" name="choose_computer" value="GO">
+                <input type="submit" name="computer" value="GO">
             </form>
         </div>
 
@@ -190,7 +162,5 @@
     </div>
 </div>
 
-</div>
-
-
-
+</body>
+</html>

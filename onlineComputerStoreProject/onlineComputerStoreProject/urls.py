@@ -28,14 +28,18 @@ urlpatterns = [
     path('account/', views.account),
     path('addItem/', views.addItem),
     path('browse/', views.browse),
+    path('browse/<slug:url_slug>', views.browse),
     path('topUp/', views.topUp),
     path('forum/', views.forum),
     path('addDiscussion/', views.addDiscussion),
     path('forum/report/', views.forum_report),
     path('item/<slug:url_slug>', views.item),
     path('purchase/<slug:url_slug>', views.purchase),
+    path('delivery/', views.delivery),
     path('purchaseConfirm/<slug:url_slug>', views.purchaseConfirm),
     path('taboolist/', views.tabooList),
+    path('transaction/', views.transaction),
+    path('viewOrder/', views.viewOrder),
     path('changePassword/', views.changePassword)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
