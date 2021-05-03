@@ -11,7 +11,7 @@ html {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 80% 20%;
+  grid-template-columns: 70% 30%;
   grid-template-rows: 100px 100% 20px;
   gap: 0px 0px;
   grid-template-areas:
@@ -80,16 +80,17 @@ button:hover {
   width: auto;
   height: 47px;
 }
-#submit {
+.submit {
     background: none;
     border: 1px solid black;
     margin: 25px 0;
     height: 47px;
-  width: auto;
-  height: 47px;
+    width: auto;
+    height: 47px;
+    cursor: pointer;
 }
 
-#submit:hover {
+.submit:hover {
     background-color: #282B33;
     color: white;
 }

@@ -16,14 +16,7 @@ class Customer(User):
 
 
 class Clerk(User):
-    balance = models.FloatField(default=0.0)
-    saved_address = models.CharField(max_length=50, null=True, blank=True, default=None)
-
-    class Meta:
-        permissions = [
-            ("add_balance", "can add balance"),
-        ]
-
+    pass
 
 class Manager(Clerk):
     pass
@@ -130,8 +123,6 @@ class ForumWarning(Warning):
     discuss = models.ForeignKey(Discussion, on_delete=models.CASCADE)
 
 
-
-
 class Transaction(models.Model):
     transaction_number = models.UUIDField(default=uuid.uuid1, editable=False)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, default="")
@@ -147,10 +138,12 @@ class Order(models.Model):
     address = models.CharField(max_length=50, null=True, default=None)
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, null=True, default=None)
 
+
 class Bidfor(models.Model):
     price = models.FloatField(default=0)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE)
+
 
 class TabooList(models.Model):
     addBy = models.ForeignKey(Clerk, on_delete=models.CASCADE)
@@ -175,9 +168,3 @@ class TabooList(models.Model):
                 temp += i
             word_list.append(temp)
         return word_list
-
-
-class Bidfor(models.Model):
-    price = models.FloatField(default=0)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE)
