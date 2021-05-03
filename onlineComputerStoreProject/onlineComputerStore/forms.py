@@ -100,11 +100,11 @@ class OrderForm(ModelForm):
         fields = ['address']
 
 
-# component chosen form
+# component chosen form for filter computer
 class FilterComputerForm(forms.Form):
-    os = forms.CharField(max_length=10, required=False)
-    purpose = forms.CharField(max_length=10, required=False)
-    architecture = forms.CharField(max_length=10, required=False)
+    os = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    purpose = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    architecture = forms.CharField(max_length=10, required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
     cpu = forms.ModelChoiceField(queryset=None, required=False)
     gpu = forms.ModelChoiceField(queryset=None, required=False)
     memory = forms.ModelChoiceField(queryset=None, required=False)
@@ -173,6 +173,9 @@ class FilterComputerForm(forms.Form):
             self.items = self.items.filter(computer_memory=self.data["memory"])
 
         return self.items
+
+
+
 
 
 

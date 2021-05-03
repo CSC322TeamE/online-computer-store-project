@@ -37,12 +37,13 @@
 
 <div class="filter-area">
     <div id="filter-computer">
-        <form action="/browse/computer" method="post" enctype="multipart/form-data">
+        <form id="filter-form" action="/browse/computer" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ form.as_p }}
-            <input id="submit" type="submit" name="filter computer" value="Submit">
+            <table>
+                {{ form.as_table }}
+            </table>
         </form>
-        <br>
+        <input class="submit" type="submit" name="filter computer" value="Submit" form="filter-form">
         <button id='reset' onclick="document.location.href='/browse/';">RESET</button>
     </div>
 </div>

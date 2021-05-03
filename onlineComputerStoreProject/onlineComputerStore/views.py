@@ -17,6 +17,7 @@ def index(request):
         return render(request, 'userIndex.html')
 
     else:
+        # ts.add_user()
         suggested_list = ['s1', 's2', 's3']
         popular_list = Item.objects.order_by('quantity_sold')[0:3]
         return render(request, 'index.html', {'popular_list': popular_list, 'suggested_list': suggested_list})
@@ -318,7 +319,7 @@ def purchaseConfirm(request, url_slug):
             else:
                 return render(request, "purchaseConfirm.html", {'item': item,
                                                                 'payment_method': request.POST['payment_method'],
-                                                                'address': request.POST['address2']})
+                                                                'address': request.POST['address']})
 
     else:
         return render(request, "purchaseConfirm.html")
@@ -350,8 +351,8 @@ def transaction(request):
 
     return render(request, 'transaction.html', context={'data': data})
 
+def viewOrder (request):
 
-def viewOrder(request):
     data = Order.objects.filter(customer_id=request.user.id)
     ## Do not know how to acess data from another table
     return render(request, 'viewOrder.html', context={'data': data})
@@ -361,30 +362,3 @@ def changePassword(request):  ## do not have any functionality
     return render(request, 'changePassword.html')
 
 
-def choose(request):
-    if request.method == "POST":
-        if 'computer' in request.POST:
-            form = FilterComputerForm(request.POST)
-            if form.is_valid():
-                return render(request, 'chooseComputerComponent.html', {'form': form})
-
-            else:
-                messages.info(request, 'something wrong')
-                return redirect('/choose/')
-    else:
-        return render(request, 'choose.html')
-
-
-# computer item list and choose component
-def chooseComputerComponent(request):
-    if request.method == "POST":
-        form = FilterComputerForm(request.POST)
-        if form.is_valid():
-            return render(request, 'chooseComputerComponent.html', {'form': form})
-
-        else:
-            messages.info(request, 'something wrong')
-            return redirect('/choose/')
-
-    else:
-        return render(request, 'chooseComputerComponent.html')
