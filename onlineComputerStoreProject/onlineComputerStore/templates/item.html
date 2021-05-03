@@ -5,13 +5,54 @@
     <title>Item page</title>
 </head>
 <body>
-    <img src="{{ item.img.url }}">
-    <ul>
-        <li>{{ item.name }}</li>
-        <li>{{ item.description }}</li>
-        <li>{{ item.rating }}</li>
-        <li>{{ item.price }}</li>
-    </ul>
-    <a href="/purchase/{{ item.url_slug }}">purchase</a>
+<h1>Item name: {{ item.name }}</h1>
+<img src="{{ item.img.url }}">
+<ul>
+
+    <li>{{ item.description }}</li>
+    <li>{{ item.rating }}</li>
+    <li>{{ item.price }}</li>
+</ul>
+<a href="/purchase/{{ item.url_slug }}">purchase</a>
+
+
+<div>
+    <h2>Comments: </h2>
+    {% for discuss in discussion %}
+        <hr>
+        <div>
+            <small style="font-size:80%; color: #ff66ff">&ltID:{{ discuss.user.id }}&gt</small>
+            <b style="color: #00ff00; font-size:140%">
+                {{ discuss.user.username }}:
+            </b>
+            <p style="background-color:#66ccff; font-size:160%;">
+                "{{ discuss.discuss }}"
+            </p>
+        </div>
+
+
+        <div style="text-align:right;">
+            <small> &lt{{ discuss.date_created }}&gt</small>
+
+            <form method="POST" action="\forum\report\">
+                {% csrf_token %}
+                <input type="hidden" name="discussionID" value={{ discuss.id }}>
+                <input type="hidden" name="reportedID" value={{ discuss.user_id }}>
+                <button class="btn btn-success"
+                        style="background-color: firebrick; width:fit-content; padding: 4px; margin:10px;">
+                    Report
+                </button>
+            </form>
+        </div>
+
+        <br>
+    {% endfor %}
+
+    <form method="POST" action="\addDiscussion\">
+        {% csrf_token %}
+        <input type="hidden" name="forum_id" value="{{ forum_id }}">
+        <button class="btn btn-success" style="width:fit-content; padding: 4px; margin:10px;">Say something</button>
+    </form>
+</div>
 </body>
 </html>
