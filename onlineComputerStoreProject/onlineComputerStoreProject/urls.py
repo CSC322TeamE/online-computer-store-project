@@ -34,8 +34,7 @@ urlpatterns = [
     path('forum/report/', views.forum_report),
     path('item/<slug:url_slug>', views.item),
     path('purchase/<slug:url_slug>', views.purchase),
-    path("deliveryOptions/", views.deliveryOptions),
-    path("addDelivery/", views.addDelivery),
+    path('delivery/', views.delivery),
     path('purchaseConfirm/<slug:url_slug>', views.purchaseConfirm),
     path('taboolist/', views.tabooList),
     path('changePassword/', views.changePassword)

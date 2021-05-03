@@ -9,15 +9,6 @@
 </head>
 
 
-{% if messages %}
-    {% for message in messages %}
-        {% if message.tags %}
-            <script> alert('{{ message }}'); </script>
-        {% endif %}
-    {% endfor %}
-{% endif %}
-
-
 <body class="wrap">
 {% comment %} style="background:url({% static '/image/background1.jpg' %}); background-size: 100%;" {% endcomment %}
 <div class="navBar">

@@ -180,4 +180,4 @@ class TabooList(models.Model):
 class Bidfor(models.Model):
     price = models.FloatField(default=0)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    deli_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE)
+    delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE)

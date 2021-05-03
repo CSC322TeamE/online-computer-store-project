@@ -76,7 +76,7 @@ def account(request):
         return render(request, 'manager.html')
 
     if request.user.groups.filter(name='deliverycompany').exists():
-        open_order = Order.objects.filter(status='open')
+        open_order = Order.objects.filter(status='in progress')
         print(open_order)
         return render(request, 'delivery.html',context={'open_order': open_order})
 
@@ -209,17 +209,20 @@ def item(request, url_slug):
     forum = Forum.objects.get(item=item)
     discussion = forum.discussion_set.all()
     return render(request, 'item.html', {'item': item, 'discussion': discussion, 'forum_id': forum.id})
-def deliveryOptions(request):
-    return render(request, "deliveryOptions.html")
 
-def addDelivery(request):
-    # name = request.POST['name']
-    # price = int(request.POST['price'])
-    # DeliveryCompany.objects.create(name=company, price=price, rating=5.0)
-    return HttpResponse('ADDED')
 
 def delivery(request):
-    return render(request, "delivery.html")
+    if request.method == 'POST':
+        company = request.user.id
+        print('PRICE'+request.POST['price'])
+        price = float(request.POST['price'])
+        order_id = request.POST['order_id']
+        print(company)
+        Bidfor.objects.create(price=price, delivery_company_id=company, order_id=order_id)
+        messages.info(request, "Success!!!")
+        return render(request, "delivery.html")
+    else:
+        return render(request, "delivery.html")
 
 def purchase(request, url_slug):
     item = Item.objects.get(url_slug=url_slug)
@@ -283,7 +286,7 @@ def purchaseConfirm(request, url_slug):
             else:
                 return render(request, "purchaseConfirm.html", {'item': item,
                                                                 'payment_method': request.POST['payment_method'],
-                                                                'address': request.POST['address']})
+                                                                'address': request.POST['address2']})
 
     else:
         return render(request, "purchaseConfirm.html")
