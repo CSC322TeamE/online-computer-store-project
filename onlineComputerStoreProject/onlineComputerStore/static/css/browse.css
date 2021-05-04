@@ -114,11 +114,18 @@ button:hover {
 #searchbutton {
   width: 60px;
   height: 47px;
+    border: 1px solid black;
+    cursor: pointer;
+}
+#searchbutton:hover {
+    background-color: #282B33;
+    color: white;
 }
 input#search {
     width: 30%;
     width: calc(100% - 90px);
     padding: 10px;
+    height: 47px;
     border: 1px solid #282B33;
 }
 @media screen and (max-width:400px) {

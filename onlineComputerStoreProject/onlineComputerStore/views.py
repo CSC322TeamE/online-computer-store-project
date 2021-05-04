@@ -9,14 +9,16 @@ import onlineComputerStore.tests as ts
 from .forms import *
 from django.core.mail import send_mail
 from onlineComputerStore.forms import AddCpuForm
+from django.db.models import Q
 
 
 def index(request):
+    ts.add_user()
+
     if request.user.is_authenticated:
         return render(request, 'userIndex.html')
 
     else:
-        # ts.add_user()
         suggested_list = ['s1', 's2', 's3']
         popular_list = Item.objects.order_by('quantity_sold')[0:3]
         return render(request, 'index.html', {'popular_list': popular_list, 'suggested_list': suggested_list})
@@ -134,10 +136,8 @@ def browse(request, url_slug=None):
     item_list = Item.objects.all()
     if request.method == "POST":
         if url_slug == "computer":
-            print(request.POST)
             form = FilterComputerForm(request.POST)
             item_list = form.get_items()
-            print(item_list)
             return render(request, 'browseComputer.html', {'item_list': item_list,
                                                            'form': form})
 
@@ -182,34 +182,15 @@ def forum(request):
     count = forums.count()
     discussions = []
     for f in forums:
-        discussions.append(f.discussion_set.all())
+        discussions.append(f.discussion_set.all().filter(reply_to=None))
+        replies = Discussion.objects.filter(~Q(reply_to=None))
+        print(replies)
     context = {'forums': forums,
                'count': count,
-               'discussions': discussions}
+               'discussions': discussions,
+               'replies': replies
+               }
     return render(request, 'forum.html', context)
-
-
-def addDiscussion(request):
-    if request.method == 'POST':
-        if "discuss" in request.POST:
-            message = request.POST['discuss']
-            for bad_word in TabooList.objects.values('word'):
-                message = message.replace(bad_word['word'], len(bad_word['word']) * '*')
-
-                Discussion.objects.create(user_id=request.user.id, forum_id=request.POST['forum_id'],
-                                            discuss=message)
-
-            if message == request.POST['discuss']:
-                messages.info(request, "Your comments are submitted!")
-            else:
-                messages.info(request, "Your comments are submitted!")
-                Warning.objects.create(reported_user=request.user, description='__Taboo_List_Auto__')
-                messages.info(request, "A warning created since your message contains sensitive word(s)!")
-            return redirect('/forum/')
-        context = {'forum_id': request.POST['forum_id']}
-        return render(request, 'addDiscussion.html', context)
-    else:
-        return render(request, 'addDiscussion.html')
 
 
 def forum_report(request):
@@ -239,7 +220,8 @@ def item(request, url_slug):
     item = Item.objects.get(url_slug=url_slug)
     forum = Forum.objects.get(item=item)
     discussion = forum.discussion_set.all()
-    return render(request, 'item.html', {'item': item, 'forum': forum, 'discussion': discussion})
+    replies = Discussion.objects.filter(~Q(reply_to=None)).all()
+    return render(request, 'item.html', {'item': item, 'forum': forum, 'discussion': discussion, 'replies': replies})
 
 
 def delivery(request):
@@ -350,8 +332,8 @@ def transaction(request):
 
     return render(request, 'transaction.html', context={'data': data})
 
-def viewOrder (request):
 
+def viewOrder(request):
     data = Order.objects.filter(customer_id=request.user.id)
     ## Do not know how to acess data from another table
     return render(request, 'viewOrder.html', context={'data': data})
@@ -361,3 +343,43 @@ def changePassword(request):  ## do not have any functionality
     return render(request, 'changePassword.html')
 
 
+def forum_reply(request):
+    if request.method == 'POST':
+        if 'discuss' in request.POST:
+            message = request.POST['discuss']
+            for bad_word in TabooList.objects.values('word'):
+                message = message.replace(bad_word['word'], len(bad_word['word']) * '*')
+            Discussion.objects.create(user=request.user, forum_id=request.POST['forum_id'], discuss=message,
+                                      reply_to=request.POST['discussionID'])
+            if message == request.POST['discuss']:
+                messages.info(request, "Your reply is submitted!")
+            else:
+                messages.info(request, "Your reply is submitted!")
+                Warning.objects.create(reported_user=request.user, description='__Taboo_List_Auto__')
+                messages.info(request, "A warning created since your message contains sensitive word(s)!!!")
+            return redirect('/forum/')
+        discussion = Discussion.objects.get(id=request.POST["discussionID"])
+        context = {'discussion': discussion, 'discussionID': request.POST["discussionID"],
+                   'forum_id': request.POST['forum_id']}
+        return render(request, 'forumReply.html', context)
+    return render(request, 'forumReply.html')
+
+
+def addDiscussion(request):
+    if request.method == 'POST':
+        if "discuss" in request.POST:
+            message = request.POST['discuss']
+            for bad_word in TabooList.objects.values('word'):
+                message = message.replace(bad_word['word'], len(bad_word['word']) * '*')
+            Discussion.objects.create(user_id=request.user.id, forum_id=request.POST['forum_id'], discuss=message)
+            if message == request.POST['discuss']:
+                messages.info(request, "Your comments are submitted!")
+            else:
+                messages.info(request, "Your comments are submitted!")
+                Warning.objects.create(reported_user=request.user, description='__Taboo_List_Auto__')
+                messages.info(request, "A warning created since your message contains sensitive word(s)!!!")
+            return redirect('/forum/')
+        context = {'forum_id': request.POST['forum_id']}
+        return render(request, 'addDiscussion.html', context)
+    else:
+        return render(request, 'addDiscussion.html')

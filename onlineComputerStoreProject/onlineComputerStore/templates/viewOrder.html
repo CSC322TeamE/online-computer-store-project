@@ -21,8 +21,8 @@
 
         <tr align="center">
             <td>{{ data.order_number }}</td>
-            <td> money </td>
-            <td>time</td>
+            <td> {{ data.transaction.amount }} </td>
+            <td>{{ data.transaction.time }}</td>
             <td>{{ data.address }}</td>
             <td>{{ data.delivery_company }}</td>
             <td>{{ data.status }}</td>

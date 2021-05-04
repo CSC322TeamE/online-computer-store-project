@@ -94,6 +94,7 @@ class Forum(models.Model):
     description = models.CharField(max_length=1000, blank=True)
     url_slug = models.SlugField(editable=False, default="")
 
+
     def __str__(self):
         return str(self.item.name)
 
@@ -107,6 +108,7 @@ class Discussion(models.Model):
     forum = models.ForeignKey(Forum, on_delete=models.CASCADE)
     discuss = models.CharField(max_length=1000)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
+    reply_to = models.IntegerField(editable=False, null=True)
 
     def __str__(self):
         return str(self.user.username) + str(self.forum)
