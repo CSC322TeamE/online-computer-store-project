@@ -31,7 +31,7 @@
         <h1>Add discussion page</h1>
     </div>
 
-<form class="login-form" action="\addDiscussion\" method="POST" id="discuss">
+<form class="login-form" action="\forum\addDiscussion\" method="POST" id="discuss">
     {% csrf_token %}
     <b>What do you want to say:</b>
     <textarea cols = 60, rows = 10 class="login-input" name="discuss" form="discuss"></textarea>

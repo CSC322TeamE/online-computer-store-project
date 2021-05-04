@@ -1,7 +1,7 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/userinfo.css' %}">
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Delivery</title>
@@ -33,32 +33,29 @@
     <a href="/aboutus">About Us</a>
 
 
-<div class="wrap">
-			<div class="UserInform-wrap">
-				<div class="login-title">
-					{{ user }}
-				</div>
+    <div class="wrap">
+        <div class="UserInform-wrap">
+            <div class="login-title">
+                {{ user }}
+            </div>
 
-                <div class="login-form">
-                    <p style="margin: 5px 0">Account : Delivery Company</p><br>
-                </div>
-                    {% for order in open_order %}
-                 <form class="login-form" action="/delivery/" method="POST">
-                 {% csrf_token %}
-                        <li> order # {{order.id}}, 
-                        <br> bid price: 
-                        <input type="number" name="price" >
-                        <input type="hidden" value={{order.id}} name="order_id">
+            <div class="login-form">
+                <p style="margin: 5px 0">Account : Delivery Company</p><br>
+            </div>
+            {% for order in open_order %}
+                <form class="login-form" action="/delivery/" method="POST">
+                    {% csrf_token %}
+                    <li> order # {{ order.id }},
+                        <br> bid price:
+                        <input type="number" name="price">
+                        <input type="hidden" value={{ order.id }} name="order_id">
                         <input type="submit" value="submit">
-				</form>
-                    {% endfor %}
+                </form>
+            {% endfor %}
 
 
-
-
-
-			</div>
-		</div>
+        </div>
+    </div>
 </div>
 </body>
 </html> 

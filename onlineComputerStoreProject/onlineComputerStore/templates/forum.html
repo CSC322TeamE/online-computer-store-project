@@ -67,6 +67,15 @@
                         </div>
                         <div style="text-align:right;">
                             <small> &lt{{ objs.date_created }}&gt</small>
+                            <form method="POST" action="\forum\reply\">
+                                {% csrf_token %}
+                                <input type="hidden" name="discussionID" value={{ objs.id }}>
+                                <input type="hidden" name="forum_id" value={{ forum.id }}>
+                                <button class="btn btn-success"
+                                        style="background-color: firebrick; width:fit-content; padding: 4px; margin:10px;">
+                                    Reply
+                                </button>
+                            </form>
                             <form method="POST" action="\forum\report\">
                                 {% csrf_token %}
                                 <input type="hidden" name="discussionID" value={{ objs.id }}>
@@ -76,13 +85,41 @@
                                     Report
                                 </button>
                             </form>
+
                         </div>
-                        <br>
+                        <div style="text-align: right;">
+                        {% for reply in replies %}
+                            {% if objs.id == reply.reply_to %}
+
+                                    <small style="font-size:60%; color: #ff66ff">&ltID:{{ objs.user.id }}&gt</small>
+                                    <b style="color: #00ff00; font-size:100%">
+                                        {{ reply.user.username }}:
+                                    </b>
+                                    <p style="background-color:#9380c9; font-size:120%;">
+                                        "{{ reply.discuss }}"
+                                    </p>
+
+                                <div style="text-align:right;">
+                                    <small> &lt{{ objs.date_created }}&gt</small>
+                                        <form method="POST" action="\forum\report\">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="discussionID" value={{ objs.id }}>
+                                            <input type="hidden" name="reportedID" value={{ objs.user_id }}>
+                                            <button class="btn btn-success"
+                                                    style="background-color: firebrick; width:fit-content; padding: 4px; margin:10px;">
+                                                Report
+                                            </button>
+                                        </form>
+                                </div>
+                                <br>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
                     {% endif %}
                 {% endfor %}
             {% endfor %}
         </div>
-        <form method="POST" action="\addDiscussion\">
+        <form method="POST" action="\forum\addDiscussion\">
             {% csrf_token %}
             <input type="hidden" name="forum_id" value="{{ forum.id }}">
             <button class="btn btn-success" style="width:fit-content; padding: 4px; margin:10px;">Say something</button>
