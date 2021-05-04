@@ -177,3 +177,18 @@ def topUp(request):
         else:
             messages.info(request, "Customer doesn't exist!!!")
     return render(request, 'topUp.html')
+
+
+def complaint(request):
+    return render(request, 'complaint.html')
+
+
+def add_complain(request):
+	if request.method=='POST':
+		order_number=request.POST['number']
+		complain=request.POST['complain']
+		compl=Complain(orderNumber=order_number,complain=complain)
+		compl.save()
+		messages.success(request,'Complain has been registered.')
+	return render(request,'add-complain.html')
+

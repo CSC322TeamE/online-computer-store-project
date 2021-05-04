@@ -27,4 +27,6 @@ urlpatterns = [
     path('addItem/', views.addItem),
     path('browse/', views.browse),
     path('topUp/', views.topUp),
+    path('complaint/', views.complaint),
+    path('sumbitcomplaint/', views.sumbitcomplaint),
 ]

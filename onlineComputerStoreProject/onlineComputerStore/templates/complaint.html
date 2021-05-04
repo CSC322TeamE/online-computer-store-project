@@ -1,0 +1,38 @@
+{% block content %}
+<div class="row mt-5">
+	<div class="col-md-8 offset-2">
+		<div class="card shadow">
+			<div class="card-header">
+				<b>Add your complain</b>
+			</div>
+			<div class="card-body">
+				{% if messages %}
+				    {% for message in messages %}
+				    <p{% if message.tags %} class="text-success"{% endif %}>{{ message }}</p>
+				    {% endfor %}
+				{% endif %}
+				<form method="post" action="/add-complain">
+					{% csrf_token %}
+					<table class="table table-bordered mt-4">
+						<tr>
+							<th>Your order number</th>
+							<td><input type="text" name="order_number" class="form-control" placeholder="Enter your order number" /></td>
+						</tr>
+						<tr>
+							<th>Your Complain</th>
+							<td>
+								<textarea class="form-control" name="complain" rows="8" placeholder="Enter your complain description"></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input type="submit" class="btn btn-dark" />
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock content %}
