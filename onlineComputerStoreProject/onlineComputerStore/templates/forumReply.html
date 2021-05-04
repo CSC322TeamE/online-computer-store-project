@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/forumReport.css' %}">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+        form {
+            border: 4px solid black;
+            margin: 0 auto;
+            padding: 40px;
+            width: fit-content;
+        }
+    </style>
+    <title>Forum Report Page</title>
+
+</head>
+
+<body>
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<div class="wrap">
+    <div class="login-title">
+         <h1>Forum Reply Page</h1>
+        You are in forum: <div style = "color: #ff66ff" >{{ forum_id }}</div>
+        You are replying to discussion: <div style = "color: #ff66ff" >{{ discussionID }}</div>
+        About this message he/she sent: <div style = "color: #ff66ff" >{{ discussion.discuss }}
+    </div>
+    <b>
+        <form class="login-form" action="\forum\reply\" method="POST" id="discuss">
+            {% csrf_token %}
+            <textarea cols = 60, rows = 10 class="login-input" name="discuss" form="discuss"></textarea>
+            <input type="hidden" name="discussionID" value={{ discussionID }}>
+            <input type="hidden" name="forum_id" value={{ forum_id }}>
+            <input type="submit" value="submit" class="login-submit">
+        </form>
+    </b>
+</div>
+</body>
+
+</html>

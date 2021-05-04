@@ -1,10 +1,20 @@
-* {
-    margin: 0;
-    padding: 0;
-    font-family: "Open Sans Light";
-    letter-spacing: .07em; /* Letter spacing size */
+.wrap {
+    height: 100%;
+    background-image: linear-gradient(to right, #30cfd0, #330867);
 }
 
+.maintext {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.navBar {
+    text-align: center;
+}
+
+.navBar a {
+    padding: 10px;
+}
 
 html {
     height: 100%;
@@ -32,32 +42,19 @@ body {
     top: 50%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
-    padding: 0 50px; 
+    padding: 0 50px;
 }
 
-.maintext {
-    text-align: center;
-    margin: 100px 0 20px;
-}
-
-.navBar {
-    text-align: center;
-}
-
-.navBar a {
-    padding: 10px;
-}
-
-.register-wrap{
+.UserInform-wrap{
     width: 200px;
     height: 500px;
     background-color: rgba(170, 170, 255, 0.3);
     position: relative;
     left: 50%;
-    top: 50%;
+    top: 40%;
     transform: translate(-50%, -50%);
     border-radius: 10px;
-    padding: 0 50px; 
+    padding: 0 50px;
 }
 
 .login-title {
@@ -69,17 +66,17 @@ body {
 }
 
 .login-form .login-input{
-    display: block; 
+    display: block;
     width: 100%;
     border: 0;
     border-bottom: 1px solid #ccc;
     padding: 10px 0 10px 10px;
     margin-bottom: 20px;
-    outline: none; 
-    background-color: transparent; 
+    outline: none;
+    background-color: transparent;
 }
 .login-form .login-input::placeholder {
-    text-transform: uppercase; 
+    text-transform: uppercase;
     color: #bdbdbd;
 }
 
@@ -95,6 +92,7 @@ body {
     cursor: pointer;
     color: #aa00ff;
     font-weight: bold;
+
 }
 
 .tip {

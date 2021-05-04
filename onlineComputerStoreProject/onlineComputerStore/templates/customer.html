@@ -1,19 +1,57 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link rel="stylesheet" href="{% static 'css/userinfo.css' %}">
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>HOME</title>
     <h1 class="maintext">Customer account home</h1>
 </head>
+
+
 <body class="wrap">
 {% comment %} style="background:url({% static '/image/background1.jpg' %}); background-size: 100%;" {% endcomment %}
 <div class="navBar">
     <a href="/">Home</a>
     <a href="/logout">Log out</a>
     <a href="/topUp">Add balance</a>
+    <a href="/forum">Forum</a>
     <a href="/aboutus">About Us</a>
 </div>
+
+<div class="wrap">
+    <div class="UserInform-wrap">
+        <div class="login-title">
+            {{ user }}
+        </div>
+
+        <div class="login-form">
+            <p style="margin: 5px 0">Account : Customer</p>
+            <p style="margin: 5px 0">Email : {{ user.email }}</p>
+            <p style="margin: 5px 0">Balance : {{ customer.balance }} </p>
+
+        </div>
+        <form class="login-form" action="/topUp/">
+            <input type="submit" name="Add Balance" value="Add Balance" class="register-submit"/>
+        </form>
+
+
+        <form class="login-form" action="/transaction/">
+            <input type="submit" name="View Transaction" value="View Transaction" class="register-submit"/>
+        </form>
+        <form class="login-form" action="/viewOrder/">
+            <input type="submit" name="Order History" value="Order History" class="register-submit"/>
+        </form>
+
+
+        <form class="login-form" action="/changePassword/" method="post">
+            {% csrf_token %}
+            <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
+        </form>
+
+    </div>
+</div>
+
+
 </body>
 </html> 

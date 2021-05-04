@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/tabooList.css' %}">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Taboo List</title>
+</head>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+<body>
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+    <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
+</div>
+<div style="text-align:center" class="wrap" >
+    <h2 class="login-title">Taboo List</h2>
+
+<div style="text-align:center">
+    <div style="text-align:center; height:500px;width:1100px;overflow:auto;background:#EEEEEE; margin:auto;">
+
+        {% for taboo in taboolist %}
+
+            <div style="text-align:center">
+                {{ taboo }}
+            </div>
+
+        {% endfor %}
+    </div>
+
+    <div>
+        <h6>Add word to "taboo" list (system will automatically generate different combinations for you):</h6>
+        <form class="login-form" action="/taboolist/" method="POST">
+            {% csrf_token %}
+            <input class="login-input" type="text" name="word" placeholder="Add word here(no space allowed)" required>
+            <input class="login-submit" type="submit" value="submit" class="login-submit">
+        </form>
+    </div>
+</div>
+</div>
+</body>
+</html>

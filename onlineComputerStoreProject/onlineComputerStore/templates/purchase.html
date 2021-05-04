@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Purchase</title>
+</head>
+
+{{ saved_address|json_script:"saved_address" }}
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<script>
+    const saved_address = JSON.parse(document.getElementById('saved_address').textContent);
+
+    function show(id) {
+		document.getElementById(id).style.display='';
+    }
+
+	function hide(id) {
+		document.getElementById(id).style.display='none';
+    }
+
+    window.onload=function(){
+        document.getElementById("payment-method").value = ""
+		hide("credit-card-form");
+		hide("balance-form");
+	}
+
+	function select_payment_method() {
+        if (document.getElementById("payment-method").value === "credit card") {
+            show("credit-card-form");
+            hide("balance-form");
+        }
+        else if (document.getElementById("payment-method").value === "balance") {
+            hide("credit-card-form");
+            show("balance-form");
+        } else {
+            hide("credit-card-form");
+            hide("balance-form");
+        }
+    }
+
+    function sa_radio_click() {
+        let target = document.getElementById('saved-address')
+        if (target.checked) {
+            document.getElementById('address').value = saved_address;
+        } else {
+            document.getElementById('address').value = document.getElementById('address').placeholder;
+        }
+    }
+
+    function sa_radio_click2() {
+        let target = document.getElementById('saved-address2')
+        if (target.checked) {
+            document.getElementById('address2').value = saved_address;
+        } else {
+            document.getElementById('address2').value = document.getElementById('address2').placeholder;
+        }
+    }
+
+</script>
+
+<body>
+    <h1>
+        Item: {{ item.name }}
+    </h1>
+    <div class="select-grid" id="select-grid">
+        <div class="payment-selector">
+            <label>
+                Payment methods:
+                <select name="payment-method" id="payment-method" onchange="select_payment_method()">
+                    <option value="">--please select a payment method--</option>
+                    <option value="credit card">credit card</option>
+                    <option value="balance">balance</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="payment-form" id="credit-card-form">
+            <form method="post" action="/purchaseConfirm/{{ item.url_slug }}">
+                {% csrf_token %}
+                <ul>
+                    <li>
+                        <label>name: </label>
+                        <input name="name" type="tel" inputmode="text" autocomplete="cc-name" placeholder="name">
+                    </li>
+                    <li>
+                        <label>card number:</label>
+                        <input name="card_number" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" placeholder="xxxx xxxx xxxx xxxx">
+                    </li>
+                    <li>
+                        <label>expire date: </label>
+                        <input name="expired_date" type="tel" inputmode="numeric" pattern="(0[1-9]|10|11|12)/[0-9]{2}" autocomplete="cc-exp" maxlength="5" placeholder="MM/YY">
+                    </li>
+                    <li>
+                        <label>csc: </label>
+                        <input name="csc" type="tel" inputmode="numeric" pattern="[0-9\s]{3}" autocomplete="cc-csc" maxlength="3" placeholder="CSC">
+                    </li>
+                </ul>
+                <input type="hidden" name="payment_method" value="credit card">
+                <input type="hidden" name="item_id" value="{{ item.id }}">
+                <textarea name="address" id="address" placeholder="--please input your address here--" maxlength="50">{% if saved_address %}{{ saved_address }}{% endif %}</textarea>
+                <input type="submit" name="buy-credit" value="buy">
+                <label>
+                    saved address:
+                    <input type="checkbox" id="saved-address" value="saved address" onchange="sa_radio_click()" {% if not saved_address %}disabled{% else %} checked {% endif %}>
+                </label>
+            </form>
+
+        </div>
+
+        <div class="payment-form" id="balance-form">
+            <form method="post" action="/purchaseConfirm/{{ item.url_slug }}">
+                {% csrf_token %}
+                <ul>
+                    <li>
+                        <label>Current Balance: {{ balance }}</label>
+                    </li>
+                    <li>
+                        <input type="hidden" name="payment_method" value="balance">
+                        <input type="hidden" name="item_id" value="{{ item.id }}">
+                        <textarea name="address" id="address2" placeholder="--please input your address here--" maxlength="50">{% if saved_address %}{{ saved_address }}{% endif %}</textarea>
+                        <input type="submit" value="buy">
+                        <label>
+                            saved address:
+                            <input type="checkbox" id="saved-address2" value="saved address" onchange="sa_radio_click2()" {% if not saved_address %}disabled{% else %} checked {% endif %}>
+                        </label>
+                    </li>
+                </ul>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>

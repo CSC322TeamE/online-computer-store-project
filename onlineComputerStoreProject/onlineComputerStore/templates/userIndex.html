@@ -7,6 +7,15 @@
     <title>Register User Page</title>
     <h1 class="maintext">Online Computer Store</h1>
 </head>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
 <body class="wrap">
 {% comment %} style="background:url({% static '/image/background1.jpg' %}); background-size: 100%;" {% endcomment %}
 <div class="navBar">
@@ -14,6 +23,7 @@
     <a href="/browse">Browse</a>
     Welcome, <a href="/account">{{ user }}</a>
     <a href="/logout">Logout</a>
+    <a href="/forum">Forum</a>
     <a href="/aboutus">About Us</a>
     <a href="/complaint">Complaint</a>
 </div>

@@ -1,4 +1,4 @@
-
+/*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">*/
 .wrap {
     height: 100%;
     background-image: linear-gradient(to right, #30cfd0, #330867);
@@ -11,8 +11,8 @@ html {
 
 .grid-container {
   display: grid;
-  grid-template-columns: 70% 30%;
-  grid-template-rows: 100px 100% 20px;
+  grid-template-columns: 80% 20%;
+  grid-template-rows: 10% 80% 10%;
   gap: 0px 0px;
   grid-template-areas:
     "tools tools"
@@ -28,10 +28,6 @@ html {
 
 .filter-area { grid-area: filter-area; }
 
-
-.filter-area th { width: 150px}
-
-.filter-area tr {width: 300px;}
 
 input, textarea, button {
     height: 25px;
@@ -50,11 +46,7 @@ button, select {
     padding: 0 15px;
     cursor: pointer;
 }
-select {
-    width: 300px;
-    background: none;
-}
-button {
+button, submit {
     background: none;
     border: 1px solid black;
     margin: 25px 0;
@@ -80,35 +72,11 @@ button:hover {
   text-align: right;
 }
 
-.submit {
-    background: none;
-    border: 1px solid black;
-    margin: 25px 0;
-    height: 47px;
-    width: auto;
-    height: 47px;
-    cursor: pointer;
-    position: relative;
-    left: 50%;
-}
 
-.submit:hover {
-    background-color: #282B33;
-    color: white;
-}
-
-.reset {
-    background: none;
-    border: 1px solid black;
-    margin: 25px 0;
-    height: 47px;
-    width: auto;
-    left: 50%;
-}
-
-.reset:hover {
-    background-color: #282B33;
-    color: white;
+#view {
+  display: none;
+  width: auto;
+  height: 47px;
 }
 
 #searchbutton {

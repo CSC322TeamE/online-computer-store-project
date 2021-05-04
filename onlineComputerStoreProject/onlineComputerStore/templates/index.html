@@ -9,11 +9,21 @@
 </head>
 <body class="wrap">
 {% comment %} style="background:url({% static '/image/background1.jpg' %}); background-size: 100%;" {% endcomment %}
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
 <div class="navBar">
     <a href="/">Home</a>
     <a href="/browse">Browse</a>
     <a href="/login">Login</a>
     <a href="/register">Register</a>
+    <a href="/forum">Forum</a>
     <a href="/aboutus">About Us</a>
 </div>
 <div class="maintext">
