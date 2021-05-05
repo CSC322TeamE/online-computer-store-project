@@ -389,7 +389,7 @@ def addDiscussion(request):
         if "discuss" in request.POST:
             message = request.POST['discuss']
             for bad_word in TabooList.objects.values('word'):
-                message = message.replace(bad_word['word'], len(bad_word['word']) * '*')
+                message = re.sub(bad_word, "*"*len(bad_word), message, flags=re.I)
             Discussion.objects.create(user_id=request.user.id, forum_id=request.POST['forum_id'], discuss=message)
             if message == request.POST['discuss']:
                 messages.info(request, "Your comments are submitted!")
