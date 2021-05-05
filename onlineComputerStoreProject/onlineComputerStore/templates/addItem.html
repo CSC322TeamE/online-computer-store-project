@@ -48,27 +48,16 @@
 
     function select_component() {
         let target = document.getElementById("component");
-        if (target.value === 'cpu') {
-            show("add-component");
-            show("add-cpu");
-            hide("add-gpu");
-            hide("add-memory");
-        } else if (target.value === 'gpu') {
-            show("add-component");
-            hide("add-cpu");
-            show("add-gpu");
-            hide("add-memory");
-        } else if(target.value === 'memory') {
-            show("add-component");
-            hide("add-cpu");
-            hide("add-gpu");
-            show("add-memory");
-        } else {
-            hide("add-component");
-            hide("add-cpu");
-            hide("add-gpu");
-            hide("add-memory");
-        }
+        show("add-component");
+        hide("add-cpu");
+        hide("add-gpu");
+        hide("add-memory");
+        hide("add-hdd");
+        hide("add-monitor");
+        hide("add-battery");
+        let str = target.value;
+        str = 'add-'+str;
+        show(str);
     }
 </script>
 
@@ -96,6 +85,9 @@
                 <option value="cpu">cpu</option>
                 <option value="gpu">gpu</option>
                 <option value="memory">memory</option>
+                <option value="hdd">hdd</option>
+                <option value="monitor">monitor</option>
+                <option value="battery">battery</option>
             </select>
         </label>
     </div>
@@ -105,7 +97,9 @@
     <div id="add-cpu">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ cpu_form.as_p }}
+            <table>
+                {{ cpu_form.as_table }}
+            </table>
             <input type="submit" name="is_cpu" value="Submit">
         </form>
     </div>
@@ -113,7 +107,9 @@
     <div id="add-gpu">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ gpu_form.as_p }}
+            <table>
+                {{ gpu_form.as_table }}
+            </table>
             <input type="submit" name="is_gpu" value="Submit">
         </form>
     </div>
@@ -121,19 +117,56 @@
     <div id="add-memory">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ memory_form.as_p }}
+            <table>
+                {{ memory_form.as_table }}
+            </table>
             <input type="submit" name="is_memory" value="Submit">
         </form>
     </div>
+
+    <div id="add-hdd">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>
+                {{ hdd_form.as_table }}
+            </table>
+            <input type="submit" name="is_hdd" value="Submit">
+        </form>
+    </div>
+
+    <div id="add-monitor">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>
+                {{ monitor_form.as_table }}
+            </table>
+            <input type="submit" name="is_monitor" value="Submit">
+        </form>
+    </div>
+
+    <div id="add-battery">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>
+                {{ battery_form.as_table }}
+            </table>
+            <input type="submit" name="is_battery" value="Submit">
+        </form>
+    </div>
+
 </div>
 
 <div id="add-computer">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ computer_form.as_p }}
+        <table>
+            {{ computer_form.as_table }}
+        </table>
         <input type="submit" name="is_computer" value="Submit">
     </form>
 </div>
+
+
 
 
 </body>

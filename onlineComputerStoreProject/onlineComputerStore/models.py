@@ -54,6 +54,7 @@ class CPU(Item):
     architecture = models.CharField(max_length=10, null=True, blank=True, default=None)  # arm or x86
     num_cores = models.IntegerField(null=True, blank=True, default=None)
     frequency = models.FloatField(null=True, blank=True, default=None)
+    power = models.FloatField(null=True, blank=True, default=None)
 
 
 class GPU(Item):
@@ -61,6 +62,7 @@ class GPU(Item):
     num_cuda_cores = models.IntegerField(null=True, blank=True, default=None)
     core_clock = models.FloatField(null=True, blank=True, default=None)
     memory_size = models.FloatField(null=True, blank=True, default=None)
+    power = models.FloatField(null=True, blank=True, default=None)
 
 
 class Memory(Item):
@@ -69,11 +71,29 @@ class Memory(Item):
     frequency = models.IntegerField(null=True, blank=True, default=None)  #
 
 
+class HDD(Item):
+    capacity = models.FloatField(null=True, blank=True, default=0.0)
+    rpm = models.IntegerField(null=True, blank=True)
+
+
+class Monitor(Item):
+    screen_size = models.IntegerField(null=True, blank=True) # 15 16 17 ...
+    resolution = models.CharField(null=True, blank=True, max_length=20)
+    refresh_rate = models.IntegerField(null=True, blank=True)
+
+
+class Battery(Item):
+    capacity = models.IntegerField(null=True, blank=True)  # 3000 mAh
+
+
 class Computer(Item):
     os = models.CharField(max_length=10, null=True, blank=True, default=None)  # operating system
     computer_cpu = models.ForeignKey(CPU, on_delete=models.DO_NOTHING, null=True, blank=False, default=None)
     computer_gpu = models.ForeignKey(GPU, on_delete=models.DO_NOTHING, null=True, blank=False, default=None)
     computer_memory = models.ForeignKey(Memory, on_delete=models.DO_NOTHING, null=True, blank=False, default=None)
+    computer_hdd = models.ForeignKey(HDD, on_delete=models.DO_NOTHING, null=True, blank=False, default=None)
+    computer_monitor = models.ForeignKey(Monitor, on_delete=models.DO_NOTHING, null=True, blank=False, default=None)
+    computer_battery = models.ForeignKey(Battery, on_delete=models.DO_NOTHING, null=True, blank=True, default=None)
 
 
 class Bank(models.Model):
@@ -135,6 +155,7 @@ class Transaction(models.Model):
 
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, default=None)
+    item = models.ForeignKey(Item, on_delete=models.DO_NOTHING, null=True, default=None)
     transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE, null=True, default=None)
     order_number = models.UUIDField(editable=False, default=uuid.uuid1())  # a unique uniformed id for each order
     status = models.CharField(max_length=20, default="in progress")  # need a clerk to check the order
@@ -151,23 +172,3 @@ class Bidfor(models.Model):
 class TabooList(models.Model):
     addBy = models.ForeignKey(Clerk, on_delete=models.CASCADE)
     word = models.CharField(max_length=100, unique=True)
-
-    def permute(w):  # A algorithm better than (2n)^n
-        # generate all combinations in different case of a word
-        n = len(w)
-
-        mx = 1 << n
-
-        w = w.lower()
-        word_list = []
-        for i in range(mx):
-            # If j-th bit is set, we convert it to upper case
-            combination = [k for k in w]
-            for j in range(n):
-                if ((i >> j) & 1) == 1:
-                    combination[j] = w[j].upper()
-            temp = ''
-            for i in combination:
-                temp += i
-            word_list.append(temp)
-        return word_list

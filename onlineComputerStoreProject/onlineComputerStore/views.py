@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -98,23 +100,35 @@ def addItem(request):
         # if the posted form are cpu form
         if 'is_cpu' in request.POST:
             form = AddCpuForm(request.POST, request.FILES)
-            f_model = CPU
+            model = CPU
 
         if 'is_gpu' in request.POST:
             form = AddGpuForm(request.POST, request.FILES)
-            f_model = GPU
+            model = GPU
 
         if 'is_memory' in request.POST:
             form = AddMemoryForm(request.POST, request.FILES)
-            f_model = Memory
+            model = Memory
+
+        if 'is_hdd' in request.POST:
+            form = AddHddForm(request.POST, request.FILES)
+            model = HDD
+
+        if 'is_monitor' in request.POST:
+            form = AddMonitorForm(request.POST, request.FILES)
+            model = Monitor
+
+        if 'is_battery' in request.POST:
+            form = AddBatteryForm(request.POST, request.FILES)
+            model = Battery
 
         if 'is_computer' in request.POST:
             form = AddComputerForm(request.POST, request.FILES)
-            f_model = Computer
+            model = Computer
 
         if form.is_valid():
             cd = form.cleaned_data
-            if not f_model.objects.filter(name=cd['name']).exists():
+            if not model.objects.filter(name=cd['name']).exists():
                 form.save()
             messages.info(request, "add item successful")
         else:
@@ -125,11 +139,17 @@ def addItem(request):
         cpu_form = AddCpuForm()
         gpu_form = AddGpuForm()
         memory_form = AddMemoryForm()
+        hdd_form = AddHddForm()
+        monitor_form = AddMonitorForm()
+        battery_form = AddBatteryForm()
         computer_form = AddComputerForm()
         return render(request, 'addItem.html', {'cpu_form': cpu_form,
                                                 'gpu_form': gpu_form,
                                                 'memory_form': memory_form,
-                                                'computer_form': computer_form})
+                                                'hdd_form': hdd_form,
+                                                'monitor_form': monitor_form,
+                                                'battery_form': battery_form,
+                                                'computer_form': computer_form,})
 
 
 def browse(request, url_slug=None):
@@ -273,6 +293,7 @@ def purchaseConfirm(request, url_slug):
             form = OrderForm(request.POST)
             order = form.save(commit=False)
             order.customer = customer
+            order.item = item
             order.transaction = Transaction.objects.filter(customer=customer).latest('id')
             form.save()
 
@@ -308,8 +329,6 @@ def purchaseConfirm(request, url_slug):
 
 def tabooList(request):
     wordlist = list(TabooList.objects.values_list('word', flat=True))
-    wordlist = [x.upper() for x in wordlist]
-    wordset = set(wordlist)
     if request.method == "POST":
         if "word" in request.POST:
             if ' ' in request.POST['word']:
@@ -318,13 +337,13 @@ def tabooList(request):
                 if TabooList.objects.filter(word=request.POST['word']).exists():
                     messages.info(request, "This word is already in the list.")
                 else:
-                    for w in TabooList.permute(request.POST['word']):
-                        TabooList.objects.create(word=w, addBy_id=request.user.id)
-
+                    TabooList.objects.create(word=request.POST['word'], addBy_id=request.user.id)
                     txt = "The word {word} has been added successfully."
                     messages.info(request, txt.format(word=request.POST['word']))
-    context = {'taboolist': wordset}
-    return render(request, 'tabooList.html', context)
+
+            return redirect("/taboolist/")
+
+    return render(request, 'tabooList.html', {'word_list': wordlist})
 
 
 def transaction(request):
@@ -348,7 +367,7 @@ def forum_reply(request):
         if 'discuss' in request.POST:
             message = request.POST['discuss']
             for bad_word in TabooList.objects.values('word'):
-                message = message.replace(bad_word['word'], len(bad_word['word']) * '*')
+                message = re.sub(bad_word, "*"*len(bad_word), message, flags=re.I)
             Discussion.objects.create(user=request.user, forum_id=request.POST['forum_id'], discuss=message,
                                       reply_to=request.POST['discussionID'])
             if message == request.POST['discuss']:
