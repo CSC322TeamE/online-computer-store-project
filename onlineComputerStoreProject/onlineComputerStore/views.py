@@ -6,7 +6,6 @@ from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import permission_required, login_required
-from django.http import HttpResponse
 import onlineComputerStore.tests as ts
 from .forms import *
 from django.core.mail import send_mail
@@ -46,11 +45,11 @@ def register(request):
         return render(request, 'register.html')
     else:
         if 'email' in request.POST and 'username' in request.POST and 'password' in request.POST:
-            if Customer.objects.filter(username=request.POST['username']).exists():
+            if User.objects.filter(username=request.POST['username']).exists():
                 messages.info(request, 'Another username')
                 return render(request, 'register.html')
 
-            if Customer.objects.filter(email=request.POST['email']).exists():
+            if User.objects.filter(email=request.POST['email']).exists():
                 send_mail(
                     'Online Computer Store Alert',
                     'You already have a account, if you do not know what I am talking about, you should check what happended.',
@@ -66,7 +65,7 @@ def register(request):
             user.save()
             group = Group.objects.get(name='customers')
             user.groups.add(group)
-            messages.info(request, "You have been registered successfully!")
+            messages.info(request, "You are successfully registered!")
             return redirect('/login/')
 
 
@@ -149,7 +148,7 @@ def addItem(request):
                                                 'hdd_form': hdd_form,
                                                 'monitor_form': monitor_form,
                                                 'battery_form': battery_form,
-                                                'computer_form': computer_form,})
+                                                'computer_form': computer_form, })
 
 
 def browse(request, url_slug=None):
@@ -204,7 +203,6 @@ def forum(request):
     for f in forums:
         discussions.append(f.discussion_set.all().filter(reply_to=None))
         replies = Discussion.objects.filter(~Q(reply_to=None))
-        print(replies)
     context = {'forums': forums,
                'count': count,
                'discussions': discussions,
@@ -366,8 +364,8 @@ def forum_reply(request):
     if request.method == 'POST':
         if 'discuss' in request.POST:
             message = request.POST['discuss']
-            for bad_word in TabooList.objects.values('word'):
-                message = re.sub(bad_word, "*"*len(bad_word), message, flags=re.I)
+            for bad_word in TabooList.objects.values_list('word', flat=True):
+                message = re.sub(bad_word, "*" * len(bad_word), message, flags=re.I)
             Discussion.objects.create(user=request.user, forum_id=request.POST['forum_id'], discuss=message,
                                       reply_to=request.POST['discussionID'])
             if message == request.POST['discuss']:
@@ -388,8 +386,8 @@ def addDiscussion(request):
     if request.method == 'POST':
         if "discuss" in request.POST:
             message = request.POST['discuss']
-            for bad_word in TabooList.objects.values('word'):
-                message = re.sub(bad_word, "*"*len(bad_word), message, flags=re.I)
+            for bad_word in TabooList.objects.values_list('word', flat=True):
+                message = re.sub(bad_word, "*" * len(bad_word), message, flags=re.I)
             Discussion.objects.create(user_id=request.user.id, forum_id=request.POST['forum_id'], discuss=message)
             if message == request.POST['discuss']:
                 messages.info(request, "Your comments are submitted!")
