@@ -125,7 +125,7 @@
                     <li>
                         <input type="hidden" name="payment_method" value="balance">
                         <input type="hidden" name="item_id" value="{{ item.id }}">
-                        <textarea name="address" id="address2" placeholder="--please input your address here--" maxlength="50">{% if saved_address %}{{ saved_address }}{% endif %}</textarea>
+                        <textarea name="address" id="address2" placeholder="--please input your address here--" maxlength="50" required>{% if saved_address %}{{ saved_address }}{% endif %}</textarea>
                         <input type="submit" value="buy">
                         <label>
                             saved address:

@@ -47,7 +47,7 @@ class Item(models.Model):
         self.url_slug = slugify(self.name)
         super(Item, self).save(*args, **kwargs)
         forum = Forum(item=self)
-        forum.save() # create forum as item created
+        forum.save()  # create forum as item created
 
 
 class CPU(Item):
@@ -77,7 +77,7 @@ class HDD(Item):
 
 
 class Monitor(Item):
-    screen_size = models.IntegerField(null=True, blank=True) # 15 16 17 ...
+    screen_size = models.IntegerField(null=True, blank=True)  # 15 16 17 ...
     resolution = models.CharField(null=True, blank=True, max_length=20)
     refresh_rate = models.IntegerField(null=True, blank=True)
 
@@ -113,7 +113,6 @@ class Forum(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     description = models.CharField(max_length=1000, blank=True)
     url_slug = models.SlugField(editable=False, default="")
-
 
     def __str__(self):
         return str(self.item.name)
@@ -161,12 +160,16 @@ class Order(models.Model):
     status = models.CharField(max_length=20, default="in progress")  # need a clerk to check the order
     address = models.CharField(max_length=50, null=True, default=None)
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, null=True, default=None)
+    assigned_by = models.ForeignKey(Clerk, on_delete=models.SET_NULL, null=True)
 
 
 class Bidfor(models.Model):
     price = models.FloatField(default=0)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['delivery_company', 'order']
 
 
 class TabooList(models.Model):

@@ -1,5 +1,4 @@
 import re
-
 from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -89,7 +88,9 @@ def account(request):
 
     if request.user.groups.filter(name='deliverycompany').exists():
         open_order = Order.objects.filter(status='in progress')
-        print(open_order)
+        bided_orderID = Bidfor.objects.filter(delivery_company_id=request.user.id).values_list("order_id", flat=True)
+        for order in bided_orderID:
+            open_order = open_order.exclude(id=order)
         return render(request, 'delivery.html', context={'open_order': open_order})
 
 
@@ -244,16 +245,13 @@ def item(request, url_slug):
 
 def delivery(request):
     if request.method == 'POST':
-        company = request.user.id
-        print('PRICE' + request.POST['price'])
         price = float(request.POST['price'])
         order_id = request.POST['order_id']
-        print(company)
-        Bidfor.objects.create(price=price, delivery_company_id=company, order_id=order_id)
+        Bidfor.objects.create(price=price, delivery_company_id=request.user.id, order_id=order_id)
         messages.info(request, "Success!!!")
-        return render(request, "delivery.html")
+        return redirect("/account/")
     else:
-        return render(request, "delivery.html")
+        return render(request, 'delivery.html')
 
 
 def purchase(request, url_slug):
@@ -400,3 +398,21 @@ def addDiscussion(request):
         return render(request, 'addDiscussion.html', context)
     else:
         return render(request, 'addDiscussion.html')
+
+
+def assignDeliCom(request):
+    if request.POST:
+        companyID = request.POST["deliCompany"]
+        orderID = request.POST["orderID"]
+        order = Order.objects.get(id=orderID)
+        order.status = 'delivering'
+        order.delivery_company_id = companyID
+        order.assigned_by_id = request.user.id
+        order.save()
+        messages.info(request, "Delivery company assigned successfully!")
+    open_orders = Order.objects.filter(status='in progress')
+    bid_info = []
+    for order in open_orders:
+        bid_info.append(order.bidfor_set.all())
+    context = {"open_orders": open_orders, "bid_info": bid_info}
+    return render(request, 'assignDeliCom.html', context)

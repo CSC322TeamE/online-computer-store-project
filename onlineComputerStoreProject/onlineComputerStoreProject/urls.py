@@ -41,7 +41,8 @@ urlpatterns = [
     path('taboolist/', views.tabooList),
     path('transaction/', views.transaction),
     path('viewOrder/', views.viewOrder),
-    path('changePassword/', views.changePassword)
+    path('changePassword/', views.changePassword),
+    path('assignDeliCom/', views.assignDeliCom),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
