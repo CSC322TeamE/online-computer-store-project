@@ -18,6 +18,10 @@ body {
     height: 100%;
 } */
 
+.navBar {
+    margin: 20px;
+}
+
 .wrap {
     height: 100%;
     background-image: linear-gradient(to right, #30cfd0, #330867);

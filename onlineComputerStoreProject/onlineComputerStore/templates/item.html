@@ -1,17 +1,20 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Item page</title>
 </head>
-<body>
+<body  class="wrap">
 <h1>Item name: {{ item.name }}</h1>
 <img src="{{ item.img.url }}">
 <ul>
 
-    <li>{{ item.description }}</li>
-    <li>{{ item.rating }}</li>
-    <li>{{ item.price }}</li>
+    <li>Description: {{ item.description }}</li>
+    <li>Rating: {{ item.rating }}</li>
+    <li>Origin Price: {{ item.price }}</li>
+    <li>Discount: {{item.discount}} </li>
 </ul>
 <a href="/purchase/{{ item.url_slug }}">purchase</a>
 
