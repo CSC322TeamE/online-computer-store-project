@@ -43,6 +43,8 @@ urlpatterns = [
     path('viewOrder/', views.viewOrder),
     path('changePassword/', views.changePassword),
     path('assignDeliCom/', views.assignDeliCom),
+    path('justification/', views.justification),
+    path('tracking/<slug:url_slug>', views.tracking),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

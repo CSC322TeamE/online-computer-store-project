@@ -10,6 +10,7 @@ from .forms import *
 from django.core.mail import send_mail
 from onlineComputerStore.forms import AddCpuForm
 from django.db.models import Q
+import datetime
 
 
 def index(request):
@@ -86,12 +87,14 @@ def account(request):
     if request.user.groups.filter(name='managers').exists():
         return render(request, 'manager.html')
 
-    if request.user.groups.filter(name='deliverycompany').exists():
+    if request.user.groups.filter(name='deliverycompanies').exists():
         open_order = Order.objects.filter(status='in progress')
         bided_orderID = Bidfor.objects.filter(delivery_company_id=request.user.id).values_list("order_id", flat=True)
         for order in bided_orderID:
             open_order = open_order.exclude(id=order)
         return render(request, 'delivery.html', context={'open_order': open_order})
+    
+    return HttpResponse("Unknown user groups")
 
 
 @permission_required('onlineComputerStore.add_item', login_url="/login/")
@@ -405,14 +408,54 @@ def assignDeliCom(request):
         companyID = request.POST["deliCompany"]
         orderID = request.POST["orderID"]
         order = Order.objects.get(id=orderID)
-        order.status = 'delivering'
-        order.delivery_company_id = companyID
-        order.assigned_by_id = request.user.id
-        order.save()
-        messages.info(request, "Delivery company assigned successfully!")
+        bids = order.bidfor_set.all()
+        lowest_price = 99999999
+        for bid in bids:
+            if bid.price<lowest_price:
+                lowest_price=bid.price
+            print('bid:'+str(bid.price)+'\nlowest:'+str(lowest_price))
+        selected = Bidfor.objects.get(order_id=orderID, delivery_company_id=companyID).price
+        if selected ==lowest_price:
+            order.status = 'delivering'
+            order.delivery_company_id = companyID
+            order.assigned_by_id = request.user.id
+            order.save()
+            messages.info(request, "Delivery company assigned successfully!")
+        else:
+            order.status = 'delivering'
+            order.delivery_company_id = companyID
+            order.assigned_by_id = request.user.id
+            order.save()
+            messages.info(request, "Delivery company assigned successfully but you need to provide justification.")
+            return render(request,'justify.html', {'orderID': order.id})
+
     open_orders = Order.objects.filter(status='in progress')
     bid_info = []
     for order in open_orders:
         bid_info.append(order.bidfor_set.all())
     context = {"open_orders": open_orders, "bid_info": bid_info}
     return render(request, 'assignDeliCom.html', context)
+
+def justification(request):
+    if request.POST:
+        if 'order_id' in request.POST:
+            orderID = int(request.POST['order_id'])
+            cur_order = Order.objects.get(id=orderID)
+            justification=request.POST['justification']
+            cur_order.justification=justification
+            cur_order.save()
+            justification=justification.strip()
+            if justification=='':
+                Warning.objects.create(reported_user=request.user, description='Possible cheating without justification')
+                messages.info(request, "Warning created since you fail to provide justification!!!")
+            else:
+                messages.info(request, "Your jusitification has been submitted.")
+            return redirect('/assignDeliCom/')
+        return render(request, 'justify.html')
+    return render(request, 'justify.html')
+
+def tracking(request, url_slug):
+    order = Order.objects.get(url_slug=url_slug)
+    estimate_time = order.transaction.time +datetime.timedelta(days=7)
+    context={'order':order, 'estimate_time': estimate_time}
+    return render(request, 'tracking.html',context)

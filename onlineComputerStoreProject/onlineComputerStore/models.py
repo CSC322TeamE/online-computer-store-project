@@ -161,6 +161,12 @@ class Order(models.Model):
     address = models.CharField(max_length=50, null=True, default=None)
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, null=True, default=None)
     assigned_by = models.ForeignKey(Clerk, on_delete=models.SET_NULL, null=True)
+    justification = models.CharField(max_length=1000, blank=True)
+    url_slug = models.SlugField(editable=False, default="")
+
+    def save(self, *args, **kwargs):
+        self.url_slug = slugify(self.order_number)
+        super(Order, self).save(*args, **kwargs)
 
 
 class Bidfor(models.Model):
