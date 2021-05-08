@@ -11,6 +11,7 @@
 
     <table align="center" border="1" width="1200" height="150">
         <tr>
+            <th>item</th>
             <a><th>Order Number</th></a>
             <th>Money</th>
             <th>Order time</th>
@@ -22,6 +23,7 @@
         {% for data in data  %}
 
         <tr align="center">
+            <td>{{ data.item.name }}</td>
             <td><a href="/tracking/{{data.url_slug}}">{{ data.order_number }}</a></td>
             <td> {{ data.transaction.amount }} </td>
             <td>{{ data.transaction.time }}</td>
