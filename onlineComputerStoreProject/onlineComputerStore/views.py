@@ -459,3 +459,24 @@ def tracking(request, url_slug):
     estimate_time = order.transaction.time +datetime.timedelta(days=7)
     context={'order':order, 'estimate_time': estimate_time}
     return render(request, 'tracking.html',context)
+
+def address(request):
+    if request.method == 'GET':
+        customer = Customer.objects.get(id=request.user.id)
+        if not customer.saved_address:
+            return render(request, "address.html")
+        else :
+            return render(request, "M_address.html")
+    else:
+        customer = Customer.objects.get(id=request.user.id)
+        if not customer.saved_address:
+            new_address = request.POST['m_address']
+            customer.saved_address = new_address
+            customer.save()
+            return redirect('/account/')
+        else:
+            new_address = request.POST['m_address']
+            customer.saved_address = new_address
+            customer.save()
+            return redirect('/account/')
+

@@ -45,6 +45,7 @@ urlpatterns = [
     path('assignDeliCom/', views.assignDeliCom),
     path('justification/', views.justification),
     path('tracking/<slug:url_slug>', views.tracking),
+    path('address/', views.address)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
