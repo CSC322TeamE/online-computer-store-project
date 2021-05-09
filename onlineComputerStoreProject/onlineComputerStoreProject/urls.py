@@ -30,6 +30,7 @@ urlpatterns = [
     path('browse/', views.browse),
     path('browse/<slug:url_slug>', views.browse),
     path('topUp/', views.topUp),
+    path('complaint/', views.complaint, name='complaint'),
     path('forum/', views.forum),
     path('forum/addDiscussion/', views.addDiscussion),
     path('forum/report/', views.forum_report),
@@ -46,7 +47,8 @@ urlpatterns = [
     path('justification/', views.justification),
     path('tracking/<slug:url_slug>', views.tracking),
     path('address/', views.address),
-    path('rating/<slug:url_slug>', views.rating)
+    path('rating/<slug:url_slug>', views.rating),
+    path('viewWarning/', views.viewWarning)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

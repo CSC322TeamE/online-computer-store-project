@@ -139,7 +139,6 @@ class Warning(models.Model):  # forum auto created ID are saved here since no re
     reported_user = models.ForeignKey(User, on_delete=models.CASCADE)
     finalized = models.BooleanField(default=False)
 
-
 class ForumWarning(Warning):
     reporter = models.ForeignKey(User, on_delete=models.CASCADE)
     discuss = models.ForeignKey(Discussion, on_delete=models.CASCADE)

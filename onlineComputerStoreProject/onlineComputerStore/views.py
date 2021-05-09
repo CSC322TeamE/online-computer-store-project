@@ -79,7 +79,8 @@ def account(request):
     # if the user is a customer:
     if request.user.groups.filter(name='customers').exists():
         customer = Customer.objects.get(id=request.user.id)
-        return render(request, 'customer.html', {'customer': customer})
+        warning = Warning.objects.get(id=request.user.id)
+        return render(request, 'customer.html', {'customer': customer })
 
     if request.user.groups.filter(name='clerks').exists():
         return render(request, 'clerk.html')
@@ -93,7 +94,7 @@ def account(request):
         for order in bided_orderID:
             open_order = open_order.exclude(id=order)
         return render(request, 'delivery.html', context={'open_order': open_order})
-    
+
     return HttpResponse("Unknown user groups")
 
 
@@ -207,6 +208,17 @@ def topUp(request):
         else:
             messages.info(request, "This bank customer does not exist!!!")
     return render(request, 'topUp.html')
+
+
+def complaint(request):
+    if request.method == 'POST':
+        if "computer_companyID" in request.POST:
+            delivery_comp = request.POST["deliveryID"]
+            context = {"companyID": request.POST['computer_companyID'], "deliveryID": delivery_comp,
+                       "order_number": request.POST['order_number']}
+            return render(request, 'complaint.html', context)
+        messages.info(request, 'Complaint has been submitted successfully!')
+    return render(request, 'complaint.html')
 
 
 def forum(request):
@@ -420,11 +432,11 @@ def assignDeliCom(request):
         bids = order.bidfor_set.all()
         lowest_price = 99999999
         for bid in bids:
-            if bid.price<lowest_price:
-                lowest_price=bid.price
-            print('bid:'+str(bid.price)+'\nlowest:'+str(lowest_price))
+            if bid.price < lowest_price:
+                lowest_price = bid.price
+            print('bid:' + str(bid.price) + '\nlowest:' + str(lowest_price))
         selected = Bidfor.objects.get(order_id=orderID, delivery_company_id=companyID).price
-        if selected ==lowest_price:
+        if selected == lowest_price:
             order.status = 'delivering'
             order.delivery_company_id = companyID
             order.assigned_by_id = request.user.id
@@ -436,7 +448,7 @@ def assignDeliCom(request):
             order.assigned_by_id = request.user.id
             order.save()
             messages.info(request, "Delivery company assigned successfully but you need to provide justification.")
-            return render(request,'justify.html', {'orderID': order.id})
+            return render(request, 'justify.html', {'orderID': order.id})
 
     open_orders = Order.objects.filter(status='in progress')
     bid_info = []
@@ -445,17 +457,19 @@ def assignDeliCom(request):
     context = {"open_orders": open_orders, "bid_info": bid_info}
     return render(request, 'assignDeliCom.html', context)
 
+
 def justification(request):
     if request.POST:
         if 'order_id' in request.POST:
             orderID = int(request.POST['order_id'])
             cur_order = Order.objects.get(id=orderID)
-            justification=request.POST['justification']
-            cur_order.justification=justification
+            justification = request.POST['justification']
+            cur_order.justification = justification
             cur_order.save()
-            justification=justification.strip()
-            if justification=='':
-                Warning.objects.create(reported_user=request.user, description='Possible cheating without justification')
+            justification = justification.strip()
+            if justification == '':
+                Warning.objects.create(reported_user=request.user,
+                                       description='Possible cheating without justification')
                 messages.info(request, "Warning created since you fail to provide justification!!!")
             else:
                 messages.info(request, "Your jusitification has been submitted.")
@@ -463,18 +477,20 @@ def justification(request):
         return render(request, 'justify.html')
     return render(request, 'justify.html')
 
+
 def tracking(request, url_slug):
     order = Order.objects.get(url_slug=url_slug)
-    estimate_time = order.transaction.time +datetime.timedelta(days=7)
-    context={'order':order, 'estimate_time': estimate_time}
-    return render(request, 'tracking.html',context)
+    estimate_time = order.transaction.time + datetime.timedelta(days=7)
+    context = {'order': order, 'estimate_time': estimate_time}
+    return render(request, 'tracking.html', context)
+
 
 def address(request):
     if request.method == 'GET':
         customer = Customer.objects.get(id=request.user.id)
         if not customer.saved_address:
             return render(request, "address.html")
-        else :
+        else:
             return render(request, "M_address.html")
     else:
         customer = Customer.objects.get(id=request.user.id)
@@ -506,4 +522,11 @@ def rating(request, url_slug=None):
 
     else:
         return render(request, 'rating.html')
+
+
+def viewWarning(request):
+    data = Warning.objects.filter(reported_user_id=request.user.id)
+    context = {'data': data}
+    return render(request,"viewWarning.html", context)
+
 
