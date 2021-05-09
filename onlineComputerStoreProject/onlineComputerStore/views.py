@@ -79,7 +79,8 @@ def account(request):
     # if the user is a customer:
     if request.user.groups.filter(name='customers').exists():
         customer = Customer.objects.get(id=request.user.id)
-        return render(request, 'customer.html', {'customer': customer})
+        warning = Warning.objects.get(id=request.user.id)
+        return render(request, 'customer.html', {'customer': customer })
 
     if request.user.groups.filter(name='clerks').exists():
         return render(request, 'clerk.html')
@@ -479,4 +480,9 @@ def address(request):
             customer.saved_address = new_address
             customer.save()
             return redirect('/account/')
+
+def viewWarning(request):
+    data = Warning.objects.filter(reported_user_id=request.user.id)
+    context = {'data': data}
+    return render(request,"viewWarning.html", context)
 
