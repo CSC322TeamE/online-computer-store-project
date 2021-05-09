@@ -171,6 +171,15 @@ def browse(request, url_slug=None):
             if request.POST['component'] == 'memory':
                 item_list = Memory.objects.all()
 
+            if request.POST['component'] == 'hdd':
+                item_list = HDD.objects.all()
+
+            if request.POST['component'] == 'monitor':
+                item_list = Monitor.objects.all()
+
+            if request.POST['component'] == 'battery':
+                item_list = Battery.objects.all()
+
             return render(request, 'browseComponent.html', {'item_list': item_list,
                                                             'component': request.POST['component']})
 
