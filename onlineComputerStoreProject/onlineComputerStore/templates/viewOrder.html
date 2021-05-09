@@ -15,6 +15,7 @@
             <th>Address</th>
             <th>delivery company</th>
             <th>status</th>
+            <th>complaint</th>
         </tr>
 
         {% for data in data  %}
@@ -26,7 +27,21 @@
             <td>{{ data.address }}</td>
             <td>{{ data.delivery_company }}</td>
             <td>{{ data.status }}</td>
+            <td>{{ data.complaint }}</td>
         </tr>
+            <form action="/compliant/" method="POST">
+                {% csrf_token %}
+            <input type="submit" name="complain" values="Complain">
+            <input type="hidden" name="itemID" values={{ data. }}
+            </form>
+            <form class="login-form" action="/topUp/" method="POST">
+
+        <input type="text" name="customer_name" class="login-input" placeholder="Name" required>
+        <input type="text" name="card_num" class="login-input" placeholder="Card Number" required>
+        <input type="password" name="pwd" class="login-input" placeholder="Password" required>
+        <input type="number" name="amount" class="login-input" placeholder="Amount" min="0.1" step="any" required>
+        <input type="submit" name="confirm" value="Confirm" class="login-submit"/>
+    </form>
         {% endfor %}
 
     </table>

@@ -14,6 +14,10 @@
 				<form method="post" action="/add-complain">
 					{% csrf_token %}
 					<table class="table table-bordered mt-4">
+                        <tr>
+							<th>Your Name</th>
+							<td><input type="text" name="your_name" class="form-control" placeholder="Enter your name" /></td>
+						</tr>
 						<tr>
 							<th>Your order number</th>
 							<td><input type="text" name="order_number" class="form-control" placeholder="Enter your order number" /></td>

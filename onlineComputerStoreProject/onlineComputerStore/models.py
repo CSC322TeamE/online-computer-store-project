@@ -120,6 +120,14 @@ class Warning(models.Model):  # forum auto created ID are saved here since no re
     reported_user = models.ForeignKey(User, on_delete=models.CASCADE)
     finalized = models.BooleanField(default=False)
 
+class Complain(models.Model):
+    name=models.CharField(max_length=100)
+    order_number=models.CharField(max_length=300)
+    complain=models.TextField()
+    add_time=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
 
 class ForumWarning(Warning):
     reporter = models.ForeignKey(User, on_delete=models.CASCADE)

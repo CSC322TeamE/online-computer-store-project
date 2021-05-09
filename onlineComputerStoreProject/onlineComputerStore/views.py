@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 # import onlineComputerStore.tests as ts
 from onlineComputerStore.forms import AddCpuForm
 from django.db.models import Q
+#from models import Complaint
 
 
 def index(request):
@@ -180,17 +181,16 @@ def topUp(request):
 
 
 def complaint(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        order_number = request.POST['order_number']
+        complain= request.POST['Complain']
+        compl=Complain(name=name, order_number=order_number, complain=complain )
+        compl.save()
+        messages.success(request,'Complain has been registered')
     return render(request, 'complaint.html')
 
 
-def add_complain(request):
-	if request.method=='POST':
-		order_number=request.POST['number']
-		complain=request.POST['complain']
-		compl=Complain(orderNumber=order_number,complain=complain)
-		compl.save()
-		messages.success(request,'Complain has been registered.')
-	return render(request,'add-complain.html')
 
 def forum(request):
     forums = Forum.objects.all()
