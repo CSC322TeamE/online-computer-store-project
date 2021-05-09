@@ -145,7 +145,7 @@ class ForumWarning(Warning):
 
 
 class Transaction(models.Model):
-    transaction_number = models.UUIDField(default=uuid.uuid1, editable=False)
+    transaction_number = models.UUIDField(default=uuid.uuid4, editable=False)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, default="")
     amount = models.FloatField(default=0)
     time = models.DateTimeField(auto_now_add=True)
@@ -155,7 +155,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, default=None)
     item = models.ForeignKey(Item, on_delete=models.DO_NOTHING, null=True, default=None)
     transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE, null=True, default=None)
-    order_number = models.UUIDField(editable=False, default=uuid.uuid1())  # a unique uniformed id for each order
+    order_number = models.UUIDField(editable=False, default=uuid.uuid4)  # a unique uniformed id for each order
     status = models.CharField(max_length=20, default="in progress")  # need a clerk to check the order
     address = models.CharField(max_length=50, null=True, default=None)
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, null=True, default=None)

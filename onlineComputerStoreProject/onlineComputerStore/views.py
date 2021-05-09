@@ -79,7 +79,6 @@ def account(request):
     # if the user is a customer:
     if request.user.groups.filter(name='customers').exists():
         customer = Customer.objects.get(id=request.user.id)
-        warning = Warning.objects.get(id=request.user.id)
         return render(request, 'customer.html', {'customer': customer })
 
     if request.user.groups.filter(name='clerks').exists():
