@@ -29,12 +29,17 @@
             <p style="margin: 5px 0">Account : Customer</p>
             <p style="margin: 5px 0">Email : {{ user.email }}</p>
             <p style="margin: 5px 0">Balance : {{ customer.balance }} </p>
+            <p style="margin: 5px 0">Address : {{ customer.saved_address }} </p>
+
 
         </div>
         <form class="login-form" action="/topUp/">
             <input type="submit" name="Add Balance" value="Add Balance" class="register-submit"/>
         </form>
 
+         <form class="login-form" action="/address/">
+            <input type="submit" name="Add / Modify Address" value="Add / Modify Address    " class="register-submit"/>
+        </form>
 
         <form class="login-form" action="/transaction/">
             <input type="submit" name="View Transaction" value="View Transaction" class="register-submit"/>

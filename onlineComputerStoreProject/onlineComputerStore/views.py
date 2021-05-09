@@ -1,17 +1,16 @@
 import re
-
 from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import permission_required, login_required
-from django.http import HttpResponse
 import onlineComputerStore.tests as ts
 from .forms import *
 from django.core.mail import send_mail
 from onlineComputerStore.forms import AddCpuForm
-from django.db.models import Q
+from django.db.models import Q, Avg
+import datetime
 
 
 def index(request):
@@ -46,11 +45,11 @@ def register(request):
         return render(request, 'register.html')
     else:
         if 'email' in request.POST and 'username' in request.POST and 'password' in request.POST:
-            if Customer.objects.filter(username=request.POST['username']).exists():
+            if User.objects.filter(username=request.POST['username']).exists():
                 messages.info(request, 'Another username')
                 return render(request, 'register.html')
 
-            if Customer.objects.filter(email=request.POST['email']).exists():
+            if User.objects.filter(email=request.POST['email']).exists():
                 send_mail(
                     'Online Computer Store Alert',
                     'You already have a account, if you do not know what I am talking about, you should check what happended.',
@@ -66,7 +65,7 @@ def register(request):
             user.save()
             group = Group.objects.get(name='customers')
             user.groups.add(group)
-            messages.info(request, "You have been registered successfully!")
+            messages.info(request, "You are successfully registered!")
             return redirect('/login/')
 
 
@@ -88,10 +87,14 @@ def account(request):
     if request.user.groups.filter(name='managers').exists():
         return render(request, 'manager.html')
 
-    if request.user.groups.filter(name='deliverycompany').exists():
+    if request.user.groups.filter(name='deliverycompanies').exists():
         open_order = Order.objects.filter(status='in progress')
-        print(open_order)
+        bided_orderID = Bidfor.objects.filter(delivery_company_id=request.user.id).values_list("order_id", flat=True)
+        for order in bided_orderID:
+            open_order = open_order.exclude(id=order)
         return render(request, 'delivery.html', context={'open_order': open_order})
+    
+    return HttpResponse("Unknown user groups")
 
 
 @permission_required('onlineComputerStore.add_item', login_url="/login/")
@@ -149,7 +152,7 @@ def addItem(request):
                                                 'hdd_form': hdd_form,
                                                 'monitor_form': monitor_form,
                                                 'battery_form': battery_form,
-                                                'computer_form': computer_form,})
+                                                'computer_form': computer_form, })
 
 
 def browse(request, url_slug=None):
@@ -213,7 +216,6 @@ def forum(request):
     for f in forums:
         discussions.append(f.discussion_set.all().filter(reply_to=None))
         replies = Discussion.objects.filter(~Q(reply_to=None))
-        print(replies)
     context = {'forums': forums,
                'count': count,
                'discussions': discussions,
@@ -255,16 +257,13 @@ def item(request, url_slug):
 
 def delivery(request):
     if request.method == 'POST':
-        company = request.user.id
-        print('PRICE' + request.POST['price'])
         price = float(request.POST['price'])
         order_id = request.POST['order_id']
-        print(company)
-        Bidfor.objects.create(price=price, delivery_company_id=company, order_id=order_id)
+        Bidfor.objects.create(price=price, delivery_company_id=request.user.id, order_id=order_id)
         messages.info(request, "Success!!!")
-        return render(request, "delivery.html")
+        return redirect("/account/")
     else:
-        return render(request, "delivery.html")
+        return render(request, 'delivery.html')
 
 
 def purchase(request, url_slug):
@@ -375,8 +374,8 @@ def forum_reply(request):
     if request.method == 'POST':
         if 'discuss' in request.POST:
             message = request.POST['discuss']
-            for bad_word in TabooList.objects.values('word'):
-                message = re.sub(bad_word, "*"*len(bad_word), message, flags=re.I)
+            for bad_word in TabooList.objects.values_list('word', flat=True):
+                message = re.sub(bad_word, "*" * len(bad_word), message, flags=re.I)
             Discussion.objects.create(user=request.user, forum_id=request.POST['forum_id'], discuss=message,
                                       reply_to=request.POST['discussionID'])
             if message == request.POST['discuss']:
@@ -397,8 +396,8 @@ def addDiscussion(request):
     if request.method == 'POST':
         if "discuss" in request.POST:
             message = request.POST['discuss']
-            for bad_word in TabooList.objects.values('word'):
-                message = message.replace(bad_word['word'], len(bad_word['word']) * '*')
+            for bad_word in TabooList.objects.values_list('word', flat=True):
+                message = re.sub(bad_word, "*" * len(bad_word), message, flags=re.I)
             Discussion.objects.create(user_id=request.user.id, forum_id=request.POST['forum_id'], discuss=message)
             if message == request.POST['discuss']:
                 messages.info(request, "Your comments are submitted!")
@@ -411,3 +410,100 @@ def addDiscussion(request):
         return render(request, 'addDiscussion.html', context)
     else:
         return render(request, 'addDiscussion.html')
+
+
+def assignDeliCom(request):
+    if request.POST:
+        companyID = request.POST["deliCompany"]
+        orderID = request.POST["orderID"]
+        order = Order.objects.get(id=orderID)
+        bids = order.bidfor_set.all()
+        lowest_price = 99999999
+        for bid in bids:
+            if bid.price<lowest_price:
+                lowest_price=bid.price
+            print('bid:'+str(bid.price)+'\nlowest:'+str(lowest_price))
+        selected = Bidfor.objects.get(order_id=orderID, delivery_company_id=companyID).price
+        if selected ==lowest_price:
+            order.status = 'delivering'
+            order.delivery_company_id = companyID
+            order.assigned_by_id = request.user.id
+            order.save()
+            messages.info(request, "Delivery company assigned successfully!")
+        else:
+            order.status = 'delivering'
+            order.delivery_company_id = companyID
+            order.assigned_by_id = request.user.id
+            order.save()
+            messages.info(request, "Delivery company assigned successfully but you need to provide justification.")
+            return render(request,'justify.html', {'orderID': order.id})
+
+    open_orders = Order.objects.filter(status='in progress')
+    bid_info = []
+    for order in open_orders:
+        bid_info.append(order.bidfor_set.all())
+    context = {"open_orders": open_orders, "bid_info": bid_info}
+    return render(request, 'assignDeliCom.html', context)
+
+def justification(request):
+    if request.POST:
+        if 'order_id' in request.POST:
+            orderID = int(request.POST['order_id'])
+            cur_order = Order.objects.get(id=orderID)
+            justification=request.POST['justification']
+            cur_order.justification=justification
+            cur_order.save()
+            justification=justification.strip()
+            if justification=='':
+                Warning.objects.create(reported_user=request.user, description='Possible cheating without justification')
+                messages.info(request, "Warning created since you fail to provide justification!!!")
+            else:
+                messages.info(request, "Your jusitification has been submitted.")
+            return redirect('/assignDeliCom/')
+        return render(request, 'justify.html')
+    return render(request, 'justify.html')
+
+def tracking(request, url_slug):
+    order = Order.objects.get(url_slug=url_slug)
+    estimate_time = order.transaction.time +datetime.timedelta(days=7)
+    context={'order':order, 'estimate_time': estimate_time}
+    return render(request, 'tracking.html',context)
+
+def address(request):
+    if request.method == 'GET':
+        customer = Customer.objects.get(id=request.user.id)
+        if not customer.saved_address:
+            return render(request, "address.html")
+        else :
+            return render(request, "M_address.html")
+    else:
+        customer = Customer.objects.get(id=request.user.id)
+        if not customer.saved_address:
+            new_address = request.POST['m_address']
+            customer.saved_address = new_address
+            customer.save()
+            return redirect('/account/')
+        else:
+            new_address = request.POST['m_address']
+            customer.saved_address = new_address
+            customer.save()
+            return redirect('/account/')
+
+
+def rating(request, url_slug=None):
+    order = Order.objects.get(url_slug=url_slug)
+
+    if request.method == 'POST':
+        order.item_score = request.POST['item_score']
+        order.delivery_score = request.POST['delivery_score']
+        order.save()
+        order.item.rating = Order.objects.filter(item=order.item).aggregate(avg_item_score=Avg('item_score'))['avg_item_score']
+        order.item.save()
+        order.delivery_company.rating = Order.objects.filter(delivery_company=order.delivery_company).aggregate(avg_delivery_score=Avg('delivery_score'))['avg_delivery_score']
+        order.delivery_company.save()
+        messages.info(request, "thank you for your rating")
+        return redirect('/viewOrder/')
+
+    else:
+        return render(request, 'rating.html')
+

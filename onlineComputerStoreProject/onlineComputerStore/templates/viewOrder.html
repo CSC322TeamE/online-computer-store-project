@@ -1,15 +1,27 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>View Order</title>
 </head>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
 <body>
  <h1 style="text-align: center"> Order History</h1>
 
     <table align="center" border="1" width="1200" height="150">
         <tr>
-            <th>Order Number</th>
+            <th>item</th>
+            <a><th>Order Number</th></a>
             <th>Money</th>
             <th>Order time</th>
             <th>Address</th>
@@ -20,12 +32,16 @@
         {% for data in data  %}
 
         <tr align="center">
-            <td>{{ data.order_number }}</td>
+            <td>{{ data.item.name }}</td>
+            <td><a href="/tracking/{{data.url_slug}}">{{ data.order_number }}</a></td>
             <td> {{ data.transaction.amount }} </td>
             <td>{{ data.transaction.time }}</td>
             <td>{{ data.address }}</td>
             <td>{{ data.delivery_company }}</td>
             <td>{{ data.status }}</td>
+            {% if data.status == "complete" %}
+                <td><a href="/rating/{{ data.url_slug }}">rate this order</a> </td>
+            {% endif %}
         </tr>
         {% endfor %}
 

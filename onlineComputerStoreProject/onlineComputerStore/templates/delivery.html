@@ -8,22 +8,8 @@
     <h1 class="maintext">Delivery company account home</h1>
 </head>
 
-{% if messages %}
-    {% for message in messages %}
-        {% if message.tags %}
-            <script> alert('{{ message }}'); </script>
-        {% endif %}
-    {% endfor %}
-{% endif %}
 
 <body class="wrap">
-{% if messages %}
-    {% for message in messages %}
-        {% if message.tags %}
-            <script> alert('{{ message }}'); </script>
-        {% endif %}>
-    {% endfor %}
-{% endif %}
 {% comment %} style="background:url({% static '/image/background1.jpg' %}); background-size: 100%;" {% endcomment %}
 <div class="navBar">
     <a href="/">Home</a>
@@ -45,17 +31,26 @@
             {% for order in open_order %}
                 <form class="login-form" action="/delivery/" method="POST">
                     {% csrf_token %}
-                    <li> order # {{ order.id }},
-                        <br> bid price:
-                        <input type="number" name="price">
+                    <li> ORDER_#: {{ order.order_number }}<br>
+                        Address: {{ order.address }}
+                        <br> your price:
+                        <input type="number" name="price" required>
                         <input type="hidden" value={{ order.id }} name="order_id">
                         <input type="submit" value="submit">
                 </form>
+                <br>
             {% endfor %}
 
 
         </div>
     </div>
 </div>
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}>
+    {% endfor %}
+{% endif %}
 </body>
 </html> 
