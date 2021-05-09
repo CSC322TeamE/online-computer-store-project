@@ -4,7 +4,11 @@
 <div class="grid-container">
 <div class="tools">
     <div class="search-area">
-        <input type="text" id="search" placeholder="Search" /> <button id="searchbutton">Go</button>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="search" id="search" placeholder="Search"/>
+            <input type="submit" id="searchbutton" value="GO">
+        </form>
     </div>
 </div>
 
@@ -95,7 +99,7 @@
     <div id="select-grid" class="select-grid">
         <table>
             <tr>
-                <th><label>Category: </label></th>
+                <th><label>Type: </label></th>
                 <td>
                     <select name="type" id="type" onchange="select_type()">
                         <option value="">--please select--</option>
@@ -144,7 +148,7 @@
                         </td>
                     </tr>
                 </table>
-                <input class="submit" type="submit" name="choose_computer" value="GO">
+                <input class="submit" type="submit" name="choose_computer" value="Filter">
             </form>
         </div>
 
@@ -164,7 +168,7 @@
                         </td>
                     </tr>
                 </table>
-                <input type="submit" class="submit" name="choose_component" value="GO">
+                <input type="submit" class="submit" name="choose_component" value="Filter">
             </form>
         </div>
     </div>

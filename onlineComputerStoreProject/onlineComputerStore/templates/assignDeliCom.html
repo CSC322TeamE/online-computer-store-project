@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for order in open_orders %}
+    Order ID: {{ order.id }}<br> address: {{ order.address }}<br>
+    {% for set in bid_info %}
+        {% for bid in set %}
+            {% if bid.order_id == order.id %}
+                Bid: {{ bid.delivery_company.username }} {{ bid.price }}
+                <form class="login-form" action="/assignDeliCom/" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="deliCompany" value={{ bid.delivery_company_id }} class=""/>
+                    <input type="hidden" name="orderID" value={{ order.id }} class=""/>
+                    <input type="submit" name="select" value="select" class="register-submit"/>
+                </form>
+                <br>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    <br>
+{% endfor %}
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+</body>
+</html>

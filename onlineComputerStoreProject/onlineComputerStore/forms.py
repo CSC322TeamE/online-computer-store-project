@@ -29,17 +29,41 @@ class AddMemoryForm(ModelForm):
                   'capacity', 'type', 'frequency']
 
 
+class AddHddForm(ModelForm):
+    class Meta:
+        model = HDD
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'img', 'description',
+                  'capacity', 'rpm']
+
+
+class AddMonitorForm(ModelForm):
+    class Meta:
+        model = Monitor
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'img', 'description',
+                  'screen_size', 'resolution', 'refresh_rate']
+
+
+class AddBatteryForm(ModelForm):
+    class Meta:
+        model = Battery
+        fields = ['name', 'brand', 'price', 'quantity', 'discount', 'img', 'description',
+                  'capacity']
+
+
 class AddComputerForm(ModelForm):
     class Meta:
         model = Computer
         fields = ['name', 'brand', 'price', 'quantity', 'discount', 'img', 'description',
-                  'os', 'computer_cpu', 'computer_gpu', 'computer_memory']
+                  'os', 'computer_cpu', 'computer_gpu', 'computer_memory', 'computer_hdd', 'computer_monitor', 'computer_battery']
 
     def __init__(self, *args, **kwargs):
         super(AddComputerForm, self).__init__(*args, **kwargs)
         self.fields['computer_cpu'].label_from_instance = lambda obj: "%s" % obj.name
         self.fields['computer_gpu'].label_from_instance = lambda obj: "%s" % obj.name
         self.fields['computer_memory'].label_from_instance = lambda obj: "%s" % obj.name
+        self.fields['computer_hdd'].label_from_instance = lambda obj: "%s" % obj.name
+        self.fields['computer_monitor'].label_from_instance = lambda obj: "%s" % obj.name
+        self.fields['computer_battery'].label_from_instance = lambda obj: "%s" % obj.name
 
 
 class DiscussionForm(ModelForm):
@@ -108,15 +132,22 @@ class FilterComputerForm(forms.Form):
     cpu = forms.ModelChoiceField(queryset=None, required=False)
     gpu = forms.ModelChoiceField(queryset=None, required=False)
     memory = forms.ModelChoiceField(queryset=None, required=False)
+    hdd = forms.ModelChoiceField(queryset=None, required=False)
+    monitor = forms.ModelChoiceField(queryset=None, required=False)
+    battery = forms.ModelChoiceField(queryset=None, required=False)
     items = Computer.objects.all()
 
     def __init__(self, *args, **kwargs):
         super(FilterComputerForm, self).__init__(*args, **kwargs)
 
-        # filter by input
+        # filter computer by input
+        # filter os
         if self.has_data("os"):
             self.items = self.items.filter(os=self.data["os"])
 
+        # filter by purpose
+        # A gaming computer's cpu frequency >= 3.0, gpu core clock >= 1500, memory capacity >= 8
+        # ...
         if self.has_data("purpose"):
             if self.data["purpose"] == "gaming":
                 self.items = self.items.filter(Q(computer_cpu__frequency__gte=3.0) &
@@ -133,12 +164,14 @@ class FilterComputerForm(forms.Form):
                                                Q(computer_memory__capacity__gte=8))
 
         if self.has_data("architecture"):
-            if self.data["architecture"] == 'x86':
-                self.items = self.items.filter(computer_cpu__architecture="x86")
+            self.items = self.items.filter(computer_cpu__architecture=self.data["architecture"])
 
-            if self.data["architecture"] == 'arm':
-                self.items = self.items.filter(computer_cpu__architecture="arm")
+        # A better gpu should have a better battery or have no battery
+        if self.has_data("gpu"):
+            if self.data["gpu"].power > 200:
+                self.items = self.items.filter(Q(computer_battery__capacity__gte=4000) | Q(computer_battery__capacity=None))
 
+        # get filtered computer's cpu to options
         id_list = self.items.distinct().order_by('computer_cpu').values_list('computer_cpu')
         self.fields["cpu"].queryset = CPU.objects.filter(id__in=id_list)
         self.fields["cpu"].label_from_instance = lambda obj: "%s" % obj.name
@@ -151,6 +184,18 @@ class FilterComputerForm(forms.Form):
         self.fields["memory"].queryset = Memory.objects.filter(id__in=id_list)
         self.fields["memory"].label_from_instance = lambda obj: "%s" % obj.name
 
+        id_list = self.items.distinct().order_by('computer_hdd').values_list('computer_hdd')
+        self.fields["hdd"].queryset = HDD.objects.filter(id__in=id_list)
+        self.fields["hdd"].label_from_instance = lambda obj: "%s" % obj.name
+
+        id_list = self.items.distinct().order_by('battery').values_list('battery')
+        self.fields["battery"].queryset = Battery.objects.filter(id__in=id_list)
+        self.fields["battery"].label_from_instance = lambda obj: "%s" % obj.name
+
+        id_list = self.items.distinct().order_by('monitor').values_list('monitor')
+        self.fields["monitor"].queryset = Monitor.objects.filter(id__in=id_list)
+        self.fields["monitor"].label_from_instance = lambda obj: "%s" % obj.name
+
     def has_data(self, s):
         if s not in self.data:
             return False
@@ -162,7 +207,6 @@ class FilterComputerForm(forms.Form):
 
     # get items queryset
     def get_items(self):
-        print(self.has_data('cpu'))
         if self.has_data('cpu'):
             self.items = self.items.filter(computer_cpu=self.data["cpu"])
 
@@ -171,6 +215,15 @@ class FilterComputerForm(forms.Form):
 
         if self.has_data('memory'):
             self.items = self.items.filter(computer_memory=self.data["memory"])
+
+        if self.has_data('hdd'):
+            self.items = self.items.filter(computer_memory=self.data["hdd"])
+
+        if self.has_data('monitor'):
+            self.items = self.items.filter(computer_memory=self.data["monitor"])
+
+        if self.has_data('battery'):
+            self.items = self.items.filter(computer_memory=self.data["battery"])
 
         return self.items
 

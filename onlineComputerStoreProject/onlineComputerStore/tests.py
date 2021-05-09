@@ -21,6 +21,10 @@ def add_user():
         can_add_item = Permission.objects.get(codename='add_item')
         group.permissions.add(can_add_item)
 
+    if not Group.objects.filter(name="deliverycompanies"):
+        group = Group.objects.create(name='deliverycompanies')
+
+
     if not Customer.objects.filter(username="customer").exists():
         user = Customer.objects.create_user(username="customer", password="customer")
         group = Group.objects.get(name='customers')
@@ -36,3 +40,7 @@ def add_user():
         group = Group.objects.get(name='managers')
         user.groups.add(group)
 
+    if not DeliveryCompany.objects.filter(username="UPS").exists():
+        user = DeliveryCompany.objects.create_user(username="UPS", password="UPS")
+        group = Group.objects.get(name='deliverycompanies')
+        user.groups.add(group)

@@ -2,4 +2,5 @@
 *.sqlite3
 item_img/
 migrations/
-
+*.xml
+*.bat

@@ -1,3 +1,5 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +11,8 @@
 
     <table align="center" border="1" width="1200" height="150">
         <tr>
-            <th>Order Number</th>
+            <th>item</th>
+            <a><th>Order Number</th></a>
             <th>Money</th>
             <th>Order time</th>
             <th>Address</th>
@@ -21,7 +24,8 @@
         {% for data in data  %}
 
         <tr align="center">
-            <td>{{ data.order_number }}</td>
+            <td>{{ data.item.name }}</td>
+            <td><a href="/tracking/{{data.url_slug}}">{{ data.order_number }}</a></td>
             <td> {{ data.transaction.amount }} </td>
             <td>{{ data.transaction.time }}</td>
             <td>{{ data.address }}</td>
