@@ -18,6 +18,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from onlineComputerStore import views
+from django.contrib.auth import views as auth_views
+from django.urls import reverse_lazy
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,7 +44,8 @@ urlpatterns = [
     path('taboolist/', views.tabooList),
     path('transaction/', views.transaction),
     path('viewOrder/', views.viewOrder),
-    path('changePassword/', views.changePassword),
+    path('changePassword/', auth_views.PasswordChangeView.as_view(success_url= reverse_lazy(views.login))),
+
     path('assignDeliCom/', views.assignDeliCom),
     path('justification/', views.justification),
     path('tracking/<slug:url_slug>', views.tracking),
