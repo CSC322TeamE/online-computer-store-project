@@ -11,7 +11,7 @@ import onlineComputerStore.tests as ts
 from .forms import *
 from django.core.mail import send_mail
 from onlineComputerStore.forms import AddCpuForm
-from django.db.models import Q
+from django.db.models import Q, Avg
 import datetime
 
 
@@ -176,6 +176,15 @@ def browse(request, url_slug=None):
             if request.POST['component'] == 'memory':
                 item_list = Memory.objects.all()
 
+            if request.POST['component'] == 'hdd':
+                item_list = HDD.objects.all()
+
+            if request.POST['component'] == 'monitor':
+                item_list = Monitor.objects.all()
+
+            if request.POST['component'] == 'battery':
+                item_list = Battery.objects.all()
+
             return render(request, 'browseComponent.html', {'item_list': item_list,
                                                             'component': request.POST['component']})
 
@@ -200,6 +209,17 @@ def topUp(request):
         else:
             messages.info(request, "This bank customer does not exist!!!")
     return render(request, 'topUp.html')
+
+
+def complaint(request):
+    if request.method == 'POST':
+        if "computer_companyID" in request.POST:
+            delivery_comp = request.POST["deliveryID"]
+            context = {"companyID": request.POST['computer_companyID'], "deliveryID": delivery_comp,
+                       "order_number": request.POST['order_number']}
+            return render(request, 'complaint.html', context)
+        messages.info(request, 'Complaint has been submitted successfully!')
+    return render(request, 'complaint.html')
 
 
 def forum(request):
@@ -425,10 +445,9 @@ def assignDeliCom(request):
         else:
             messages.info(request,
                           "Delivery company assigned successfully but you need to provide justification to avoid warning.")
-            warning = Warning.objects.create(reported_user=request.user,
+            warning = Warning.objects.create(reported_user=request.user, finalized=True,
                                              description='Possible_Cheating')
-            return render(request, 'justify.html', {'orderID': order.id, 'warningID': warning.id})
-
+            return render(request, 'justification.html', {'orderID': order.id, 'warningID': warning.id})
     open_orders = Order.objects.filter(status='in progress')
     bid_info = []
     for order in open_orders:
@@ -447,14 +466,14 @@ def justification(request):
             cur_order.save()
             justification = justification.strip()
             if justification != '':
+                warning = Warning.objects.get(id=request.POST['warning_id'])
+                warning.finalized = False
+                warning.save()
                 messages.info(request, "Your justification has been submitted.")
             else:
-                warning = Warning.objects.get(id=request.POST['warning_id'])
-                warning.finalized = True
-                warning.save()
                 messages.info(request, "Warning created since you fail to provide justification!!!")
             return redirect('/assignDeliCom/')
-    return render(request, 'justify.html')
+    return render(request, 'justification.html')
 
 
 def tracking(request, url_slug):
@@ -462,3 +481,50 @@ def tracking(request, url_slug):
     estimate_time = order.transaction.time + datetime.timedelta(days=7)
     context = {'order': order, 'estimate_time': estimate_time}
     return render(request, 'tracking.html', context)
+
+
+def address(request):
+    if request.method == 'GET':
+        customer = Customer.objects.get(id=request.user.id)
+        if not customer.saved_address:
+            return render(request, "address.html")
+        else:
+            return render(request, "modifyAddress.html")
+    else:
+        customer = Customer.objects.get(id=request.user.id)
+        if not customer.saved_address:
+            new_address = request.POST['m_address']
+            customer.saved_address = new_address
+            customer.save()
+            return redirect('/account/')
+        else:
+            new_address = request.POST['m_address']
+            customer.saved_address = new_address
+            customer.save()
+            return redirect('/account/')
+
+
+def rating(request, url_slug=None):
+    order = Order.objects.get(url_slug=url_slug)
+
+    if request.method == 'POST':
+        order.item_score = request.POST['item_score']
+        order.delivery_score = request.POST['delivery_score']
+        order.save()
+        order.item.rating = Order.objects.filter(item=order.item).aggregate(avg_item_score=Avg('item_score'))[
+            'avg_item_score']
+        order.item.save()
+        order.delivery_company.rating = Order.objects.filter(delivery_company=order.delivery_company).aggregate(
+            avg_delivery_score=Avg('delivery_score'))['avg_delivery_score']
+        order.delivery_company.save()
+        messages.info(request, "thank you for your rating")
+        return redirect('/viewOrder/')
+
+    else:
+        return render(request, 'rating.html')
+
+
+def viewWarning(request):
+    data = Warning.objects.filter(reported_user_id=request.user.id)
+    context = {'data': data}
+    return render(request, "viewWarning.html", context)

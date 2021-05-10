@@ -1,17 +1,20 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Item page</title>
 </head>
-<body>
+<body  class="wrap">
 <h1>Item name: {{ item.name }}</h1>
 <img src="{{ item.img.url }}">
 <ul>
 
-    <li>{{ item.description }}</li>
-    <li>{{ item.rating }}</li>
-    <li>{{ item.price }}</li>
+    <li>Description: {{ item.description }}</li>
+    <li>Rating: {{ item.rating }}</li>
+    <li>Origin Price: {{ item.price }}</li>
+    <li>Discount: {{item.discount}} </li>
 </ul>
 <a href="/purchase/{{ item.url_slug }}">purchase</a>
 
@@ -77,8 +80,8 @@
                         <small> &lt{{ reply.date_created }}&gt</small>
                             <form method="POST" action="\forum\report\">
                                 {% csrf_token %}
-                                <input type="hidden" name="discussionID" value={{ discuss.id }}>
-                                <input type="hidden" name="reportedID" value={{ discuss.user_id }}>
+                                <input type="hidden" name="discussionID" value={{ reply.id }}>
+                                <input type="hidden" name="reportedID" value={{ reply.user_id }}>
                                 <button class="btn btn-success"
                                         style="background-color: firebrick; width:fit-content; padding: 4px; margin:10px;">
                                     Report

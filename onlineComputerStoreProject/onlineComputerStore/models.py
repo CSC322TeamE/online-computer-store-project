@@ -28,7 +28,7 @@ class Company(User):
 
 
 class DeliveryCompany(User):
-    pass
+    rating = models.FloatField(null=True, blank=True, default=0)
 
 
 class Item(models.Model):
@@ -139,14 +139,13 @@ class Warning(models.Model):  # forum auto created ID are saved here since no re
     reported_user = models.ForeignKey(User, on_delete=models.CASCADE)
     finalized = models.BooleanField(default=False)
 
-
 class ForumWarning(Warning):
     reporter = models.ForeignKey(User, on_delete=models.CASCADE)
     discuss = models.ForeignKey(Discussion, on_delete=models.CASCADE)
 
 
 class Transaction(models.Model):
-    transaction_number = models.UUIDField(default=uuid.uuid1, editable=False)
+    transaction_number = models.UUIDField(default=uuid.uuid4, editable=False)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, default="")
     amount = models.FloatField(default=0)
     time = models.DateTimeField(auto_now_add=True)
@@ -156,13 +155,15 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, default=None)
     item = models.ForeignKey(Item, on_delete=models.DO_NOTHING, null=True, default=None)
     transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE, null=True, default=None)
-    order_number = models.UUIDField(editable=False, default=uuid.uuid1())  # a unique uniformed id for each order
+    order_number = models.UUIDField(editable=False, default=uuid.uuid4)  # a unique uniformed id for each order
     status = models.CharField(max_length=20, default="in progress")  # need a clerk to check the order
     address = models.CharField(max_length=50, null=True, default=None)
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, null=True, default=None)
     assigned_by = models.ForeignKey(Clerk, on_delete=models.SET_NULL, null=True)
     justification = models.CharField(max_length=1000, blank=True)
     url_slug = models.SlugField(editable=False, default="")
+    item_score = models.FloatField(null=True, blank=True, default=None)
+    delivery_score = models.FloatField(null=True, blank=True, default=None)
 
     def save(self, *args, **kwargs):
         self.url_slug = slugify(self.order_number)
@@ -181,3 +182,4 @@ class Bidfor(models.Model):
 class TabooList(models.Model):
     addBy = models.ForeignKey(Clerk, on_delete=models.CASCADE)
     word = models.CharField(max_length=100, unique=True)
+

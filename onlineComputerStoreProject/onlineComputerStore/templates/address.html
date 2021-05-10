@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Address</title>
+</head>
+
+<body>
+
+<body>
+
+
+		<div class="wrap">
+			<div class="register-wrap">
+				<div class="login-title">
+					Add Address
+				</div>
+
+                <form class="login-form" action="/address/" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="m_address">
+                    <input type="submit" name="Submit" value="Modify Address" class="register-submit"/>
+				</form>
+
+
+			</div>
+		</div>
+
+
+
+
+
+</body>
+</html>

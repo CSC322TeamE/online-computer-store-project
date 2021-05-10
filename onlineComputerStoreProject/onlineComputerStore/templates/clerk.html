@@ -25,7 +25,7 @@
     <a href="/forum">Forum</a>
     <a href="/taboolist">Taboo List</a>
     <a href="/aboutus">About Us</a>
-
+    <a href="/complaint">Complaint</a>
 
 <div class="wrap">
 			<div class="UserInform-wrap">
@@ -41,6 +41,10 @@
                  <form class="login-form" action="/addItem/" >
                      <input type="submit" name="addItem" value="Add Item" class="register-submit"/>
 				</form>
+
+                   <form class="login-form" action="/viewWarning/">
+            <input type="submit" name="Warning History" value="Warning History" class="register-submit"/>
+        </form>
 
                   <form class="login-form" action="/changePassword/" method="post" >
                        {% csrf_token %}

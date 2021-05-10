@@ -1,6 +1,7 @@
 {% load static %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
       integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" 0>
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +16,7 @@
         }
     </style>
 </head>
-<body>
+<body style="background-image: linear-gradient(to right, #30cfd0, #330867);">
 <div class="navBar">
     <a href="/">Home</a>
     <a href="/browse">Browse</a>
@@ -58,7 +59,7 @@
                         <hr>
                         <div>
                             <small style="font-size:80%; color: #ff66ff">&ltID:{{ objs.user.id }}&gt</small>
-                            <b style="color: #00ff00; font-size:140%">
+                            <b style="color: #FF9900; font-size:140%">
                                 {{ objs.user.username }}:
                             </b>
                             <p style="background-color:#66ccff; font-size:160%;">
@@ -91,10 +92,17 @@
                         {% for reply in replies %}
                             {% if objs.id == reply.reply_to %}
 
-                                    <small style="font-size:60%; color: #ff66ff">&ltID:{{ objs.user.id }}&gt</small>
+                                    <small style="font-size:60%; color: #ff66ff">&ltID:{{ reply.user.id }}&gt</small>
                                     <b style="color: #00ff00; font-size:100%">
-                                        {{ reply.user.username }}:
+                                        {{ reply.user.username }}
                                     </b>
+                                    <b style="font-size:100%">
+                                       replies to
+                                    </b>
+                                <b style="color: #FF9900; font-size:100%">
+                                       {{ objs.user.username }}:
+                                    </b>
+
                                     <p style="background-color:#9380c9; font-size:120%;">
                                         "{{ reply.discuss }}"
                                     </p>
@@ -103,8 +111,8 @@
                                     <small> &lt{{ objs.date_created }}&gt</small>
                                         <form method="POST" action="\forum\report\">
                                             {% csrf_token %}
-                                            <input type="hidden" name="discussionID" value={{ objs.id }}>
-                                            <input type="hidden" name="reportedID" value={{ objs.user_id }}>
+                                            <input type="hidden" name="discussionID" value={{ reply.id }}>
+                                            <input type="hidden" name="reportedID" value={{ reply.user_id }}>
                                             <button class="btn btn-success"
                                                     style="background-color: firebrick; width:fit-content; padding: 4px; margin:10px;">
                                                 Report
