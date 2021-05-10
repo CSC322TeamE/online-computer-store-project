@@ -28,12 +28,12 @@ class Company(User):
 
 
 class DeliveryCompany(User):
-    rating = models.FloatField(null=True, blank=True, default=0)
+    rating = models.FloatField(null=True, blank=True, default=None)
 
 
 class Item(models.Model):
     name = models.CharField(max_length=20)
-    brand = models.CharField(max_length=20, null=True, blank=True, default=None)
+    brand = models.ForeignKey(Company, on_delete=models.DO_NOTHING, null=True, blank=True, default=None)
     price = models.FloatField(null=True, blank=False, default=None)
     quantity = models.IntegerField(null=True, blank=False, default=None)
     discount = models.FloatField(null=True, blank=True, default=1)
