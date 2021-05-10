@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Justify Delivery</title>
-    <h1 class="maintext">Justify delivery company assigned</h1>
+    <h1 class="maintext">Justify assigned delivery</h1>
 </head>
 
 
@@ -26,7 +26,8 @@
                 <textarea rows="10" cols="30" name="justification" form="justify">
                 </textarea>
                 <input type="hidden" name="order_id" value="{{ orderID }}" >
-                <input type="submit" value="submit" >
+                <input type="hidden" name="warning_id" value={{ warningID }} >
+                <input type="submit" value="submit" class="login-submit">
             </form>
 
 

@@ -1,4 +1,6 @@
 import re
+import warnings
+
 from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -93,7 +95,7 @@ def account(request):
         for order in bided_orderID:
             open_order = open_order.exclude(id=order)
         return render(request, 'delivery.html', context={'open_order': open_order})
-    
+
     return HttpResponse("Unknown user groups")
 
 
@@ -411,23 +413,21 @@ def assignDeliCom(request):
         bids = order.bidfor_set.all()
         lowest_price = 99999999
         for bid in bids:
-            if bid.price<lowest_price:
-                lowest_price=bid.price
-            print('bid:'+str(bid.price)+'\nlowest:'+str(lowest_price))
+            if bid.price < lowest_price:
+                lowest_price = bid.price
         selected = Bidfor.objects.get(order_id=orderID, delivery_company_id=companyID).price
-        if selected ==lowest_price:
-            order.status = 'delivering'
-            order.delivery_company_id = companyID
-            order.assigned_by_id = request.user.id
-            order.save()
+        order.status = 'delivering'
+        order.delivery_company_id = companyID
+        order.assigned_by_id = request.user.id
+        order.save()
+        if selected == lowest_price:
             messages.info(request, "Delivery company assigned successfully!")
         else:
-            order.status = 'delivering'
-            order.delivery_company_id = companyID
-            order.assigned_by_id = request.user.id
-            order.save()
-            messages.info(request, "Delivery company assigned successfully but you need to provide justification.")
-            return render(request,'justify.html', {'orderID': order.id})
+            messages.info(request,
+                          "Delivery company assigned successfully but you need to provide justification to avoid warning.")
+            warning = Warning.objects.create(reported_user=request.user,
+                                             description='Possible_Cheating')
+            return render(request, 'justify.html', {'orderID': order.id, 'warningID': warning.id})
 
     open_orders = Order.objects.filter(status='in progress')
     bid_info = []
@@ -436,26 +436,29 @@ def assignDeliCom(request):
     context = {"open_orders": open_orders, "bid_info": bid_info}
     return render(request, 'assignDeliCom.html', context)
 
+
 def justification(request):
     if request.POST:
         if 'order_id' in request.POST:
             orderID = int(request.POST['order_id'])
             cur_order = Order.objects.get(id=orderID)
-            justification=request.POST['justification']
-            cur_order.justification=justification
+            justification = request.POST['justification']
+            cur_order.justification = justification
             cur_order.save()
-            justification=justification.strip()
-            if justification=='':
-                Warning.objects.create(reported_user=request.user, description='Possible cheating without justification')
-                messages.info(request, "Warning created since you fail to provide justification!!!")
+            justification = justification.strip()
+            if justification != '':
+                messages.info(request, "Your justification has been submitted.")
             else:
-                messages.info(request, "Your jusitification has been submitted.")
+                warning = Warning.objects.get(id=request.POST['warning_id'])
+                warning.finalized = True
+                warning.save()
+                messages.info(request, "Warning created since you fail to provide justification!!!")
             return redirect('/assignDeliCom/')
-        return render(request, 'justify.html')
     return render(request, 'justify.html')
+
 
 def tracking(request, url_slug):
     order = Order.objects.get(url_slug=url_slug)
-    estimate_time = order.transaction.time +datetime.timedelta(days=7)
-    context={'order':order, 'estimate_time': estimate_time}
-    return render(request, 'tracking.html',context)
+    estimate_time = order.transaction.time + datetime.timedelta(days=7)
+    context = {'order': order, 'estimate_time': estimate_time}
+    return render(request, 'tracking.html', context)
