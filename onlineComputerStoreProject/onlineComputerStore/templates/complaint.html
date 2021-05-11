@@ -21,7 +21,8 @@
 						<tr>
 							<th>Your Complaint to Company:</th>
 							<td>
-								<textarea class="form-control" name="complainComputerCompany" rows="8" form="formID" placeholder="Enter your complain description"></textarea>
+								<textarea class="form-control" name="complainComputerCompany" rows="8" form="formID" placeholder="Enter your complain description" required></textarea>
+                                <input type="hidden" name="CompID" value={{ companyID }}>
 							</td>
 						</tr>
 						<tr>
@@ -41,7 +42,8 @@
 						<tr>
 							<th>Your Complaint</th>
 							<td>
-								<textarea class="form-control" name="complainDeliveryCompany" rows="8" form="formID2" placeholder="Enter your complain description"></textarea>
+								<textarea class="form-control" name="complainDeliveryCompany" rows="8" form="formID2" placeholder="Enter your complain description" required></textarea>
+                                <input type="hidden" name="deliveryCompID" value={{ deliveryID }}>
 							</td>
 						</tr>
 						<tr>

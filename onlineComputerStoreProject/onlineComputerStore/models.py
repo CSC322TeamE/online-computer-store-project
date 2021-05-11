@@ -33,10 +33,10 @@ class DeliveryCompany(User):
 
 class Item(models.Model):
     name = models.CharField(max_length=20)
-    brand = models.ForeignKey(Company, on_delete=models.DO_NOTHING, null=True, blank=True, default=None)
+    brand = models.ForeignKey(Company, on_delete=models.DO_NOTHING, null=False, blank=False, default=None)
     price = models.FloatField(null=True, blank=False, default=None)
     quantity = models.IntegerField(null=True, blank=False, default=None)
-    discount = models.FloatField(null=True, blank=True, default=1)
+    discount = models.FloatField(null=False, blank=False, default=1)
     rating = models.FloatField(null=True, blank=True, default=None)
     quantity_sold = models.IntegerField(null=True, blank=True, default=0)
     img = models.ImageField(upload_to='img/item_img/', default='img/default_img/400x650.png', blank=True, null=True)
@@ -143,6 +143,8 @@ class ForumWarning(Warning):
     reporter = models.ForeignKey(User, on_delete=models.CASCADE)
     discuss = models.ForeignKey(Discussion, on_delete=models.CASCADE)
 
+class OrderWarning(Warning):
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Transaction(models.Model):
     transaction_number = models.UUIDField(default=uuid.uuid4, editable=False)

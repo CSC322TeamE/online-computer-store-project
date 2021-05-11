@@ -32,27 +32,27 @@
         <th>complaint</th>
     </tr>
 
-    {% for data in data %}
+    {% for order in data %}
 
         <tr align="center">
-            <td>{{ data.item.name }}</td>
-            <td><a href="/tracking/{{ data.url_slug }}">{{ data.order_number }}</a></td>
-            <td> {{ data.transaction.amount }} </td>
-            <td>{{ data.transaction.time }}</td>
-            <td>{{ data.address }}</td>
-            <td>{{ data.delivery_company }}</td>
-            <td>{{ data.status }}</td>
-            {% if data.status == "complete" %}
-                <td><a href="/rating/{{ data.url_slug }}">rate this order</a> </td>
+            <td>{{ order.item.name }}</td>
+            <td><a href="/tracking/{{ order.url_slug }}">{{ order.order_number }}</a></td>
+            <td> {{ order.transaction.amount }} </td>
+            <td>{{ order.transaction.time }}</td>
+            <td>{{ order.address }}</td>
+            <td>{{ order.delivery_company }}</td>
+            <td>{{ order.status }}</td>
+            {% if order.status == "complete" %}
+                <td><a href="/rating/{{ order.url_slug }}">rate this order</a> </td>
             {% endif %}
-            <td>{{ data.complaint }}</td>
+            <td>{{ order.complaint }}</td>
             <td>
                 <form action="/complaint/" method="POST">
                     {% csrf_token %}
                     <input type="submit" name="complain" value="Complain">
-                    <input type="hidden" name="computer_companyID" value={{ data.item.computer_company }}>
-                    <input type="hidden" name="order_number" value={{ data.order_number }}>
-                    <input type="hidden" name="deliveryID" value={{ data.delivery_company_id }}>
+                    <input type="hidden" name="computer_companyID" value={{ order.item.brand.id }}>
+                    <input type="hidden" name="order_number" value={{ order.order_number }}>
+                    <input type="hidden" name="deliveryID" value={{ order.delivery_company_id }}>
                 </form>
             </td>
         </tr>

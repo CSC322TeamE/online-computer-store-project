@@ -213,6 +213,16 @@ def topUp(request):
 
 def complaint(request):
     if request.method == 'POST':
+        if "complainDeliveryCompany" in request.POST:
+            OrderWarning.objects.create(reporter=request.user, reported_user_id=request.POST['deliveryCompID'],
+                                        description=request.POST['complainDeliveryCompany'])
+            messages.info(request, "Your complaint is filed successfully, we will solve it as soon as possible!")
+            return redirect("/viewOrder/")
+        if "complainComputerCompany" in request.POST:
+            OrderWarning.objects.create(reporter=request.user, reported_user_id=request.POST['CompID'],
+                                        description=request.POST['complainComputerCompany'])
+            messages.info(request, "Your complaint is filed successfully, we will solve it as soon as possible!")
+            return redirect("/viewOrder/")
         if "computer_companyID" in request.POST:
             delivery_comp = request.POST["deliveryID"]
             context = {"companyID": request.POST['computer_companyID'], "deliveryID": delivery_comp,
@@ -395,7 +405,7 @@ def forum_reply(request):
                 messages.info(request, "Your reply is submitted!")
             else:
                 messages.info(request, "Your reply is submitted!")
-                Warning.objects.create(reported_user=request.user, description='__Taboo_List_Auto__')
+                Warning.objects.create(reported_user=request.user, finalized=True, description='__Taboo_List_Auto__')
                 messages.info(request, "A warning created since your message contains sensitive word(s)!!!")
             return redirect('/forum/')
         discussion = Discussion.objects.get(id=request.POST["discussionID"])
@@ -416,7 +426,7 @@ def addDiscussion(request):
                 messages.info(request, "Your comments are submitted!")
             else:
                 messages.info(request, "Your comments are submitted!")
-                Warning.objects.create(reported_user=request.user, description='__Taboo_List_Auto__')
+                Warning.objects.create(reported_user=request.user, finalized=True, description='__Taboo_List_Auto__')
                 messages.info(request, "A warning created since your message contains sensitive word(s)!!!")
             return redirect('/forum/')
         context = {'forum_id': request.POST['forum_id']}
@@ -496,11 +506,13 @@ def address(request):
             new_address = request.POST['m_address']
             customer.saved_address = new_address
             customer.save()
+            messages.info(request, "Address updated successfully!")
             return redirect('/account/')
         else:
             new_address = request.POST['m_address']
             customer.saved_address = new_address
             customer.save()
+            messages.info(request, "Address updated successfully!")
             return redirect('/account/')
 
 

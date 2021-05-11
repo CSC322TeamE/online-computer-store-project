@@ -7,7 +7,7 @@
     <title>Modify Address</title>
 </head>
 
-<body>
+
 
 <body>
 
@@ -21,7 +21,7 @@
                 <form class="login-form" action="/address/" method="POST">
                     {% csrf_token %}
                     <input type="text" name="m_address">
-                    <input type="submit" name="Submit" value="Modify Address" class="register-submit"/>
+                    <input type="submit" name="Submit" value="Update Address" class="register-submit"/>
 				</form>
 
 
@@ -29,7 +29,13 @@
 		</div>
 
 
-
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
 
 
 </body>

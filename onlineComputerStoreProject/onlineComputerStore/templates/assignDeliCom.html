@@ -2,8 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Assign Delivery</title>
 </head>
+<h1>Assign Delivery</h1>
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    <a href="/forum">Forum</a>
+</div>
+<br>
+<br>
+
+
+
 <body>
 {% for order in open_orders %}
     Order ID: {{ order.id }}<br> address: {{ order.address }}<br>
