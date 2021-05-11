@@ -118,8 +118,9 @@ class Forum(models.Model):
         return str(self.item.name)
 
     def save(self, *args, **kwargs):
-        self.url_slug = slugify(self.item.name)
-        super(Forum, self).save(*args, **kwargs)
+        if not Forum.objects.filter(item_id=self.item.id).exists():
+            self.url_slug = slugify(self.item.name)
+            super(Forum, self).save(*args, **kwargs)
 
 
 class Discussion(models.Model):
