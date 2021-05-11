@@ -11,7 +11,7 @@ import onlineComputerStore.tests as ts
 from .forms import *
 from django.core.mail import send_mail
 from onlineComputerStore.forms import AddCpuForm
-from django.db.models import Q, Avg
+from django.db.models import Q, Avg, Count
 import datetime
 
 
@@ -540,3 +540,23 @@ def viewWarning(request):
     data = Warning.objects.filter(reported_user_id=request.user.id)
     context = {'data': data}
     return render(request, "viewWarning.html", context)
+
+
+# only manager can access this page
+def warningJustification(request):
+    warning = OrderWarning.objects.all()
+    if request.method == 'POST':
+        if 'stay' in request.POST:
+            warning = OrderWarning.objects.get(id=request.POST["id"])
+            warning.finalized = True
+            warning.save()
+            warning.check_suspended(warning.reported_user)
+            messages.info(request, 'warning stay successful')
+            return redirect('/warningJustification/')
+        if 'remove' in request.POST:
+            OrderWarning.objects.get(id=request.POST['id']).delete()
+            messages.info(request, 'warning remove successful')
+            return redirect('/warningJustification/')
+
+    else:
+        return render(request, 'warningJustification.html', {"warning": warning})

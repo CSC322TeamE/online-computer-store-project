@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table align="center" border="1">
+    <tr align="center">
+        <th>reporter</th>
+        <th>reported user</th>
+        <th>message</th>
+        <th>options</th>
+    </tr>
+    {% for w in warning %}
+        <tr>
+            <td>{{ w.reporter }}</td>
+            <td>{{ w.reported_user }}</td>
+            <td>{{ w.description }}</td>
+            <td>
+                {% if not w.finalized %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ w.id }}">
+                        <input type="submit" name="stay" value="stay">
+                    </form>
+                {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ w.id }}">
+                    <input type="submit" name="remove" value="remove">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
