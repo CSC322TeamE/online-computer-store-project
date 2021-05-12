@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Assign Delivery</title>
-</head>
-
-<body>
+{% block content %}
 <div class="row mt-5">
 	<div class="col-md-8 offset-2">
 		<div class="card shadow">
 			<div class="card-header">
-				<h1>File your complaint</h1>
+				<b>Add your complain</b>
 			</div>
 			<div class="card-body">
 				{% if messages %}
@@ -34,7 +27,7 @@
 						</tr>
 						<tr>
 							<td colspan="2">
-								<input type="submit" value='submit' class="btn btn-dark" />
+								<input type="submit" class="btn btn-dark" />
 							</td>
 						</tr>
 					</table>
@@ -55,7 +48,7 @@
 						</tr>
 						<tr>
 							<td colspan="2">
-								<input type="submit" value='submit' class="btn btn-dark" />
+								<input type="submit" class="btn btn-dark" />
 							</td>
 						</tr>
 					</table>
@@ -65,4 +58,4 @@
 		</div>
 	</div>
 </div>
-</body>
+{% endblock content %}

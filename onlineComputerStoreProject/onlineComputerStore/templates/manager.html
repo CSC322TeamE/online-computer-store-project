@@ -22,7 +22,6 @@
     <a href="/">Home</a>
     <a href="/Browse">Browse</a>
     <a href="/logout">Logout</a>
-    <a href="/">Change suggested items</a>
     <a href="/forum">Forum</a>
     <a href="/aboutus">About Us</a>
 
@@ -52,6 +51,10 @@
                 <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
             </form>
 
+            <form class="login-form" action="/warningJustification/" method="post">
+                {% csrf_token %}
+                <input type="submit" name="Warning Justification" value="Warning Justification" class="register-submit"/>
+            </form>
 
         </div>
     </div>
