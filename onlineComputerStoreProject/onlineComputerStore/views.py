@@ -16,12 +16,42 @@ def index(request):
     ts.add_user()
 
     if request.user.is_authenticated:
-        suggested_list = ['s1', 's2', 's3']
+        suggested = SuggestedItem.objects.order_by('-id')[0]
+        suggested_list = []
+        if Item.objects.filter(id=suggested.item1_id).exists():
+            suggested_list.append(Item.objects.get(id=suggested.item1_id))
+        else:
+            suggested_list.append(None)
+
+        if Item.objects.filter(id=suggested.item2_id).exists():
+            suggested_list.append(Item.objects.get(id=suggested.item2_id))
+        else:
+            suggested_list.append(None)
+
+        if Item.objects.filter(id=suggested.item3_id).exists():
+            suggested_list.append(Item.objects.get(id=suggested.item3_id))
+        else:
+            suggested_list.append(None)
         popular_list = Item.objects.order_by('quantity_sold')[0:3]
         return render(request, 'userIndex.html', {'popular_list': popular_list, 'suggested_list': suggested_list})
 
     else:
-        suggested_list = ['s1', 's2', 's3']
+        suggested = SuggestedItem.objects.order_by('-id')[0]
+        suggested_list = []
+        if Item.objects.filter(id=suggested.item1_id).exists():
+            suggested_list.append(Item.objects.get(id=suggested.item1_id))
+        else:
+            suggested_list.append(None)
+
+        if Item.objects.filter(id=suggested.item2_id).exists():
+            suggested_list.append(Item.objects.get(id=suggested.item2_id))
+        else:
+            suggested_list.append(None)
+
+        if Item.objects.filter(id=suggested.item3_id).exists():
+            suggested_list.append(Item.objects.get(id=suggested.item3_id))
+        else:
+            suggested_list.append(None)
         popular_list = Item.objects.order_by('quantity_sold')[0:3]
         return render(request, 'index.html', {'popular_list': popular_list, 'suggested_list': suggested_list})
 
@@ -207,6 +237,10 @@ def browse(request, url_slug=None):
 
             return render(request, 'browseComponent.html', {'item_list': item_list,
                                                             'component': request.POST['component']})
+
+        if 'search' in request.POST:
+            item_list = Item.objects.filter(Q(name__icontains=request.POST['search']) | Q(description__icontains=request.POST['search']))
+            return render(request, 'browse.html', {'item_list': item_list})
 
     else:
         return render(request, 'browse.html', {'item_list': item_list})
@@ -619,5 +653,22 @@ def aboutus(request):
     return render(request, 'aboutus.html')
 
 
+
 def rmUser(request):
     return render(request, 'removeUser.html')
+
+def suggestedItem(request):
+    if request.method == 'POST':
+        form = SuggestedItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.info(request, 'success')
+            return redirect('/suggestedItem/')
+
+        else:
+            messages.info(request, 'something wrong')
+            return redirect('/suggestedItem/')
+
+    else:
+        form = SuggestedItemForm()
+        return render(request, 'suggestedItem.html', {'form': form})

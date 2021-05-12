@@ -206,6 +206,7 @@ class TabooList(models.Model):
 
 
 class SuspendedList(models.Model):
+
     date_created = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     justification = models.TextField(blank=True)
@@ -220,3 +221,12 @@ class SuspendedList(models.Model):
             fail_silently=False,
         )
         super(SuspendedList, self).save(*args, **kwargs)
+
+
+class SuggestedItem(models.Model):
+    item1 = models.ForeignKey(Item, related_name='suggested_item1', on_delete=models.CASCADE, null=True, blank=True, default=None)
+    item2 = models.ForeignKey(Item, related_name='suggested_item2', on_delete=models.CASCADE, null=True, blank=True,
+                              default=None)
+    item3 = models.ForeignKey(Item, related_name='suggested_item3', on_delete=models.CASCADE, null=True, blank=True,
+                              default=None)
+

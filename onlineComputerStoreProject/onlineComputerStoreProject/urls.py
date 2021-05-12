@@ -55,5 +55,6 @@ urlpatterns = [
                   path('warningJustification/', views.warningJustification),
                   path('complaintHistory/', views.ComplaintHistory),
                   path('company/', views.Company),
-                  path('removeUser/', views.rmUser)
+                  path('removeUser/', views.rmUser),
+                  path('suggestedItem/', views.suggestedItem)
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

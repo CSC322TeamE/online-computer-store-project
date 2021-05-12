@@ -228,6 +228,22 @@ class FilterComputerForm(forms.Form):
         return self.items
 
 
+class SuggestedItemForm(ModelForm):
+    class Meta:
+        model = SuggestedItem
+        fields = ['item1', 'item2', 'item3']
+
+    def __init__(self, *args, **kwargs):
+        super(SuggestedItemForm, self).__init__(*args, **kwargs)
+
+        self.fields['item1'].queryset = Item.objects.all()
+        self.fields['item2'].queryset = Item.objects.all()
+        self.fields['item3'].queryset = Item.objects.all()
+
+        self.fields['item1'].label_from_instance = lambda obj: "%s" % obj.name
+        self.fields['item2'].label_from_instance = lambda obj: "%s" % obj.name
+        self.fields['item3'].label_from_instance = lambda obj: "%s" % obj.name
+
 
 
 
