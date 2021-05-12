@@ -35,7 +35,6 @@ body {
 
 .login-wrap {
     width: 200px;
-    height: 400px;
     background-color: rgba(170, 170, 255, 0.3);
     position: relative;
     left: 50%;
@@ -47,7 +46,7 @@ body {
 
 .UserInform-wrap{
     width: 200px;
-    height: 500px;
+    height: 650px;
     background-color: rgba(170, 170, 255, 0.3);
     position: relative;
     left: 50%;

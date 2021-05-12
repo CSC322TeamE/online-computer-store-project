@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Purchase</title>
+    <h1 class="maintext">Online Computer Store</h1>
 </head>
 
 {{ saved_address|json_script:"saved_address" }}
@@ -68,7 +69,16 @@
 
 </script>
 
-<body>
+<body style="margin-left: 50px">
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
+    <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
+
+</div>
     <h1>
         Item: {{ item.name }}
     </h1>
@@ -108,7 +118,7 @@
                 <input type="hidden" name="payment_method" value="credit card">
                 <input type="hidden" name="item_id" value="{{ item.id }}">
                 <textarea name="address" id="address" placeholder="--please input your address here--" maxlength="50">{% if saved_address %}{{ saved_address }}{% endif %}</textarea>
-                <input type="submit" name="buy-credit" value="buy">
+                <input class="btn" type="submit" name="buy-credit" value="buy">
                 <label>
                     saved address:
                     <input type="checkbox" id="saved-address" value="saved address" onchange="sa_radio_click()" {% if not saved_address %}disabled{% else %} checked {% endif %}>
