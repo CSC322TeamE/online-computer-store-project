@@ -19,7 +19,9 @@ def index(request):
     ts.add_user()
 
     if request.user.is_authenticated:
-        return render(request, 'userIndex.html')
+        suggested_list = ['s1', 's2', 's3']
+        popular_list = Item.objects.order_by('quantity_sold')[0:3]
+        return render(request, 'userIndex.html', {'popular_list': popular_list, 'suggested_list': suggested_list})
 
     else:
         suggested_list = ['s1', 's2', 's3']
@@ -560,3 +562,6 @@ def warningJustification(request):
 
     else:
         return render(request, 'warningJustification.html', {"warning": warning})
+
+def aboutus(request):
+    return render(request, 'aboutus.html')

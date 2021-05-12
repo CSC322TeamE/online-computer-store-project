@@ -45,7 +45,7 @@ urlpatterns = [
     path('transaction/', views.transaction),
     path('viewOrder/', views.viewOrder),
     path('changePassword/', auth_views.PasswordChangeView.as_view(success_url= reverse_lazy(views.login))),
-
+    path('aboutus/', views.aboutus),
     path('assignDeliCom/', views.assignDeliCom),
     path('justification/', views.justification),
     path('tracking/<slug:url_slug>', views.tracking),
