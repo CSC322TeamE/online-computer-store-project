@@ -30,7 +30,20 @@
 <div class="maintext">
     <h2>Recommended Items</h2>
     {% for item in suggested_list %}
-        <li>{{ item }}</li>
+        <div class="product">
+            <li><div class="product-img">
+                <img src="{{ item.img.url }}" style="width: 200px">
+            </div>
+            <div class="product-content">
+                <h3>
+                    <a href="/item/{{ item.url_slug }}">Item name: {{ item.name }}</a>
+                    <small>Description: {{ item.description }}</small>
+                </h3>
+                <p class="product-text price">Price: {{ item.price }}</p>
+                <p class="product-text genre">Rating: {{ item.rating }}</p>
+            </div>
+            </li>
+        </div>
     {% endfor %}
     <h2>Most Popular Items - HOT</h2>
     {% for item in popular_list %}

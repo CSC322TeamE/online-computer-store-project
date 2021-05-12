@@ -200,3 +200,11 @@ class TabooList(models.Model):
 
 class SuspendedList(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+
+class SuggestedItem(models.Model):
+    item1 = models.ForeignKey(Item, related_name='suggested_item1', on_delete=models.CASCADE, null=True, blank=True, default=None)
+    item2 = models.ForeignKey(Item, related_name='suggested_item2', on_delete=models.CASCADE, null=True, blank=True,
+                              default=None)
+    item3 = models.ForeignKey(Item, related_name='suggested_item3', on_delete=models.CASCADE, null=True, blank=True,
+                              default=None)
