@@ -220,6 +220,10 @@ def browse(request, url_slug=None):
             return render(request, 'browseComponent.html', {'item_list': item_list,
                                                             'component': request.POST['component']})
 
+        if 'search' in request.POST:
+            item_list = Item.objects.filter(Q(name__icontains=request.POST['search']) | Q(description__icontains=request.POST['search']))
+            return render(request, 'browse.html', {'item_list': item_list})
+
     else:
         return render(request, 'browse.html', {'item_list': item_list})
 

@@ -4,10 +4,10 @@
 <div class="grid-container">
 <div class="tools">
     <div class="search-area">
-        <form method="POST">
+        <form method="post">
             {% csrf_token %}
-            <input type="text" name="search" id="search" placeholder="Search"/>
-            <input type="submit" id="searchbutton" value="GO">
+            <input type="text" id="search" name="search" placeholder="Search" />
+            <input type="submit" id="searchbutton" value="Go">
         </form>
     </div>
 </div>
