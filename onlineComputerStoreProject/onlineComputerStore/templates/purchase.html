@@ -54,7 +54,7 @@
         if (target.checked) {
             document.getElementById('address').value = saved_address;
         } else {
-            document.getElementById('address').value = document.getElementById('address').placeholder;
+            document.getElementById('address').value = "";
         }
     }
 
@@ -63,8 +63,20 @@
         if (target.checked) {
             document.getElementById('address2').value = saved_address;
         } else {
-            document.getElementById('address2').value = document.getElementById('address2').placeholder;
+            document.getElementById('address2').value = "";
         }
+    }
+
+    function do_submit() {
+        let str = document.getElementById('address').value;
+        str = encodeURIComponent(str.trim());
+        document.getElementById('address').value = str;
+    }
+
+    function do_submit2() {
+        let str = document.getElementById('address2').value;
+        str = encodeURIComponent(str.trim());
+        document.getElementById('address2').value = str;
     }
 
 </script>
@@ -95,7 +107,7 @@
         </div>
 
         <div class="payment-form" id="credit-card-form">
-            <form method="post" action="/purchaseConfirm/{{ item.url_slug }}">
+            <form method="post" action="/purchaseConfirm/{{ item.url_slug }}" onsubmit="do_submit()">
                 {% csrf_token %}
                 <ul>
                     <li>
@@ -128,7 +140,7 @@
         </div>
 
         <div class="payment-form" id="balance-form">
-            <form method="post" action="/purchaseConfirm/{{ item.url_slug }}">
+            <form method="post" action="/purchaseConfirm/{{ item.url_slug }}" onsubmit="do_submit2()">
                 {% csrf_token %}
                 <ul>
                     <li>
@@ -137,7 +149,7 @@
                     <li>
                         <input type="hidden" name="payment_method" value="balance">
                         <input type="hidden" name="item_id" value="{{ item.id }}">
-                        <textarea name="address" id="address2" placeholder="--please input your address here--" maxlength="50" required>{% if saved_address %}{{ saved_address }}{% endif %}</textarea>
+                        <textarea type="text" name="address" id="address2" placeholder="--please input your address here--" maxlength="50" required>{% if saved_address %}{{ saved_address }}{% endif %}</textarea>
                         <input type="submit" value="buy">
                         <label>
                             saved address:

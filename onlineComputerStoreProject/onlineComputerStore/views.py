@@ -13,6 +13,7 @@ from django.core.mail import send_mail
 from onlineComputerStore.forms import AddCpuForm
 from django.db.models import Q, Avg, Count
 import datetime
+import urllib
 
 
 def index(request):
@@ -350,14 +351,16 @@ def purchaseConfirm(request, url_slug):
                 customer.balance -= item.price
                 customer.save()
 
+            post = request.POST.copy()
+            post['address'] = urllib.parse.unquote(request.POST['address'])
             # record transaction
-            form = TransactionForm(request.POST)
+            form = TransactionForm(post)
             transaction = form.save(commit=False)
             transaction.customer = customer
             form.save()
 
             # record order
-            form = OrderForm(request.POST)
+            form = OrderForm(post)
             order = form.save(commit=False)
             order.customer = customer
             order.item = item
