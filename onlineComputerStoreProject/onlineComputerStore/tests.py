@@ -92,19 +92,14 @@ def add_user():
         user = DeliveryCompany.objects.create_user(username="Purolator", password="Purolator")
         group = Group.objects.get(name='deliverycompanies')
         user.groups.add(group)
-<<<<<<< HEAD
-=======
+
 
     if not DeliveryCompany.objects.filter(username="OnTrac Inc.").exists():
         user = DeliveryCompany.objects.create_user(username="OnTrac Inc.", password="OnTrac Inc.")
         group = Group.objects.get(name='deliverycompanies')
         user.groups.add(group)
->>>>>>> 6be79768aab1fc827d0eea2a6fde9725fea6f247
 
-    if not DeliveryCompany.objects.filter(username="OnTrac Inc.").exists():
-        user = DeliveryCompany.objects.create_user(username="OnTrac Inc.", password="OnTrac Inc.")
-        group = Group.objects.get(name='deliverycompanies')
-        user.groups.add(group)
+
     if not Company.objects.filter(username="INTEL").exists():
         user = Company.objects.create_user(username="INTEL", password="INTEL")
         group = Group.objects.get(name='companies')
