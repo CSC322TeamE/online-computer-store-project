@@ -1,0 +1,64 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Complaint History </title>
+</head>
+<body>
+ <h1 style="text-align: center"> Your Complaint History </h1>
+
+    <br>  <br>  <br>  <br>  <br>
+    <br>
+    <h2 style="text-align: center" >Order Complaint </h2>
+    <table align="center" border="1" width="1200" height="150">
+        <tr>
+            <th>Complaint Description</th>
+            <th>Reported User</th>
+            <th>Finalized Status</th>
+            <th>Time</th>
+        </tr>
+
+
+        {% for order in order  %}
+
+        <tr align="center">
+            <td>{{ order.description }}</td>
+            <td> {{ order.reported_user }} </td>
+            <td> {{ order.finalized }} </td>
+            <td>{{order.date_created}}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+  <br> <br>  <br>  <br>  <br>  <br>  <br>  <br>
+    <br>
+    <h2 style="text-align: center" >Complaint toward User in Forum</h2>
+    <table align="center" border="1" width="1200" height="150">
+        <tr>
+            <th>Complaint Description</th>
+            <th>Reported User</th>
+            <th>Finalized Status</th>
+            <th>Time</th>
+        </tr>
+
+
+        {% for forum in forum  %}
+
+        <tr align="center">
+            <td>{{ forum.description }}</td>
+            <td> {{ forum.reported_user }} </td>
+             <td> {{ forum.finalized }} </td>
+            <td>{{forum.date_created}}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+
+
+ <a  style="display: block; text-align: center;" href="/account">account page</a>
+</body>
+</html>
