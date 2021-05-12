@@ -552,14 +552,14 @@ def warningJustification(request):
     warning = Warning.objects.filter(finalized=False)
     if request.method == 'POST':
         if 'stay' in request.POST:
-            warning = OrderWarning.objects.get(id=request.POST["id"])
+            warning = Warning.objects.get(id=request.POST["id"])
             warning.finalized = True
             warning.save()
             warning.check_suspended(warning.reported_user)
             messages.info(request, 'warning stay successful')
             return redirect('/warningJustification/')
         if 'remove' in request.POST:
-            OrderWarning.objects.get(id=request.POST['id']).delete()
+            Warning.objects.get(id=request.POST['id']).delete()
             messages.info(request, 'warning remove successful')
             return redirect('/warningJustification/')
         if 'revert' in request.POST:

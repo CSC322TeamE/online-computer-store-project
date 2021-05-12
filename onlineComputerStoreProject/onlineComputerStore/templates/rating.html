@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
-    <title>评价</title>
+    <title>Rate</title>
+    <h1 class="maintext">Online Computer Store</h1>
     <link rel="stylesheet" href="{% static 'css/rating.css' %}">
 </head>
 
@@ -36,32 +37,44 @@
 </script>
 
 <body>
-<form method="post">
-<div class="rating">
-        {% csrf_token %}
-        <span>rate item</span>
-        <span><input type="radio" name="item_score" id="is5" value="5"><label for="is5"></label></span>
-        <span><input type="radio" name="item_score" id="is4" value="4"><label for="is4"></label></span>
-        <span><input type="radio" name="item_score" id="is3" value="3"><label for="is3"></label></span>
-        <span><input type="radio" name="item_score" id="is2" value="2"><label for="is2"></label></span>
-        <span><input type="radio" name="item_score" id="is1" value="1"><label for="is1"></label></span>
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
+    <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
 </div>
+<form method="post" style="margin: 40px">
+    <div class="rating">
+            {% csrf_token %}
+            <span>Please rate item: </span>
+            <br>
+            <span><input type="radio" name="item_score" id="is5" value="5"><label for="is5"></label></span>
+            <span><input type="radio" name="item_score" id="is4" value="4"><label for="is4"></label></span>
+            <span><input type="radio" name="item_score" id="is3" value="3"><label for="is3"></label></span>
+            <span><input type="radio" name="item_score" id="is2" value="2"><label for="is2"></label></span>
+            <span><input type="radio" name="item_score" id="is1" value="1"><label for="is1"></label></span>
+    </div>
 
 <br>
 <br>
 <br>
 <br>
 
-<div class="rating2">
-        <span>rate delivery:</span>
-        <span><input type="radio" name="delivery_score" id="ds5" value="5"><label for="ds5"></label></span>
-        <span><input type="radio" name="delivery_score" id="ds4" value="4"><label for="ds4"></label></span>
-        <span><input type="radio" name="delivery_score" id="ds3" value="3"><label for="ds3"></label></span>
-        <span><input type="radio" name="delivery_score" id="ds2" value="2"><label for="ds2"></label></span>
-        <span><input type="radio" name="delivery_score" id="ds1" value="1"><label for="ds1"></label></span>
+    <div class="rating2">
+            <span>Please rate delivery:</span>
+            <br>
+            <span><input type="radio" name="delivery_score" id="ds5" value="5"><label for="ds5"></label></span>
+            <span><input type="radio" name="delivery_score" id="ds4" value="4"><label for="ds4"></label></span>
+            <span><input type="radio" name="delivery_score" id="ds3" value="3"><label for="ds3"></label></span>
+            <span><input type="radio" name="delivery_score" id="ds2" value="2"><label for="ds2"></label></span>
+            <span><input type="radio" name="delivery_score" id="ds1" value="1"><label for="ds1"></label></span>
+
+    </div>
+    <div style="margin: 150px">
         <input type="submit" value="submit">
-
-</div>
+    </div>
     </form>
 </body>
 </html>

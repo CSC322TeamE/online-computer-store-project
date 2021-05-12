@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>View Order</title>
+    <h1 class="maintext">Online Computer Store</h1>
 </head>
 
 {% if messages %}
@@ -16,9 +17,17 @@
 {% endif %}
 
 <body>
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
+    <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
+</div>
 <h1 style="text-align: center"> Order History</h1>
 
-<table align="center" border="1" width="1800" height="150">
+<table align="center" border="1" width="100%" height="150">
     <tr>
         <th>item</th>
         <th>Item Rating</th>

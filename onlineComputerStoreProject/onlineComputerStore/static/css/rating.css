@@ -65,3 +65,34 @@
     color:#FFF;
 }
 
+body {
+    height: 100%;
+    background-image: linear-gradient(to right, #30cfd0, #330867);
+}
+
+.maintext {
+    text-align: center;
+    margin-top: 100px;
+}
+
+.navBar {
+    text-align: center;
+}
+
+.navBar a {
+    padding: 10px;
+}
+
+.btn {
+    width: 100%;
+    line-height: 30px;
+    border: 0;
+    border-radius: 3px;
+    margin-top: 20px;
+    background-image: linear-gradient(to right, #5ee7df, #b490ca);
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    color: #aa00ff;
+    font-weight: bold;
+}
