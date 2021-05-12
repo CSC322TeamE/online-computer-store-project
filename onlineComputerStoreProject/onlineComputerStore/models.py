@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.core.validators import MinLengthValidator, MaxLengthValidator, MinValueValidator, MaxValueValidator
+from django.db.models import Count
 from django.template.defaultfilters import slugify
 import uuid
 
@@ -140,12 +141,22 @@ class Warning(models.Model):  # forum auto created ID are saved here since no re
     reported_user = models.ForeignKey(User, on_delete=models.CASCADE)
     finalized = models.BooleanField(default=False)
 
+    def check_suspended(self, user):
+        print(user)
+        warning_count = Warning.objects.filter(reported_user=user).count()
+        print(warning_count)
+        if warning_count >= 3 and not SuspendedList.objects.filter(user=user).exists():
+            SuspendedList.objects.create(user=user)
+
+
 class ForumWarning(Warning):
     reporter = models.ForeignKey(User, on_delete=models.CASCADE)
     discuss = models.ForeignKey(Discussion, on_delete=models.CASCADE)
 
+
 class OrderWarning(Warning):
     reporter = models.ForeignKey(User, on_delete=models.CASCADE)
+
 
 class Transaction(models.Model):
     transaction_number = models.UUIDField(default=uuid.uuid4, editable=False)
@@ -186,3 +197,6 @@ class TabooList(models.Model):
     addBy = models.ForeignKey(Clerk, on_delete=models.CASCADE)
     word = models.CharField(max_length=100, unique=True)
 
+
+class SuspendedList(models.Model):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
