@@ -29,13 +29,13 @@
 </div>
 <div class="maintext">
     <h2>Recommended Items</h2>
-    <li>recomended item1</li>
-    <li>recomended item2</li>
-    <li>recomended item3</li>
+    {% for item in suggested_list %}
+        <li>{{ item }}</li>
+    {% endfor %}
     <h2>Most Popular Items</h2>
-    <li>popular item1</li>
-    <li>popular item2</li>
-    <li>popular item3</li>
+    {% for item in popular_list %}
+        <li>{{ item.name }}</li>
+    {% endfor %}
 </div>
 </body>
 </html>
