@@ -29,7 +29,7 @@
             <form class="login-form" action="/justification/" method="POST" id="justify">
                 {% csrf_token %}
                 <br>
-                <h2>Please provide your Justication: </h2><br>
+                <h2>Please Provide Your Justification: </h2><br>
                 <textarea rows="15" cols="25" name="justification" form="justify" required></textarea>
 
                 <input type="hidden" name="order_id" value="{{ orderID }}" >
