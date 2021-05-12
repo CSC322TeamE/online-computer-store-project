@@ -24,7 +24,10 @@
 <div style="text-align: center;">
 <h1>Assign Delivery</h1>
 {% for order in open_orders %}
-    <li>Order ID: {{ order.id }}<br> address: {{ order.address }}<br>
+    <li><b>Order ID:</b> {{ order.id }}
+    <br> <b>Order #:</b> {{ order.order_number }}
+        <br> <b>Address:</b> {{ order.address }}<br>
+
     {% for set in bid_info %}
         {% for bid in set %}
             {% if bid.order_id == order.id %}
@@ -35,10 +38,10 @@
                     <input type="hidden" name="orderID" value={{ order.id }} class=""/>
                     <input type="submit" name="select" value="select" class="register-submit"/>
                 </form>
-                <br>
             {% endif %}
         {% endfor %}
     {% endfor %}
+    <br>
     <br>
     </li>
 {% endfor %}

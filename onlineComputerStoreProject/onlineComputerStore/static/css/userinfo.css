@@ -20,9 +20,11 @@ html {
     height: 100%;
     background-image: linear-gradient(to right, #30cfd0, #330867);
 }
+
 body {
     height: 100%;
 }
+
 /* color from：https://www.sj520.cn/tools/jianbian/  */
 /* .wrap {
     height: 100%;
@@ -44,7 +46,7 @@ body {
     padding: 0 50px;
 }
 
-.UserInform-wrap{
+.UserInform-wrap {
     width: 200px;
     height: 650px;
     background-color: rgba(170, 170, 255, 0.3);
@@ -64,7 +66,7 @@ body {
     font-weight: bold;
 }
 
-.login-form .login-input{
+.login-form .login-input {
     display: block;
     width: 100%;
     border: 0;
@@ -74,12 +76,13 @@ body {
     outline: none;
     background-color: transparent;
 }
+
 .login-form .login-input::placeholder {
     text-transform: uppercase;
     color: #bdbdbd;
 }
 
-.login-form .login-submit, .register-submit{
+.login-form .login-submit, .register-submit {
     width: 100%;
     line-height: 30px;
     border: 0;
@@ -96,6 +99,7 @@ body {
 .tip {
     margin-top: 15px;
 }
+
 .tip a {
     padding-left: 110px;
     text-decoration: none;

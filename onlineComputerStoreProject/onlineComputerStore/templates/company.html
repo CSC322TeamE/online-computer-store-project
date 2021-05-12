@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>HOME</title>
-    <h1 class="maintext">Manager Account Home</h1>
+    <h1 class="maintext">Computer Company Account Home</h1>
 </head>
 
 {% if messages %}
@@ -33,33 +33,9 @@
             </div>
 
             <div class="login-form">
-                <p style="margin: 5px 0">Account : Manager</p>
-
+                <p style="margin: 5px 0">Account : Computer Company</p>
 
             </div>
-            <form class="login-form" action="/">
-                <input type="submit" name="change suggested item" value="change suggested item"
-                       class="register-submit"/>
-            </form>
-
-
-            <form class="login-form" action="/warningJustification/" method="get">
-                {% csrf_token %}
-                <input type="submit" name="Warning Justification" value="Warning Justification"
-                       class="register-submit"/>
-            </form>
-
-            <form class="login-form" action="/taboolist/" method="get">
-                {% csrf_token %}
-                <input type="submit" name="taboolist" value="Taboo list"
-                       class="register-submit"/>
-            </form>
-
-            <form class="login-form" action="/addItem/" method="get">
-                {% csrf_token %}
-                <input type="submit" name="additem" value="Add Item"
-                       class="register-submit"/>
-            </form>
 
             <form class="login-form" action="/viewWarning/">
                 <input type="submit" name="Warning History" value="Warning History" class="register-submit"/>

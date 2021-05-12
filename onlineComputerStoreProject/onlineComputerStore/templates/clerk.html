@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>HOME</title>
-    <h1 class="maintext">Clerk account home</h1>
+    <h1 class="maintext">Clerk Account Home</h1>
 </head>
 
 {% if messages %}
@@ -28,37 +28,43 @@
 </div>
 
 
-    <div class="wrap">
-        <div class="UserInform-wrap">
-            <div class="login-title">
-                {{ user }}
-            </div>
+<div class="wrap">
+    <div class="UserInform-wrap">
+        <div class="login-title">
+            {{ user }}
+        </div>
 
-            <div class="login-form">
-                <p style="margin: 5px 0">Account : clerk</p>
-
-
-            </div>
-            <form class="login-form" action="/addItem/">
-                <input type="submit" name="addItem" value="Add Item" class="register-submit"/>
-            </form>
-
-            <form class="login-form" action="/viewWarning/">
-                <input type="submit" name="Warning History" value="Warning History" class="register-submit"/>
-            </form>
-
-            <form class="login-form" action="/changePassword/" method="post">
-                {% csrf_token %}
-                <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
-            </form>
-
-            <form class="login-form" action="/assignDeliCom/" method="get">
-                {% csrf_token %}
-                <input type="submit" name="deliCom" value="Assign Delivery" class="register-submit"/>
-            </form>
+        <div class="login-form">
+            <p style="margin: 5px 0">Account : Clerk</p>
 
 
         </div>
+        <form class="login-form" action="/addItem/">
+            <input type="submit" name="addItem" value="Add Item" class="register-submit"/>
+        </form>
+
+
+        <form class="login-form" action="/assignDeliCom/" method="get">
+            {% csrf_token %}
+            <input type="submit" name="deliCom" value="Assign Delivery" class="register-submit"/>
+        </form>
+
+        <form class="login-form" action="/taboolist/" method="get">
+            {% csrf_token %}
+            <input type="submit" name="taboolist" value="Taboo list"
+                   class="register-submit"/>
+        </form>
+
+        <form class="login-form" action="/viewWarning/">
+            <input type="submit" name="Warning History" value="Warning History" class="register-submit"/>
+        </form>
+
+
+        <form class="login-form" action="/changePassword/" method="post">
+            {% csrf_token %}
+            <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
+        </form>
+
     </div>
 </div>
 </body>

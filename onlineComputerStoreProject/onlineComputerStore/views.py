@@ -1,9 +1,6 @@
 import re
-import warnings
-
 from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import permission_required, login_required
@@ -63,6 +60,13 @@ def login(request):
         user = authenticate(username=username, password=password)
 
         if user:
+            if SuspendedList.objects.filter(user=user).exists():
+                suspended_user = SuspendedList.objects.get(user=user)
+                now = datetime.datetime.now().date()
+                delta = now - suspended_user.date_created.date()
+                if delta.days >= 7:
+                    User.objects.get(username=user).delete()
+                    return render(request, 'login.html')
             auth.login(request, user)
             return redirect('/', {'user': user})
 
@@ -77,7 +81,7 @@ def register(request):
     else:
         if 'email' in request.POST and 'username' in request.POST and 'password' in request.POST:
             if User.objects.filter(username=request.POST['username']).exists():
-                messages.info(request, 'Another username')
+                messages.info(request, 'Please use another username')
                 return render(request, 'register.html')
 
             if User.objects.filter(email=request.POST['email']).exists():
@@ -88,7 +92,18 @@ def register(request):
                     [request.POST['email']],
                     fail_silently=False,
                 )
-                messages.info(request, 'Another email')
+                messages.info(request, 'Please use another email.')
+                return render(request, 'register.html')
+
+            if SuspendedList.objects.filter(email=request.POST['email']).exists():
+                send_mail(
+                    'Online Computer Store Alert',
+                    'Sorry, this email is in the suspended list, try another one.',
+                    'onlineComputerStoreGroup@gmail.com',
+                    [request.POST['email']],
+                    fail_silently=False,
+                )
+                messages.info(request, 'Please use another email.')
                 return render(request, 'register.html')
 
             user = Customer.objects.create_user(username=request.POST['username'], email=request.POST['email'],
@@ -124,6 +139,9 @@ def account(request):
         for order in bided_orderID:
             open_order = open_order.exclude(id=order)
         return render(request, 'delivery.html', context={'open_order': open_order})
+
+    if request.user.groups.filter(name='companies').exists():
+        return render(request, 'company.html')
 
     return HttpResponse("Unknown user groups")
 
@@ -234,7 +252,9 @@ def topUp(request):
                 customer.balance += float(request.POST['amount'])
                 customer.save()
                 Transaction.objects.create(customer_id=customer.id, amount=request.POST['amount'])
-                messages.info(request, "Success!!!")
+                text = "Success!!! {amount} dollars have been added to your balance.".format(
+                    amount=float(request.POST['amount']))
+                messages.info(request, text)
                 return redirect('/topUp/')
 
             else:
@@ -400,7 +420,7 @@ def tabooList(request):
             if ' ' in request.POST['word']:
                 messages.info(request, "Warning: Space is not allowed!!!")
             else:
-                if TabooList.objects.filter(word=request.POST['word']).exists():
+                if TabooList.objects.filter(word=request.POST['word'].upper()).exists():
                     messages.info(request, "This word is already in the list.")
                 else:
                     TabooList.objects.create(word=request.POST['word'], addBy_id=request.user.id)
@@ -491,7 +511,7 @@ def assignDeliCom(request):
             messages.info(request,
                           "Delivery company assigned successfully but you need to provide justification to avoid warning.")
             warning = Warning.objects.create(reported_user=request.user, finalized=True,
-                                             description='Possible_Cheating')
+                                             description='__Possible_Cheating_Auto__')
             return render(request, 'justification.html', {'orderID': order.id, 'warningID': warning.id})
     open_orders = Order.objects.filter(status='in progress')
     bid_info = []
@@ -588,7 +608,6 @@ def warningJustification(request):
             warning = Warning.objects.get(id=request.POST["id"])
             warning.finalized = True
             warning.save()
-            warning.check_suspended(warning.reported_user)
             messages.info(request, 'warning stay successful')
             return redirect('/warningJustification/')
         if 'remove' in request.POST:
@@ -598,12 +617,12 @@ def warningJustification(request):
         if 'revert' in request.POST:
             myid = request.POST["id"]
             if ForumWarning.objects.filter(id=myid).exists():
-                warning1= ForumWarning.objects.get(id=myid)
+                warning1 = ForumWarning.objects.get(id=myid)
                 reporter = warning1.reporter
                 reported = warning1.reported_user
-                warning1.reporter=reported
-                warning1.reported_user=reporter
-                warning1.finalized=True
+                warning1.reporter = reported
+                warning1.reported_user = reporter
+                warning1.finalized = True
                 warning1.save()
                 messages.info(request, "Complaint revered successfully ")
             elif OrderWarning.objects.filter(id=myid).exists():
@@ -616,7 +635,7 @@ def warningJustification(request):
                 warning1.save()
                 messages.info(request, "Complaint revered successfully ")
             else:
-                messages.info(request, "You can not reverse this order since its generated by the system.")
+                messages.info(request, "You can not reverse this (AUTO)warning generated by the system.")
         return render(request, 'warningJustification.html', {"warning": warning})
     else:
         return render(request, 'warningJustification.html', {"warning": warning})
@@ -626,12 +645,16 @@ def ComplaintHistory(request):
     order = OrderWarning.objects.filter(reporter_id=request.user.id)
     forum = ForumWarning.objects.filter(reporter_id=request.user.id)
     context = {'order': order, 'forum': forum}
-    return render(request, 'ViewComplaint.html', context)
+    return render(request, 'viewComplaint.html', context)
 
 
 def aboutus(request):
     return render(request, 'aboutus.html')
 
+
+
+def rmUser(request):
+    return render(request, 'removeUser.html')
 
 def suggestedItem(request):
     if request.method == 'POST':

@@ -4,6 +4,8 @@ from django.core.validators import MinLengthValidator, MaxLengthValidator, MinVa
 from django.db.models import Count
 from django.template.defaultfilters import slugify
 import uuid
+from django.core.mail import send_mail
+from django.shortcuts import render, redirect
 
 
 class Customer(User):
@@ -34,7 +36,7 @@ class DeliveryCompany(User):
 
 class Item(models.Model):
     name = models.CharField(max_length=20)
-    brand = models.ForeignKey(Company, on_delete=models.DO_NOTHING, null=False, blank=False, default=None)
+    brand = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=False, default=None)
     price = models.FloatField(null=True, blank=False, default=None)
     quantity = models.IntegerField(null=True, blank=False, default=None)
     discount = models.FloatField(null=False, blank=False, default=1)
@@ -140,13 +142,14 @@ class Warning(models.Model):  # forum auto created ID are saved here since no re
     description = models.CharField(max_length=300, blank=False)
     reported_user = models.ForeignKey(User, on_delete=models.CASCADE)
     finalized = models.BooleanField(default=False)
+    justification = models.TextField(blank=True)
 
-    def check_suspended(self, user):
-        print(user)
-        warning_count = Warning.objects.filter(reported_user=user).count()
-        print(warning_count)
-        if warning_count >= 3 and not SuspendedList.objects.filter(user=user).exists():
-            SuspendedList.objects.create(user=user)
+    def save(self, *args, **kwargs):
+        super(Warning, self).save(*args, **kwargs)
+        finalized_warning_count = Warning.objects.filter(reported_user=self.reported_user, finalized=True).count()
+        if finalized_warning_count >= 3 and not SuspendedList.objects.filter(user=self.reported_user).exists():
+            SuspendedList.objects.create(user=self.reported_user, email=self.reported_user.email)
+            message = "New suspended user added to list!"
 
 
 class ForumWarning(Warning):
@@ -197,9 +200,27 @@ class TabooList(models.Model):
     addBy = models.ForeignKey(Clerk, on_delete=models.CASCADE)
     word = models.CharField(max_length=100, unique=True)
 
+    def save(self, *args, **kwargs):
+        self.word = self.word.upper()
+        super(TabooList, self).save(*args, **kwargs)
+
 
 class SuspendedList(models.Model):
-    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    justification = models.TextField(blank=True)
+    email = models.CharField(blank=True, max_length=100)
+
+    def save(self, *args, **kwargs):
+        send_mail(
+            'Online Computer Store Alert',
+            'Your account is suspended since 3 standing warnings in your account(or by the decision of the manager)! This is your last chance(in a week) to clean up your account.',
+            'onlineComputerStoreGroup@gmail.com',
+            [self.email],
+            fail_silently=False,
+        )
+        super(SuspendedList, self).save(*args, **kwargs)
 
 
 class SuggestedItem(models.Model):
@@ -208,3 +229,4 @@ class SuggestedItem(models.Model):
                               default=None)
     item3 = models.ForeignKey(Item, related_name='suggested_item3', on_delete=models.CASCADE, null=True, blank=True,
                               default=None)
+
