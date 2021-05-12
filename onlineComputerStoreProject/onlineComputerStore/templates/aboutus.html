@@ -1,0 +1,35 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>About Us</title>
+    <a href="/"><h1 class="maintext">Online Computer Store</h1></a>
+</head>
+<body class="wrap">
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<div class="navBar">
+</div>
+<div class="maintext">
+    <h2>Our Mission: Shop anytime and anywhere!</h2>
+    
+    <h2>Our Team:</h2>
+    <li>Alice Chen</li>
+    <li>Ling Fang</li>
+    <li>Shuoxin Liu</li>
+    <li>Yi Lin</li>
+    <li>Yiyang Wu</li>
+
+ 
+<div>
+</body>
+</html> 

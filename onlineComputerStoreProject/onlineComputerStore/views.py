@@ -19,7 +19,9 @@ def index(request):
     ts.add_user()
 
     if request.user.is_authenticated:
-        return render(request, 'userIndex.html')
+        suggested_list = ['s1', 's2', 's3']
+        popular_list = Item.objects.order_by('quantity_sold')[0:3]
+        return render(request, 'userIndex.html', {'popular_list': popular_list, 'suggested_list': suggested_list})
 
     else:
         suggested_list = ['s1', 's2', 's3']
@@ -544,7 +546,9 @@ def viewWarning(request):
 
 # only manager can access this page
 def warningJustification(request):
-    warning = OrderWarning.objects.all()
+    warning = OrderWarning.objects.filter(finalized = False)
+    forum_warning = ForumWarning.objects.filter(finalized = False)
+    auto_warining = ForumWarning.objects.filter()
     if request.method == 'POST':
         if 'stay' in request.POST:
             warning = OrderWarning.objects.get(id=request.POST["id"])
@@ -557,7 +561,7 @@ def warningJustification(request):
             OrderWarning.objects.get(id=request.POST['id']).delete()
             messages.info(request, 'warning remove successful')
             return redirect('/warningJustification/')
-
+        return render(request, 'warningJustification.html', {"warning": warning})
     else:
         return render(request, 'warningJustification.html', {"warning": warning})
 
@@ -568,3 +572,7 @@ def ComplaintHistory(request):
     forum = ForumWarning.objects.filter(reporter_id=request.user.id)
     context = {'order': order, 'forum': forum}
     return render(request, 'ViewComplaint.html',context)
+
+def aboutus(request):
+    return render(request, 'aboutus.html')
+
