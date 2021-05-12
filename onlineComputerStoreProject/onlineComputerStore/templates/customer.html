@@ -24,6 +24,7 @@
     <a href="/logout">Logout</a>
     <a href="/forum">Forum</a>
     <a href="/aboutus">About Us</a>
+    <a href="/complaint">Complaint</a>
 </div>
 <div class="wrap">
     <div class="UserInform-wrap" style="height: 650px">
@@ -60,6 +61,9 @@
             <input type="submit" name="Warning History" value="Warning History" class="register-submit"/>
         </form>
 
+        <form class="login-form" action="/ComplaintHistory/">
+            <input type="submit" name="Your complaints History" value="Your complaints History" class="register-submit"/>
+        </form>
 
         <form class="login-form" action="/changePassword/" method="post">
             {% csrf_token %}
