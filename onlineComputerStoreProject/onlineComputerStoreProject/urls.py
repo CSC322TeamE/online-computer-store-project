@@ -52,7 +52,8 @@ urlpatterns = [
     path('address/', views.address),
     path('rating/<slug:url_slug>', views.rating),
     path('viewWarning/', views.viewWarning),
-    path('warningJustification/', views.warningJustification)
+    path('warningJustification/', views.warningJustification),
+    path('ComplaintHistory/',views.ComplaintHistory)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

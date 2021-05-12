@@ -560,3 +560,11 @@ def warningJustification(request):
 
     else:
         return render(request, 'warningJustification.html', {"warning": warning})
+
+
+def ComplaintHistory(request):
+    order = OrderWarning.objects.filter(reporter_id=request.user.id)
+
+    forum = ForumWarning.objects.filter(reporter_id=request.user.id)
+    context = {'order': order, 'forum': forum}
+    return render(request, 'ViewComplaint.html',context)
