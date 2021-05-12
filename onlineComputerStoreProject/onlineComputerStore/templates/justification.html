@@ -13,18 +13,24 @@
 {% comment %} style="background:url({% static '/image/background1.jpg' %}); background-size: 100%;" {% endcomment %}
 <div class="navBar">
     <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
+    <a href="/forum">Forum</a>
     <a href="/aboutus">About Us</a>
+</div>
 
 
-    <div class="wrap">
+    <div class="wrap" style="text-align: center">
+    <br>
     <b>Order ID: {{orderID}}</b>
         <div class="UserInform-wrap">
 
             <form class="login-form" action="/justification/" method="POST" id="justify">
                 {% csrf_token %}
-                <p style="margin: 5px 0">Please provide your Justication: </p><br>
-                <textarea rows="10" cols="30" name="justification" form="justify">
-                </textarea>
+                <br>
+                <h2>Please provide your Justication: </h2><br>
+                <textarea rows="15" cols="25" name="justification" form="justify"></textarea>
                 <input type="hidden" name="order_id" value="{{ orderID }}" >
                 <input type="hidden" name="warning_id" value={{ warningID }} >
                 <input type="submit" value="submit" class="login-submit">

@@ -1,8 +1,11 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Add item page</title>
+    <h1 class="maintext">Online Computer Store</h1>
 </head>
 
 {% if messages %}
@@ -63,8 +66,15 @@
 
 
 <body>
-
-<div id="selector">
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
+    <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
+</div>
+<div id="selector" style="margin:40px 50px 40px">
     <div id="select-type">
         <label>
             Item type:
@@ -77,7 +87,7 @@
     </div>
 
 
-    <div id="select-component">
+    <div id="select-component" style="margin-top: 40px">
         <label>
             Component:
             <select id="component" onchange="select_component()">
@@ -95,9 +105,9 @@
 
 <div id="add-component">
     <div id="add-cpu">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" style="margin-left:40px">
             {% csrf_token %}
-            <table>
+            <table >
                 {{ cpu_form.as_table }}
             </table>
             <input type="submit" name="is_cpu" value="Submit">
@@ -105,7 +115,7 @@
     </div>
 
     <div id="add-gpu">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" style="margin-left:40px">
             {% csrf_token %}
             <table>
                 {{ gpu_form.as_table }}
@@ -115,7 +125,7 @@
     </div>
 
     <div id="add-memory">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" style="margin-left:40px">
             {% csrf_token %}
             <table>
                 {{ memory_form.as_table }}
@@ -125,7 +135,7 @@
     </div>
 
     <div id="add-hdd">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" style="margin-left:40px">
             {% csrf_token %}
             <table>
                 {{ hdd_form.as_table }}
@@ -135,7 +145,7 @@
     </div>
 
     <div id="add-monitor">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" style="margin-left:40px">
             {% csrf_token %}
             <table>
                 {{ monitor_form.as_table }}
@@ -145,7 +155,7 @@
     </div>
 
     <div id="add-battery">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" style="margin-left:40px">
             {% csrf_token %}
             <table>
                 {{ battery_form.as_table }}
@@ -157,9 +167,9 @@
 </div>
 
 <div id="add-computer">
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" style="margin-left:40px">
         {% csrf_token %}
-        <table>
+        <table margin="20px">
             {{ computer_form.as_table }}
         </table>
         <input type="submit" name="is_computer" value="Submit">

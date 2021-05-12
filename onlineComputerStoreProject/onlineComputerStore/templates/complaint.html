@@ -1,18 +1,29 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Assign Delivery</title>
+    <title>File Complaint</title>
+	<h1 class="maintext">Online Computer Store</h1>
 </head>
 
 <body>
-<div class="row mt-5">
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
+    <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
+</div>
+<div class="row mt-5" style="margin-left: 50px">
 	<div class="col-md-8 offset-2">
 		<div class="card shadow">
 			<div class="card-header">
 				<h1>File your complaint</h1>
 			</div>
-			<div class="card-body">
+			<div class="card-body" style="margin-top: 50px">
 				{% if messages %}
 				    {% for message in messages %}
 				    <p{% if message.tags %} class="text-success"{% endif %}>{{ message }}</p>
@@ -42,7 +53,7 @@
             {% if deliveryID != 'None' %}
                 	<form method="post" action="/complaint/" id="formID2">
 					{% csrf_token %}
-					<table class="table table-bordered mt-4">
+					<table class="table table-bordered mt-4" style="margin-top: 50px">
 						<tr>
 							<th>Your Delivery Company ID:{{ deliveryID }}</th>
 						</tr>

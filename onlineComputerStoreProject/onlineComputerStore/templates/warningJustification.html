@@ -1,11 +1,22 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Warning Justication</title>
+    <h1 class="maintext">Online Computer Store</h1>
 </head>
 <body>
-<table align="center" border="1">
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
+    <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
+</div>
+<table align="center" border="1" style="margin-top: 50px">
     <tr align="center">
         <th>reporter</th>
         <th>reported user</th>

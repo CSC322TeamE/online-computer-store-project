@@ -1,13 +1,22 @@
-
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Transaction</title>
-
+    <h1 class="maintext">Online Computer Store</h1>
 
 </head>
 <body>
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
+    <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
+</div>
 
  <h1 style="text-align: center"> Transaction</h1>
 

@@ -1,14 +1,19 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Assign Delivery</title>
+    <h1 class="maintext">Customer account home</h1>
 </head>
-<h1>Assign Delivery</h1>
 <div class="navBar">
     <a href="/">Home</a>
     <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
     <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
 </div>
 <br>
 <br>
@@ -16,12 +21,14 @@
 
 
 <body>
+<div style="text-align: center;">
+<h1>Assign Delivery</h1>
 {% for order in open_orders %}
-    Order ID: {{ order.id }}<br> address: {{ order.address }}<br>
+    <li>Order ID: {{ order.id }}<br> address: {{ order.address }}<br>
     {% for set in bid_info %}
         {% for bid in set %}
             {% if bid.order_id == order.id %}
-                Bid: {{ bid.delivery_company.username }} {{ bid.price }}
+                - Bid: {{ bid.delivery_company.username }} {{ bid.price }}
                 <form class="login-form" action="/assignDeliCom/" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="deliCompany" value={{ bid.delivery_company_id }} class=""/>
@@ -33,6 +40,7 @@
         {% endfor %}
     {% endfor %}
     <br>
+    </li>
 {% endfor %}
 
 {% if messages %}
@@ -42,5 +50,6 @@
         {% endif %}
     {% endfor %}
 {% endif %}
+</div>
 </body>
 </html>

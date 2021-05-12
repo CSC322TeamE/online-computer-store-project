@@ -6,6 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Top Up</title>
+    <h1 class="maintext">Online Computer Store</h1>
 </head>
 <body class="wrap">
 {% if messages %}
@@ -17,13 +18,13 @@
 {% endif %}
 <div class="navBar">
     <a href="/">Home</a>
-    <a href="/logout">Log out</a>
-    <a href="/topUp">Add balance</a>
+    <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
     <a href="/forum">Forum</a>
     <a href="/aboutus">About Us</a>
 </div>
-
-<div class="login-wrap">
+<div class="login-wrap" style="width: 300px">
     <div class="login-title">
         Top Up Your Balance
     </div>
