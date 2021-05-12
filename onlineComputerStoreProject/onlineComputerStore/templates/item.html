@@ -5,10 +5,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Item page</title>
+    <h1 class="maintext">Online Computer Store</h1>
 </head>
 <body  class="wrap">
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
+    <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
+
+</div>
+
+<div style="margin-left: 50px">
 <h1>Item name: {{ item.name }}</h1>
-<img src="{{ item.img.url }}">
+<img src="{{ item.img.url }}" style="width: 200px">
 <ul>
 
     <li>Description: {{ item.description }}</li>
@@ -104,6 +116,8 @@
         <input type="hidden" name="forum_id" value="{{ forum.id }}">
         <button class="btn btn-success" style="width:fit-content; padding: 4px; margin:10px;">Say something</button>
     </form>
+
+</div>
 </div>
 </body>
 </html>

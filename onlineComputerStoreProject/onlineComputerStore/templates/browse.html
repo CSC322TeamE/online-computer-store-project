@@ -1,6 +1,23 @@
 {% load static %}
 <link rel="stylesheet" href="/static/css/browse.css?{% now "U" %}"/>
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>HOME</title>
+    <h1 class="maintext">Online Computer Store</h1>
+</head>
+<body class="wrap">
+<div class="navBar">
+    <a href="/">Home</a>
+    <a href="/browse">Browse</a>
+    Welcome, <a href="/account">{{ user }}</a>
+    <a href="/logout">Logout</a>
+    <a href="/forum">Forum</a>
+    <a href="/aboutus">About Us</a>
 
+</div>
+<br>
 <div class="grid-container">
 <div class="tools">
     <div class="search-area">
@@ -13,7 +30,6 @@
 </div>
 
 <div class="products-products-table">
-    <div class="products products-table">
         {% for item in item_list %}
         <div class="product">
             <div class="product-img">
@@ -29,7 +45,6 @@
             </div>
         </div>
         {% endfor %}
-    </div>
 </div>
 
 
@@ -180,4 +195,6 @@
 </div>
 
 
-
+<div>
+</body>
+</html> 
