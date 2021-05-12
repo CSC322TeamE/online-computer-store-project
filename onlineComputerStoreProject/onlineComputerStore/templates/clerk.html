@@ -1,7 +1,7 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/userinfo.css' %}">
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>HOME</title>
@@ -26,41 +26,38 @@
     <a href="/taboolist">Taboo List</a>
     <a href="/aboutus">About Us</a>
 
-<div class="wrap">
-			<div class="UserInform-wrap">
-				<div class="login-title">
-					{{ user }}
-				</div>
+    <div class="wrap">
+        <div class="UserInform-wrap">
+            <div class="login-title">
+                {{ user }}
+            </div>
 
-                <div class="login-form">
-                    <p style="margin: 5px 0">Account : clerk</p>
-
-
-                </div>
-                 <form class="login-form" action="/addItem/" >
-                     <input type="submit" name="addItem" value="Add Item" class="register-submit"/>
-				</form>
-
-                   <form class="login-form" action="/viewWarning/">
-            <input type="submit" name="Warning History" value="Warning History" class="register-submit"/>
-        </form>
-
-                  <form class="login-form" action="/changePassword/" method="post" >
-                       {% csrf_token %}
-                     <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
-				</form>
-
-                <form class="login-form" action="/assignDeliCom/" method="get" >
-                       {% csrf_token %}
-                     <input type="submit" name="deliCom" value="Assign Delivery" class="register-submit"/>
-				</form>
+            <div class="login-form">
+                <p style="margin: 5px 0">Account : clerk</p>
 
 
+            </div>
+            <form class="login-form" action="/addItem/">
+                <input type="submit" name="addItem" value="Add Item" class="register-submit"/>
+            </form>
+
+            <form class="login-form" action="/viewWarning/">
+                <input type="submit" name="Warning History" value="Warning History" class="register-submit"/>
+            </form>
+
+            <form class="login-form" action="/changePassword/" method="post">
+                {% csrf_token %}
+                <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
+            </form>
+
+            <form class="login-form" action="/assignDeliCom/" method="get">
+                {% csrf_token %}
+                <input type="submit" name="deliCom" value="Assign Delivery" class="register-submit"/>
+            </form>
 
 
-
-			</div>
-		</div>
+        </div>
+    </div>
 </div>
 </body>
 </html> 
