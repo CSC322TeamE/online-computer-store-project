@@ -52,6 +52,10 @@
                 <input type="submit" name="Change Password" value="Change Password" class="register-submit"/>
             </form>
 
+            <form class="login-form" action="/warningJustification/" method="get">
+                {% csrf_token %}
+                <input type="submit" name="Warning Justification" value="Warning Justification" class="register-submit"/>
+            </form>
 
         </div>
     </div>
