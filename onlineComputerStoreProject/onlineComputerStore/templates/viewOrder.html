@@ -18,34 +18,34 @@
 <body>
 <h1 style="text-align: center"> Order History</h1>
 
-<table align="center" border="1" width="1200" height="150">
+<table align="center" border="1" width="1800" height="150">
     <tr>
         <th>item</th>
+        <th>Item Rating</th>
         <a>
             <th>Order Number</th>
         </a>
+
         <th>Money</th>
         <th>Order time</th>
         <th>Address</th>
         <th>delivery company</th>
         <th>status</th>
         <th>complaint</th>
+        <th>rate oreder</th>
     </tr>
 
     {% for order in data %}
 
         <tr align="center">
             <td>{{ order.item.name }}</td>
+            <td> {{ order.item.rating }}</td>
             <td><a href="/tracking/{{ order.url_slug }}">{{ order.order_number }}</a></td>
             <td> {{ order.transaction.amount }} </td>
             <td>{{ order.transaction.time }}</td>
             <td>{{ order.address }}</td>
             <td>{{ order.delivery_company }}</td>
             <td>{{ order.status }}</td>
-            {% if order.status == "complete" %}
-                <td><a href="/rating/{{ order.url_slug }}">rate this order</a> </td>
-            {% endif %}
-            <td>{{ order.complaint }}</td>
             <td>
                 <form action="/complaint/" method="POST">
                     {% csrf_token %}
@@ -55,6 +55,15 @@
                     <input type="hidden" name="deliveryID" value={{ order.delivery_company_id }}>
                 </form>
             </td>
+            {% if order.status == "complete"  %}
+                {% if order.item_score == Null and order.delivery_score == Null %}
+                    <td style="color: #FF9900"><button><a href="/rating/{{ order.url_slug }}">rate this order</a></button></td>
+                {% else %}
+                    <td style="color: #FF9900"><b>Item: {{ order.item_score }} Delivery: {{ order.delivery_score }} (Already rated this order)</b></td>
+            {% endif %}
+                {% else %}
+                <td style="color: #FF9900"><b>Can't rate yet</b></td>
+        {% endif %}
         </tr>
 
 
