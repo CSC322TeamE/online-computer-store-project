@@ -1,3 +1,6 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/userinfo.css' %}">
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,6 +17,7 @@
 {% endif %}
 
 <body>
+<a href="/account/">return to account</a>
 <h1>Select suggested item</h1>
 <form method="post">
     {% csrf_token %}

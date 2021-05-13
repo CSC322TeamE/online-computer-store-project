@@ -40,8 +40,8 @@
                     <a href="/item/{{ item.url_slug }}">{{ item.name }}</a>
                     <small>{{ item.description }}</small>
                 </h3>
-                <p class="product-text price">{{ item.price }}</p>
-                <p class="product-text genre">{{ item.rating }}</p>
+                <p class="product-text price">price: {{ item.price }}</p>
+                <p class="product-text genre">rating: {{ item.rating }}</p>
             </div>
         </div>
         {% endfor %}

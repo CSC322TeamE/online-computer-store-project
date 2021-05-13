@@ -142,3 +142,8 @@ def add_user():
         user = Company.objects.create_user(username="SAMSUNG", password="SAMSUNG")
         group = Group.objects.get(name='companies')
         user.groups.add(group)
+
+    if not Company.objects.filter(username="NVIDIA").exists():
+        user = Company.objects.create_user(username="NVIDIA", password="NVIDIA")
+        group = Group.objects.get(name='companies')
+        user.groups.add(group)
