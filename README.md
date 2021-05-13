@@ -30,3 +30,6 @@ Creating a “models” (this creates database tables) Go to models.py Django’
 
 
 # Checklist
+
+Main features of the system:
+- [x] 1. The online store has a homepage showing 3 suggested systems chosen by a store manager and 3 most popular computers per number of sales.
