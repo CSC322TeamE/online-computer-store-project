@@ -36,7 +36,7 @@ class DeliveryCompany(User):
 
 class Item(models.Model):
     name = models.CharField(max_length=20)
-    brand = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True, blank=False, default=None)
+    brand = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=False, default=None)
     price = models.FloatField(null=True, blank=False, default=None)
     quantity = models.IntegerField(null=True, blank=False, default=None)
     discount = models.FloatField(null=False, blank=False, default=1)
@@ -170,7 +170,7 @@ class Transaction(models.Model):
 
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, default=None)
-    item = models.ForeignKey(Item, on_delete=models.DO_NOTHING, null=True, default=None)
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True, default=None)
     transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE, null=True, default=None)
     order_number = models.UUIDField(editable=False, default=uuid.uuid4)  # a unique uniformed id for each order
     status = models.CharField(max_length=20, default="in progress")  # need a clerk to check the order

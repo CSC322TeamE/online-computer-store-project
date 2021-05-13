@@ -37,25 +37,29 @@
             <td>{{ w.reported_user }}</td>
             <td>{{ w.description }}</td>
             <td>
-                <form method="post">
+                <form method="post" id="1">
                     {% csrf_token %}
                     <input type="hidden" name="id" value="{{ w.id }}">
                     <input type="submit" name="stay" value="stay">
-                </form>
-                <form method="post">
+
+
                     {% csrf_token %}
                     <input type="hidden" name="id" value="{{ w.id }}">
                     <input type="submit" name="remove" value="remove">
-                </form>
             </td>
             <td>
-                <form method="post">
+
                     {% csrf_token %}
                     <input type="hidden" name="id" value="{{ w.id }}">
                     <input style="background-color: #fa0000 " type="submit" name="revert" value="revert">
-                </form>
+
             </td>
         </tr>
+            <td><input type="text" class="login-input" name="justification"  placeholder="Write your justificaiton here please" required></td>
+
+            </form>
+
+
     {% endfor %}
 </table>
 </body>

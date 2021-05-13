@@ -64,8 +64,9 @@ def login(request):
                 suspended_user = SuspendedList.objects.get(user=user)
                 now = datetime.datetime.now().date()
                 delta = now - suspended_user.date_created.date()
-                if delta.days >= 7:
+                if delta.days >= 0:
                     User.objects.get(username=user).delete()
+                    messages.info(request, "You account has been suspended!!!")
                     return render(request, 'login.html')
             auth.login(request, user)
             return redirect('/', {'user': user})
@@ -528,7 +529,7 @@ def justification(request):
             cur_order = Order.objects.get(id=orderID)
             justification = request.POST['justification']
             cur_warning = Warning.objects.get(id=request.POST['warning_id'])
-            cur_warning.description = cur_warning.description + "   Justification: " + justification
+            cur_warning.description = cur_warning.description + "           Justification: " + justification
             cur_warning.save()
             cur_order.justification = justification
             cur_order.save()
@@ -607,6 +608,7 @@ def warningJustification(request):
         if 'stay' in request.POST:
             warning = Warning.objects.get(id=request.POST["id"])
             warning.finalized = True
+            warning.justification = request.POST['justification']
             warning.save()
             messages.info(request, 'warning stay successful')
             return redirect('/warningJustification/')
@@ -623,6 +625,7 @@ def warningJustification(request):
                 warning1.reporter = reported
                 warning1.reported_user = reporter
                 warning1.finalized = True
+                warning1.justification = request.POST['justification']
                 warning1.save()
                 messages.info(request, "Complaint revered successfully ")
             elif OrderWarning.objects.filter(id=myid).exists():
@@ -632,6 +635,7 @@ def warningJustification(request):
                 warning1.reporter = reported
                 warning1.reported_user = reporter
                 warning1.finalized = True
+                warning1.justification = request.POST['justification']
                 warning1.save()
                 messages.info(request, "Complaint revered successfully ")
             else:
@@ -673,7 +677,6 @@ def suggestedItem(request):
 
 
 def provideTracking(request):
-    print(request.user)
     deli_order = Order.objects.filter(Q(delivery_company=request.user) & Q(status='delivering'))
     if request.method == 'POST':
         curr_order = Order.objects.get(id=request.POST['order_id'])

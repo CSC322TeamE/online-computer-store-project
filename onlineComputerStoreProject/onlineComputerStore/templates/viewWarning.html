@@ -20,18 +20,20 @@
 
     <table align="center" border="1" width="1200" height="150">
         <tr>
+            <th>Time</th>
             <th>Description of Reporter</th>
             <th>Finalized Status</th>
-            <th>Time</th>
+            <th>Final Justification</th>
         </tr>
 
 
         {% for data in data  %}
 
         <tr align="center">
+            <td>{{ data.date_created }}</td>
             <td>{{ data.description }}</td>
             <td> {{ data.finalized }} </td>
-            <td>{{ data.date_created }}</td>
+            <td>{{ data.justification }}</td>
         </tr>
         {% endfor %}
 
