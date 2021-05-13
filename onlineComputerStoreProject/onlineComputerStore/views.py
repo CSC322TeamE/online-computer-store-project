@@ -652,7 +652,6 @@ def aboutus(request):
     return render(request, 'aboutus.html')
 
 
-
 def rmUser(request):
     return render(request, 'removeUser.html')
 
@@ -671,3 +670,27 @@ def suggestedItem(request):
     else:
         form = SuggestedItemForm()
         return render(request, 'suggestedItem.html', {'form': form})
+
+
+def provideTracking(request):
+    print(request.user)
+    deli_order = Order.objects.filter(Q(delivery_company=request.user) & Q(status='delivering'))
+    if request.method == 'POST':
+        curr_order = Order.objects.get(id=request.POST['order_id'])
+        if 'update' in request.POST:
+            if request.POST['tracking'] == "":
+                messages.info(request, 'please enter tracking info')
+
+            else:
+                curr_order.tracking_info = request.POST['tracking']
+                curr_order.save()
+
+        if 'complete' in request.POST:
+            curr_order.status = 'complete'
+            curr_order.tracking_info = 'complete'
+            curr_order.save()
+
+        return redirect('/provideTracking/')
+
+    else:
+        return render(request, 'provideTracking.html', {'deli_order': deli_order})

@@ -181,6 +181,7 @@ class Order(models.Model):
     url_slug = models.SlugField(editable=False, default="")
     item_score = models.FloatField(null=True, blank=True, default=None)
     delivery_score = models.FloatField(null=True, blank=True, default=None)
+    tracking_info = models.CharField(max_length=50, null=True, blank=True, default=None)
 
     def save(self, *args, **kwargs):
         self.url_slug = slugify(self.order_number)
@@ -207,7 +208,7 @@ class TabooList(models.Model):
 
 class SuspendedList(models.Model):
 
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     justification = models.TextField(blank=True)
     email = models.CharField(blank=True, max_length=100)
@@ -229,4 +230,5 @@ class SuggestedItem(models.Model):
                               default=None)
     item3 = models.ForeignKey(Item, related_name='suggested_item3', on_delete=models.CASCADE, null=True, blank=True,
                               default=None)
+
 

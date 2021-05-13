@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/userinfo.css' %}">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Provide Tracking</title>
+</head>
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags %}
+            <script> alert('{{ message }}'); </script>
+        {% endif %}>
+    {% endfor %}
+{% endif %}
+
+<body>
+
+<a href="/delivery">Account Home</a>
+
+{% for order in deli_order %}
+    <form class="login-form" method="POST">
+        {% csrf_token %}
+        <li> ORDER_#: {{ order.order_number }}<br>
+            Address: {{ order.address }}
+            <br> Tracking information: {{ order.tracking_info }} <br>
+            <input type="text" name="tracking">
+            <input type="hidden" value={{ order.id }} name="order_id">
+            <input type="submit" name="update" value="update">
+            <input type="submit" name="complete" value="complete">
+    </form>
+    <br>
+{% endfor %}
+
+
+</body>
+</html>

@@ -168,7 +168,7 @@ class FilterComputerForm(forms.Form):
 
         # A better gpu should have a better battery or have no battery
         if self.has_data("gpu"):
-            if self.data["gpu"].power > 200:
+            if GPU.objects.get(id=self.data['gpu']).power > 200:
                 self.items = self.items.filter(Q(computer_battery__capacity__gte=4000) | Q(computer_battery__capacity=None))
 
         # get filtered computer's cpu to options
@@ -188,11 +188,11 @@ class FilterComputerForm(forms.Form):
         self.fields["hdd"].queryset = HDD.objects.filter(id__in=id_list)
         self.fields["hdd"].label_from_instance = lambda obj: "%s" % obj.name
 
-        id_list = self.items.distinct().order_by('battery').values_list('battery')
+        id_list = self.items.distinct().order_by('computer_battery').values_list('computer_battery')
         self.fields["battery"].queryset = Battery.objects.filter(id__in=id_list)
         self.fields["battery"].label_from_instance = lambda obj: "%s" % obj.name
 
-        id_list = self.items.distinct().order_by('monitor').values_list('monitor')
+        id_list = self.items.distinct().order_by('computer_monitor').values_list('computer_monitor')
         self.fields["monitor"].queryset = Monitor.objects.filter(id__in=id_list)
         self.fields["monitor"].label_from_instance = lambda obj: "%s" % obj.name
 
@@ -217,13 +217,13 @@ class FilterComputerForm(forms.Form):
             self.items = self.items.filter(computer_memory=self.data["memory"])
 
         if self.has_data('hdd'):
-            self.items = self.items.filter(computer_memory=self.data["hdd"])
+            self.items = self.items.filter(computer_hdd=self.data["hdd"])
 
         if self.has_data('monitor'):
-            self.items = self.items.filter(computer_memory=self.data["monitor"])
+            self.items = self.items.filter(computer_monitor=self.data["monitor"])
 
         if self.has_data('battery'):
-            self.items = self.items.filter(computer_memory=self.data["battery"])
+            self.items = self.items.filter(computer_battery=self.data["battery"])
 
         return self.items
 
