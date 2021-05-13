@@ -18,7 +18,7 @@ class AddGpuForm(ModelForm):
     class Meta:
         model = GPU
         fields = ['name', 'brand', 'price', 'quantity', 'discount', 'img', 'description',
-                  'chipset', 'num_cuda_cores', 'core_clock', 'memory_size']
+                  'chipset', 'num_cuda_cores', 'core_clock', 'memory_size', 'power']
 
 
 # Add memory form
